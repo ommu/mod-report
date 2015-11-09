@@ -1,0 +1,14 @@
+code			: 12000
+name			: Report
+description		: Report
+folder_name		: report
+global_model	: Reports
+version			: 1.1.5
+created_date	: 2012-08-30 14:03
+author			: Putra Sudaryanto
+
+db_table_name	: 
+ - ommu_report_category
+ - ommu_reports
+ 
+db_sql_filename	: 
