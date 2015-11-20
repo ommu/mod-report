@@ -35,6 +35,7 @@
 class Reports extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $old_status;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -233,11 +234,11 @@ class Reports extends CActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->report_ip = $_SERVER['REMOTE_ADDR'];
-				if(!Yii::app()->user->isGuest) {
+				if(!Yii::app()->user->isGuest)
 					$this->user_id = Yii::app()->user->id;
-				} else {
-					$this->user_id = 0;
-				}
+			} else {
+				$this->resolved_id = Yii::app()->user->id;
+				$this->unresolved_id = Yii::app()->user->id;
 			}
 		}
 		return true;
