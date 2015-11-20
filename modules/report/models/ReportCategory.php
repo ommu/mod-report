@@ -26,6 +26,10 @@
  * @property integer $orders
  * @property string $name
  * @property string $desc
+ * @property string $creation_date
+ * @property string $creation_id
+ * @property string $modified_date
+ * @property string $modified_id
  *
  * The followings are the available model relations:
  * @property OmmuReports[] $ommuReports
@@ -64,7 +68,7 @@ class ReportCategory extends CActiveRecord
 		return array(
 			array('
 				title, description', 'required'),
-			array('publish, dependency, orders', 'numerical', 'integerOnly'=>true),
+			array('publish, dependency, orders, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('name, desc', 'length', 'max'=>11),
 			array('
 				title', 'length', 'max'=>32),
@@ -73,7 +77,7 @@ class ReportCategory extends CActiveRecord
 			array('dependency', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cat_id, publish, dependency, orders, name, desc', 'safe', 'on'=>'search'),
+			array('cat_id, publish, dependency, orders, name, desc, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -101,6 +105,10 @@ class ReportCategory extends CActiveRecord
 			'orders' => 'Order',
 			'name' => Phrase::trans(12016,1),
 			'desc' => Phrase::trans(12017,1),
+			'creation_date' => 'Creation',
+			'creation_id' => 'Creation',
+			'modified_date' => 'Modified',
+			'modified_id' => 'Modified',
 			'title' => Phrase::trans(12016,1),
 			'description' => Phrase::trans(12017,1),
 		);
@@ -132,6 +140,12 @@ class ReportCategory extends CActiveRecord
 		$criteria->compare('orders',$this->orders);
 		$criteria->compare('name',$this->name);
 		$criteria->compare('desc',$this->desc);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		$criteria->compare('t.creation_id',$this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		$criteria->compare('t.modified_id',$this->modified_id);
 		if(!isset($_GET['ReportCategory_sort']))
 			$criteria->order = 'cat_id DESC';
 
@@ -164,6 +178,10 @@ class ReportCategory extends CActiveRecord
 			$this->defaultColumns[] = 'orders';
 			$this->defaultColumns[] = 'name';
 			$this->defaultColumns[] = 'desc';
+			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
 		}
 
 		return $this->defaultColumns;
@@ -256,7 +274,9 @@ class ReportCategory extends CActiveRecord
 					)
 				));
 				$this->orders = count($model) + 1;
-			}
+				$this->creation_id = Yii::app()->user->id;	
+			} else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
