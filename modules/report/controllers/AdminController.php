@@ -1,28 +1,29 @@
 <?php
 /**
 * AdminController
-* Handle AdminController
-* Copyright (c) 2013, Ommu Platform (ommu.co). All rights reserved.
-* version: 1.5.0
-* Reference start
-*
-* TOC :
-*	Index
-*	Manage
-*	Edit
-*	Delete
-*	Resolve
-*
-*	LoadModel
-*	performAjaxValidation
-*
-* @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
-* @copyright Copyright (c) 2012 Ommu Platform (ommu.co)
-* @link http://company.ommu.co
-* @contact (+62)856-299-4114
-*
-*----------------------------------------------------------------------------------------------------------
-*/
+ * @var $this AdminController
+ * @var $model Reports
+ * @var $form CActiveForm
+ * version: 0.0.1
+ * Reference start
+ *
+ * TOC :
+ *	Index
+ *	Manage
+ *	Edit
+ *	Delete
+ *	Resolve
+ *
+ *	LoadModel
+ *	performAjaxValidation
+ *
+ * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
+ * @copyright Copyright (c) 2014 Ommu Platform (ommu.co)
+ * @link https://github.com/oMMu/Ommu-Report
+ * @contect (+62)856-299-4114
+ *
+ *----------------------------------------------------------------------------------------------------------
+ */
 
 class AdminController extends Controller
 {
