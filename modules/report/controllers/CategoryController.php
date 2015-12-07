@@ -1,6 +1,6 @@
 <?php
 /**
-* CategoryController
+ * CategoryController
  * @var $this CategoryController
  * @var $model ReportCategory
  * @var $form CActiveForm

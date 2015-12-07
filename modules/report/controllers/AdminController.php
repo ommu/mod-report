@@ -1,6 +1,6 @@
 <?php
 /**
-* AdminController
+ * AdminController
  * @var $this AdminController
  * @var $model Reports
  * @var $form CActiveForm

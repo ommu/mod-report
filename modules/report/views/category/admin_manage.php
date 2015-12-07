@@ -1,6 +1,6 @@
 <?php
 /**
- * ReportCategory (report-category)
+ * Report Category (report-category)
  * @var $this CategoryController
  * @var $model ReportCategory
  *

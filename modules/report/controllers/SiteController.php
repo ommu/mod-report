@@ -1,6 +1,6 @@
 <?php
 /**
-* SitesController
+ * SitesController
  * @var $this AdminController
  * @var $model Reports
  * version: 0.0.1
