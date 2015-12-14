@@ -39,6 +39,10 @@ class ReportCategory extends CActiveRecord
 	public $defaultColumns = array();
 	public $title;
 	public $description;
+	
+	// Variable Search
+	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -77,7 +81,8 @@ class ReportCategory extends CActiveRecord
 			array('dependency', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cat_id, publish, dependency, orders, name, desc, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('cat_id, publish, dependency, orders, name, desc, creation_date, creation_id, modified_date, modified_id,
+				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,7 +94,10 @@ class ReportCategory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			//'ommuReports' => array(self::HAS_MANY, 'OmmuReports', 'cat_id'),
+			'view_cat' => array(self::BELONGS_TO, 'ViewReportCategory', 'cat_id'),
+			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'report' => array(self::HAS_MANY, 'Reports', 'cat_id'),
 		);
 	}
 
@@ -111,6 +119,8 @@ class ReportCategory extends CActiveRecord
 			'modified_id' => 'Modified',
 			'title' => Phrase::trans(12016,1),
 			'description' => Phrase::trans(12017,1),
+			'creation_search' => 'Creation',
+			'modified_search' => 'Modified',
 		);
 	}
 	
@@ -146,7 +156,28 @@ class ReportCategory extends CActiveRecord
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id);
-		if(!isset($_GET['ReportCategory_sort']))
+		
+		// Custom Search
+		$criteria->with = array(
+			'view_cat' => array(
+				'alias'=>'view_cat',
+				'select'=>'category_name, category_desc'
+			),
+			'creation_relation' => array(
+				'alias'=>'creation_relation',
+				'select'=>'displayname',
+			),
+			'modified_relation' => array(
+				'alias'=>'modified_relation',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('view_cat.category_name',strtolower($this->title), true);
+		$criteria->compare('view_cat.category_desc',strtolower($this->description), true);
+		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
+		
+		if(isset($_GET['ReportCategory_sort']))
 			$criteria->order = 'cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -205,11 +236,11 @@ class ReportCategory extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'name',
+				'name' => 'title',
 				'value' => 'Phrase::trans($data->name, 2)',
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'desc',
+				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc, 2)',
 			);
 			$this->defaultColumns[] = array(

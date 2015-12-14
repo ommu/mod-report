@@ -36,6 +36,11 @@ class Reports extends CActiveRecord
 {
 	public $defaultColumns = array();
 	public $old_status;
+	
+	// Variable Search
+	public $user_search;
+	public $resolved_search;
+	public $unresolved_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -63,16 +68,16 @@ class Reports extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, url, body, 
-				user_id, report_ip', 'required'),
+			array('cat_id, url, body', 'required'),
 			array('cat_id, status', 'numerical', 'integerOnly'=>true),
 			array('user_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
 			array('url', 'length', 'max'=>255),
-			array('report_date', 'safe'),
+			array('report_date, report_ip', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('report_id, cat_id, user_id, status, url, body, report_date, report_ip', 'safe', 'on'=>'search'),
+			array('report_id, cat_id, user_id, status, url, body, report_date, report_ip, resolved_date, resolved_id, unresolved_date, unresolved_id,
+				user_search, resolved_search, unresolved_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +91,8 @@ class Reports extends CActiveRecord
 		return array(
 			'cat' => array(self::BELONGS_TO, 'ReportCategory', 'cat_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'resolved_relation' => array(self::BELONGS_TO, 'Users', 'resolved_id'),
+			'unresolved_relation' => array(self::BELONGS_TO, 'Users', 'unresolved_id'),
 		);
 	}
 
@@ -103,6 +110,11 @@ class Reports extends CActiveRecord
 			'body' => 'Body',
 			'report_date' => 'Report Date',
 			'report_ip' => 'Report Ip',
+			'resolved_date' => 'Resolved Date',
+			'resolved_id' => 'Resolved',
+			'user_search' => 'User',
+			'unresolved_date' => 'Unresolved Date',
+			'unresolved_id' => 'Unresolved',
 		);
 	}
 	
@@ -118,7 +130,10 @@ class Reports extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.report_id',$this->report_id);
-		$criteria->compare('t.cat_id',$this->cat_id);
+		if(isset($_GET['category']))
+			$criteria->compare('t.cat_id',$_GET['category']);
+		else
+			$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.url',$this->url,true);
@@ -126,10 +141,34 @@ class Reports extends CActiveRecord
 		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.report_date)',date('Y-m-d', strtotime($this->report_date)));
 		$criteria->compare('t.report_ip',$this->report_ip,true);
+		if($this->resolved_date != null && !in_array($this->resolved_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.resolved_date)',date('Y-m-d', strtotime($this->resolved_date)));
+		$criteria->compare('t.resolved_id',$this->resolved_id);
+		if($this->unresolved_date != null && !in_array($this->unresolved_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.unresolved_date)',date('Y-m-d', strtotime($this->unresolved_date)));
+		$criteria->compare('t.unresolved_id',$this->unresolved_id);
 		
-		if(!isset($_GET['Reports_sort'])) {
+		// Custom Search
+		$criteria->with = array(
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+			'resolved_relation' => array(
+				'alias'=>'resolved_relation',
+				'select'=>'displayname',
+			),
+			'unresolved_relation' => array(
+				'alias'=>'unresolved_relation',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('resolved_relation.displayname',strtolower($this->resolved_search), true);
+		$criteria->compare('unresolved_relation.displayname',strtolower($this->unresolved_search), true);
+		
+		if(!isset($_GET['Reports_sort']))
 			$criteria->order = 'report_id DESC';
-		}
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -179,12 +218,16 @@ class Reports extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
+			if(!isset($_GET['category'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'cat_id',
+					'value' => 'Phrase::trans($data->cat->name, 2)',
+					'filter'=> ReportCategory::getCategory(),
+					'type' => 'raw',
+				);
+			}
 			$this->defaultColumns[] = array(
-				'name' => 'cat_id',
-				'value' => 'Phrase::trans($data->cat->name, 2)',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'user_id',
+				'name' => 'user_search',
 				'value' => '$data->user->displayname',
 			);
 			$this->defaultColumns[] = 'url';
