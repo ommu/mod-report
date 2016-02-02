@@ -168,7 +168,7 @@ class Reports extends CActiveRecord
 		$criteria->compare('unresolved_relation.displayname',strtolower($this->unresolved_search), true);
 		
 		if(!isset($_GET['Reports_sort']))
-			$criteria->order = 'report_id DESC';
+			$criteria->order = 't.report_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
