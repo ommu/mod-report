@@ -11,3 +11,9 @@ db_table_name	:
  - ommu_reports
  
 db_sql_filename	: 
+
+content_menu	:
+# controller o/category
+	- urlTitle: Add Category
+		urlRules: {report, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
