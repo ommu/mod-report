@@ -23,6 +23,7 @@ class ReportModule extends CWebModule
 			$publicControllers = array(
 				'site',
 				'user',
+				'api/site',
 			);
 			
 			// pake ini untuk set theme per action di controller..
