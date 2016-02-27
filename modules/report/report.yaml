@@ -18,7 +18,7 @@ plugin_menu		:
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 		
 	- urlTitle: Report Categories
-		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlRules: {siteType: 0,1, userLevel: 1}
 		urlPath: {url: o/category/manage, attr: -, icon: -}
 
 content_menu	:
