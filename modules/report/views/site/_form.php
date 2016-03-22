@@ -59,7 +59,7 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Phrase::trans(12015,0) : Phrase::trans(2,0), array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Phrase::trans(12015,0) : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button('Closed', array('id'=>'closed')); ?>
 </div>
 
