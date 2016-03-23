@@ -223,10 +223,10 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 		if($model->status == 1) {
-			$title = Phrase::trans(292,0);
+			$title = Yii::t('phrase', 'Unresolved');
 			$replace = 0;
 		} else {
-			$title = Phrase::trans(291,0);
+			$title = Yii::t('phrase', 'Resolved');
 			$replace = 1;
 		}
 
