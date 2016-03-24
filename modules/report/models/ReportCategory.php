@@ -317,21 +317,20 @@ class ReportCategory extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-			$currentAction = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
 			if($this->isNewRecord) {
+				$location = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
 				$title=new OmmuSystemPhrase;
-				$title->location = $currentAction;
+				$title->location = $location.'_title';
 				$title->en = $this->title;
-				if($title->save()) {
+				if($title->save())
 					$this->name = $title->phrase_id;
-				}
 
 				$desc=new OmmuSystemPhrase;
-				$desc->location = $currentAction;
+				$desc->location = $location.'_description';
 				$desc->en = $this->description;
-				if($desc->save()) {
+				if($desc->save())
 					$this->desc = $desc->phrase_id;
-				}
+				
 			} else {
 				$title = OmmuSystemPhrase::model()->findByPk($this->name);
 				$title->en = $this->title;
