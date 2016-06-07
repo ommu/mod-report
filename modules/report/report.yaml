@@ -16,10 +16,6 @@ plugin_menu		:
 	- urlTitle: View Reports
 		urlRules: {siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-		
-	- urlTitle: Report Categories
-		urlRules: {siteType: 0,1, userLevel: 1}
-		urlPath: {url: o/category/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/category
