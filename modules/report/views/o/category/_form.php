@@ -29,9 +29,9 @@
 			<?php echo $form->labelEx($model,'dependency'); ?>
 			<div class="desc">
 				<?php if(ReportCategory::getCategory() != null) {
-					echo $form->dropDownList($model,'dependency', ReportCategory::getCategory(), array('prompt'=>Phrase::trans(12020,1)));
+					echo $form->dropDownList($model,'dependency', ReportCategory::getCategory(), array('prompt'=>Yii::t('phrase', 'No Parent')));
 				} else {
-					echo $form->dropDownList($model,'dependency', array('prompt'=>Phrase::trans(12020,1)));
+					echo $form->dropDownList($model,'dependency', array('prompt'=>Yii::t('phrase', 'No Parent')));
 				}?>
 				<?php echo $form->error($model,'dependency'); ?>
 			</div>

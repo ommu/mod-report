@@ -107,20 +107,20 @@ class ReportCategory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cat_id' => Phrase::trans(12018,1),
-			'publish' => Phrase::trans(12021,1),
-			'dependency' => Phrase::trans(12019,1),
-			'orders' => 'Order',
-			'name' => Phrase::trans(12016,1),
-			'desc' => Phrase::trans(12017,1),
-			'creation_date' => 'Creation',
-			'creation_id' => 'Creation',
-			'modified_date' => 'Modified',
-			'modified_id' => 'Modified',
-			'title' => Phrase::trans(12016,1),
-			'description' => Phrase::trans(12017,1),
-			'creation_search' => 'Creation',
-			'modified_search' => 'Modified',
+			'cat_id' => Yii::t('attribute', 'Category'),
+			'publish' => Yii::t('attribute', 'Publish'),
+			'dependency' => Yii::t('attribute', 'Parent'),
+			'orders' => Yii::t('attribute', 'Order'),
+			'name' => Yii::t('attribute', 'Category'),
+			'desc' => Yii::t('attribute', 'Description'),
+			'creation_date' => Yii::t('attribute', 'Creation'),
+			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'title' => Yii::t('attribute', 'Category'),
+			'description' => Yii::t('attribute', 'Description'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 	
@@ -236,16 +236,16 @@ class ReportCategory extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
+				'name' => 'dependency',
+				'value' => '$data->dependency != 0 ? Phrase::trans(ReportCategory::model()->findByPk($data->dependency)->name, 2) : \'-\'',
+			);
+			$this->defaultColumns[] = array(
 				'name' => 'title',
 				'value' => 'Phrase::trans($data->name, 2)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc, 2)',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'dependency',
-				'value' => 'Phrase::trans(ReportCategory::model()->findByPk($data->dependency)->name, 2)',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(

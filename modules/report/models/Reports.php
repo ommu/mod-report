@@ -102,19 +102,19 @@ class Reports extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'report_id' => 'Report',
-			'cat_id' => 'Cat',
-			'user_id' => 'User',
-			'status' => 'Status',
-			'url' => 'Url',
-			'body' => 'Body',
-			'report_date' => 'Report Date',
-			'report_ip' => 'Report Ip',
-			'resolved_date' => 'Resolved Date',
-			'resolved_id' => 'Resolved',
-			'user_search' => 'User',
-			'unresolved_date' => 'Unresolved Date',
-			'unresolved_id' => 'Unresolved',
+			'report_id' => Yii::t('attribute', 'Report'),
+			'cat_id' => Yii::t('attribute', 'Cat'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'status' => Yii::t('attribute', 'Status'),
+			'url' => Yii::t('attribute', 'Url'),
+			'body' => Yii::t('attribute', 'Body'),
+			'report_date' => Yii::t('attribute', 'Report Date'),
+			'report_ip' => Yii::t('attribute', 'Report Ip'),
+			'resolved_date' => Yii::t('attribute', 'Resolved Date'),
+			'resolved_id' => Yii::t('attribute', 'Resolved'),
+			'user_search' => Yii::t('attribute', 'User'),
+			'unresolved_date' => Yii::t('attribute', 'Unresolved Date'),
+			'unresolved_id' => Yii::t('attribute', 'Unresolved'),
 		);
 	}
 	

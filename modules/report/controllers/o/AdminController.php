@@ -124,8 +124,8 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(12012,1);
-		$this->pageDescription = Phrase::trans(12013,1);
+		$this->pageTitle = Yii::t('phrase', 'Abuse Reports');
+		$this->pageDescription = Yii::t('phrase', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
 			'model'=>$model,
@@ -159,7 +159,7 @@ class AdminController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-reports',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(12011,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success fixed.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -173,7 +173,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Phrase::trans(12010,1);
+			$this->pageTitle = Yii::t('phrase', 'Fixed Report');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -198,7 +198,7 @@ class AdminController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-reports',
-					'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(12009,1).'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success deleted.').'</strong></div>',
 				));
 			}
 
@@ -207,7 +207,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(12008,1);
+			$this->pageTitle = Yii::t('phrase', 'Delete Report');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -241,7 +241,7 @@ class AdminController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-reports',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(12011,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success fixed.').'</strong></div>',
 					));
 				}
 			}

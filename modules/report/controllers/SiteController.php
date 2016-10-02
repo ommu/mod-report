@@ -127,7 +127,7 @@ class SiteController extends Controller
 			$this->dialogGroundUrl = Yii::app()->createUrl('site/index');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Phrase::trans(12014,1);
+			$this->pageTitle = Yii::t('phrase', 'Report this page');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('front_send',array(

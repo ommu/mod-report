@@ -88,9 +88,9 @@ class ViewReportCategory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cat_id' => 'Cat',
-			'category_name' => 'Category Name',
-			'category_desc' => 'Category Desc',
+			'cat_id' => Yii::t('attribute', 'Category'),
+			'category_name' => Yii::t('attribute', 'Category'),
+			'category_desc' => Yii::t('attribute', 'Description'),
 		);
 	}
 

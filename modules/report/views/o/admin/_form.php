@@ -32,7 +32,7 @@
 				<?php if(ReportCategory::getCategory(1) != null) {
 					echo $form->dropDownList($model,'cat_id', ReportCategory::getCategory(1));
 				} else {
-					echo $form->dropDownList($model,'cat_id', array('prompt'=>Phrase::trans(12020,1)));
+					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')));
 				}?>
 				<?php echo $form->error($model,'cat_id'); ?>
 			</div>
