@@ -221,7 +221,7 @@ class Reports extends CActiveRecord
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
-					'value' => 'Phrase::trans($data->cat->name, 2)',
+					'value' => 'Phrase::trans($data->cat->name)',
 					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);

@@ -237,15 +237,15 @@ class ReportCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'dependency',
-				'value' => '$data->dependency != 0 ? Phrase::trans(ReportCategory::model()->findByPk($data->dependency)->name, 2) : \'-\'',
+				'value' => '$data->dependency != 0 ? Phrase::trans(ReportCategory::model()->findByPk($data->dependency)->name) : \'-\'',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'title',
-				'value' => 'Phrase::trans($data->name, 2)',
+				'value' => 'Phrase::trans($data->name)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
-				'value' => 'Phrase::trans($data->desc, 2)',
+				'value' => 'Phrase::trans($data->desc)',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
@@ -283,7 +283,7 @@ class ReportCategory extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->cat_id] = Phrase::trans($val->name, 2);
+				$items[$val->cat_id] = Phrase::trans($val->name);
 			}
 			return $items;
 		} else {
