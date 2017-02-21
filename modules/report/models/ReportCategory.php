@@ -39,8 +39,11 @@ class ReportCategory extends CActiveRecord
 	public $description;
 	
 	// Variable Search
+	public $report_search;
+	public $report_resolved_search;
+	public $report_all_search;
 	public $creation_search;
-	public $modified_search;
+	public $modified_search;	
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -80,7 +83,7 @@ class ReportCategory extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id,
-				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
+				title, description, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -117,6 +120,9 @@ class ReportCategory extends CActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'title' => Yii::t('attribute', 'Category'),
 			'description' => Yii::t('attribute', 'Description'),
+			'report_search' => Yii::t('attribute', 'Report'),
+			'report_resolved_search' => Yii::t('attribute', 'Resolved'),
+			'report_all_search' => Yii::t('attribute', 'All'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -184,6 +190,9 @@ class ReportCategory extends CActiveRecord
 		
 		$criteria->compare('title.'.$language,strtolower($this->title), true);
 		$criteria->compare('description.'.$language,strtolower($this->description), true);
+		$criteria->compare('view.reports',strtolower($this->report_search), true);
+		$criteria->compare('view.report_resolved',strtolower($this->report_resolved_search), true);
+		$criteria->compare('view.report_all',strtolower($this->report_all_search), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 		
@@ -250,6 +259,30 @@ class ReportCategory extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc)',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_search',
+				'value' => 'CHtml::link($data->view->reports, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_resolved_search',
+				'value' => 'CHtml::link($data->view->report_resolved, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_all_search',
+				'value' => 'CHtml::link($data->view->report_all, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',

@@ -135,7 +135,10 @@ class Reports extends CActiveRecord
 		else
 			$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.status',$this->status);
+		if(isset($_GET['status']))
+			$criteria->compare('t.status',$_GET['status']);
+		else
+			$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.url',$this->url,true);
 		$criteria->compare('t.body',$this->body,true);
 		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '0000-00-00')))
