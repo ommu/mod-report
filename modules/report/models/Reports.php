@@ -72,7 +72,6 @@ class Reports extends CActiveRecord
 			array('cat_id, status', 'numerical', 'integerOnly'=>true),
 			array('user_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
-			array('url', 'length', 'max'=>255),
 			array('report_date, report_ip', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -229,12 +228,12 @@ class Reports extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
+			//$this->defaultColumns[] = 'url';
+			$this->defaultColumns[] = 'body';
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
 				'value' => '$data->user->displayname',
 			);
-			$this->defaultColumns[] = 'url';
-			$this->defaultColumns[] = 'body';
 			$this->defaultColumns[] = array(
 				'name' => 'report_date',
 				'value' => 'Utility::dateFormat($data->report_date)',
@@ -278,14 +277,14 @@ class Reports extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				$this->report_ip = $_SERVER['REMOTE_ADDR'];
-				if(!Yii::app()->user->isGuest)
-					$this->user_id = Yii::app()->user->id;
-			} else {
+			if($this->isNewRecord)
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			else {
 				$this->resolved_id = Yii::app()->user->id;
 				$this->unresolved_id = Yii::app()->user->id;
 			}
+			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
 	}

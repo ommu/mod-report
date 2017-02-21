@@ -29,8 +29,10 @@
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'cat_id'); ?>
 			<div class="desc">
-				<?php if(ReportCategory::getCategory(1) != null) {
-					echo $form->dropDownList($model,'cat_id', ReportCategory::getCategory(1));
+				<?php 
+				$category = ReportCategory::getCategory(1);
+				if($category != null) {
+					echo $form->dropDownList($model,'cat_id', $category);
 				} else {
 					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')));
 				}?>
@@ -41,9 +43,8 @@
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'url'); ?>
 			<div class="desc">
-				<?php 
-				$model->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-				echo $form->textField($model,'url',array('maxlength'=>255, 'class'=>'span-11')); ?>
+				<?php //$model->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+				echo $form->textField($model,'url',array('class'=>'span-11')); ?>
 				<?php echo $form->error($model,'url'); ?>
 			</div>
 		</div>
@@ -51,11 +52,28 @@
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'body'); ?>
 			<div class="desc">
-				<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller')); ?>
+				<?php //echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));				
+				$this->widget('application.extensions.imperavi.ImperaviRedactorWidget', array(
+					'model'=>$model,
+					'attribute'=>body,
+					// Redactor options
+					'options'=>array(
+						//'lang'=>'fi',
+						'buttons'=>array(
+							'html', '|', 
+							'bold', 'italic', 'deleted', '|',
+						),
+					),
+					'plugins' => array(
+						'fontcolor' => array('js' => array('fontcolor.js')),
+						'fullscreen' => array('js' => array('fullscreen.js')),
+					),
+				));?>
 				<?php echo $form->error($model,'body'); ?>
 			</div>
 		</div>
 
+		<?php if(!$model->isNewRecord) {?>
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'status'); ?>
 			<div class="desc">
@@ -64,6 +82,7 @@
 				<?php echo $form->error($model,'status'); ?>
 			</div>
 		</div>
+		<?php }?>
 
 	</fieldset>
 </div>
