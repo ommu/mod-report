@@ -38,6 +38,12 @@
 class ReportComment extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $report_search;
+	public $user_search;
+	public $modified_search;	
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -66,13 +72,14 @@ class ReportComment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, user_id, comment_text, creation_date, modified_id', 'required'),
+			array('report_id, user_id, comment_text', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
 			array('modified_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('comment_id, publish, report_id, user_id, comment_text, creation_date, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('comment_id, publish, report_id, user_id, comment_text, creation_date, modified_date, modified_id,
+				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -84,7 +91,9 @@ class ReportComment extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'report_relation' => array(self::BELONGS_TO, 'OmmuReports', 'report_id'),
+			'report' => array(self::BELONGS_TO, 'Reports', 'report_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -102,6 +111,10 @@ class ReportComment extends CActiveRecord
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'report_search' => Yii::t('attribute', 'Report'),
+			'user_search' => Yii::t('attribute', 'User'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
 			'Comment' => 'Comment',
@@ -133,6 +146,22 @@ class ReportComment extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search		
+		$criteria->with = array(
+			'report' => array(
+				'alias'=>'report',
+				'select'=>'cat_id, url, report_body'
+			),
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.comment_id',strtolower($this->comment_id),true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
@@ -162,6 +191,11 @@ class ReportComment extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		
+		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
+		$criteria->compare('report.report_body',strtolower($this->report_search), true);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['ReportComment_sort']))
 			$criteria->order = 't.comment_id DESC';
@@ -222,23 +256,23 @@ class ReportComment extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['type'])) {
+			if(!isset($_GET['report'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->comment_id)), $data->publish, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->report->cat->name)',
+					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
+				$this->defaultColumns[] = array(
+					'name' => 'report_search',
+					'value' => '$data->report->report_body',
+				);
 			}
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'comment_text';
+			$this->defaultColumns[] = array(
+				'name' => 'user_search',
+				'value' => '$data->user->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -265,33 +299,20 @@ class ReportComment extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'modified_date',
-				'value' => 'Utility::dateFormat($data->modified_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->comment_id)), $data->publish, 1)',
 					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
+						'class' => 'center',
 					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
 					),
-				), true),
-			);
-			$this->defaultColumns[] = 'modified_id';
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
@@ -316,68 +337,14 @@ class ReportComment extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			// Create action
+		if(parent::beforeValidate()) {		
+			if($this->isNewRecord)
+				$this->user_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
