@@ -35,6 +35,11 @@
 class ReportUser extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $report_search;
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -69,7 +74,8 @@ class ReportUser extends CActiveRecord
 			array('creation_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, publish, report_id, user_id, creation_date', 'safe', 'on'=>'search'),
+			array('id, publish, report_id, user_id, creation_date,
+				category_search, report_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,7 +87,8 @@ class ReportUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'report_relation' => array(self::BELONGS_TO, 'OmmuReports', 'report_id'),
+			'report' => array(self::BELONGS_TO, 'Reports', 'report_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -96,6 +103,9 @@ class ReportUser extends CActiveRecord
 			'report_id' => Yii::t('attribute', 'Report'),
 			'user_id' => Yii::t('attribute', 'User'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'report_search' => Yii::t('attribute', 'Report'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
 			'ID' => 'ID',
@@ -124,6 +134,18 @@ class ReportUser extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search		
+		$criteria->with = array(
+			'report' => array(
+				'alias'=>'report',
+				'select'=>'cat_id, url, report_body'
+			),
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
@@ -146,6 +168,10 @@ class ReportUser extends CActiveRecord
 			$criteria->compare('t.user_id',$this->user_id);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		
+		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
+		$criteria->compare('report.report_body',strtolower($this->report_search), true);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['ReportUser_sort']))
 			$criteria->order = 't.id DESC';
@@ -203,22 +229,22 @@ class ReportUser extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['type'])) {
+			if(!isset($_GET['report'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->id)), $data->publish, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->report->cat->name)',
+					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
+				$this->defaultColumns[] = array(
+					'name' => 'report_search',
+					'value' => '$data->report->report_body',
+				);
 			}
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = array(
+				'name' => 'user_search',
+				'value' => '$data->user->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -245,6 +271,20 @@ class ReportUser extends CActiveRecord
 					),
 				), true),
 			);
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->id)), $data->publish, 1)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
@@ -265,73 +305,5 @@ class ReportUser extends CActiveRecord
 			return $model;			
 		}
 	}
-
-	/**
-	 * before validate attributes
-	 */
-	/*
-	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-			//$this->creation_date = date('Y-m-d', strtotime($this->creation_date));
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }

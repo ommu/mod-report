@@ -19,35 +19,30 @@
 	);
 ?>
 
-<?php //begin.Messages ?>
-<?php
-if(Yii::app()->user->hasFlash('success'))
-	echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
-?>
-<?php //end.Messages ?>
-
+<div class="dialog-content">
 <?php $this->widget('application.components.system.FDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		array(
 			'name'=>'id',
 			'value'=>$model->id,
-			//'value'=>$model->id != '' ? $model->id : '-',
 		),
 		array(
 			'name'=>'publish',
 			'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-			//'value'=>$model->publish,
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'category_search',
+			'value'=>Phrase::trans($model->report->cat->name),
 		),
 		array(
 			'name'=>'report_id',
-			'value'=>$model->report_id,
-			//'value'=>$model->report_id != '' ? $model->report_id : '-',
+			'value'=>$model->report->report_body,
 		),
 		array(
 			'name'=>'user_id',
-			'value'=>$model->user_id,
-			//'value'=>$model->user_id != '' ? $model->user_id : '-',
+			'value'=>$model->user_id != '' ? $model->user->displayname : '-',
 		),
 		array(
 			'name'=>'creation_date',
@@ -55,8 +50,6 @@ if(Yii::app()->user->hasFlash('success'))
 		),
 	),
 )); ?>
-
-<div class="dialog-content">
 </div>
 <div class="dialog-submit">
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
