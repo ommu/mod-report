@@ -50,12 +50,12 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'body'); ?>
+			<?php echo $form->labelEx($model,'report_body'); ?>
 			<div class="desc">
-				<?php //echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));				
+				<?php //echo $form->textArea($model,'report_body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));				
 				$this->widget('application.extensions.imperavi.ImperaviRedactorWidget', array(
 					'model'=>$model,
-					'attribute'=>body,
+					'attribute'=>report_body,
 					// Redactor options
 					'options'=>array(
 						//'lang'=>'fi',
@@ -69,7 +69,7 @@
 						'fullscreen' => array('js' => array('fullscreen.js')),
 					),
 				));?>
-				<?php echo $form->error($model,'body'); ?>
+				<?php echo $form->error($model,'report_body'); ?>
 			</div>
 		</div>
 

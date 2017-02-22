@@ -21,13 +21,20 @@
  *
  * The followings are the available columns in table 'ommu_reports':
  * @property string $report_id
+ * @property integer $status
  * @property integer $cat_id
  * @property string $user_id
- * @property integer $status
  * @property string $url
- * @property string $body
+ * @property string $report_body
  * @property string $report_date
  * @property string $report_ip
+ * @property string $report_message
+ * @property string $resolved_date
+ * @property integer $resolved_id
+ * @property string $unresolved_date
+ * @property integer $unresolved_id
+ * @property string $modified_date
+ * @property string $modified_id
  *
  * The followings are the available model relations:
  * @property OmmuReportCategory $cat
@@ -41,6 +48,7 @@ class Reports extends CActiveRecord
 	public $user_search;
 	public $resolved_search;
 	public $unresolved_search;
+	public $modified_search;	
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,15 +76,16 @@ class Reports extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, url, body', 'required'),
-			array('cat_id, status', 'numerical', 'integerOnly'=>true),
-			array('user_id', 'length', 'max'=>11),
+			array('cat_id, url, report_body', 'required'),
+			array('status, cat_id, user_id, resolved_id, unresolved_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('cat_id', 'length', 'max'=>5),
+			array('user_id, resolved_id, unresolved_id, modified_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
-			array('report_date, report_ip', 'safe'),
+			array('report_ip, report_message', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('report_id, cat_id, user_id, status, url, body, report_date, report_ip, resolved_date, resolved_id, unresolved_date, unresolved_id,
-				user_search, resolved_search, unresolved_search', 'safe', 'on'=>'search'),
+			array('report_id, status, cat_id, user_id, url, report_body, report_date, report_ip, report_message, resolved_date, resolved_id, unresolved_date, unresolved_id, modified_date, modified_id,
+				user_search, resolved_search, unresolved_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -90,8 +99,9 @@ class Reports extends CActiveRecord
 		return array(
 			'cat' => array(self::BELONGS_TO, 'ReportCategory', 'cat_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'resolved_relation' => array(self::BELONGS_TO, 'Users', 'resolved_id'),
-			'unresolved_relation' => array(self::BELONGS_TO, 'Users', 'unresolved_id'),
+			'resolved' => array(self::BELONGS_TO, 'Users', 'resolved_id'),
+			'unresolved' => array(self::BELONGS_TO, 'Users', 'unresolved_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -102,18 +112,22 @@ class Reports extends CActiveRecord
 	{
 		return array(
 			'report_id' => Yii::t('attribute', 'Report'),
-			'cat_id' => Yii::t('attribute', 'Cat'),
+			'cat_id' => Yii::t('attribute', 'Category'),
 			'user_id' => Yii::t('attribute', 'User'),
 			'status' => Yii::t('attribute', 'Status'),
-			'url' => Yii::t('attribute', 'Url'),
-			'body' => Yii::t('attribute', 'Body'),
+			'url' => Yii::t('attribute', 'URL'),
+			'report_body' => Yii::t('attribute', 'Report Trouble'),
 			'report_date' => Yii::t('attribute', 'Report Date'),
-			'report_ip' => Yii::t('attribute', 'Report Ip'),
+			'report_ip' => Yii::t('attribute', 'Report IP'),
+			'report_message' => Yii::t('attribute', 'Report Message'),
 			'resolved_date' => Yii::t('attribute', 'Resolved Date'),
 			'resolved_id' => Yii::t('attribute', 'Resolved'),
+			'modified_date' => Yii::t('attribute', 'Modified'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'unresolved_date' => Yii::t('attribute', 'Unresolved Date'),
 			'unresolved_id' => Yii::t('attribute', 'Unresolved'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 	
@@ -139,16 +153,20 @@ class Reports extends CActiveRecord
 		else
 			$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.url',$this->url,true);
-		$criteria->compare('t.body',$this->body,true);
+		$criteria->compare('t.report_body',$this->report_body,true);
 		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.report_date)',date('Y-m-d', strtotime($this->report_date)));
 		$criteria->compare('t.report_ip',$this->report_ip,true);
+		$criteria->compare('t.report_message',$this->report_message,true);
 		if($this->resolved_date != null && !in_array($this->resolved_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.resolved_date)',date('Y-m-d', strtotime($this->resolved_date)));
 		$criteria->compare('t.resolved_id',$this->resolved_id);
 		if($this->unresolved_date != null && !in_array($this->unresolved_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.unresolved_date)',date('Y-m-d', strtotime($this->unresolved_date)));
 		$criteria->compare('t.unresolved_id',$this->unresolved_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		$criteria->compare('t.modified_id',$this->modified_id);
 		
 		// Custom Search
 		$criteria->with = array(
@@ -156,18 +174,23 @@ class Reports extends CActiveRecord
 				'alias'=>'user',
 				'select'=>'displayname'
 			),
-			'resolved_relation' => array(
-				'alias'=>'resolved_relation',
+			'resolved' => array(
+				'alias'=>'resolved',
 				'select'=>'displayname',
 			),
-			'unresolved_relation' => array(
-				'alias'=>'unresolved_relation',
+			'unresolved' => array(
+				'alias'=>'unresolved',
+				'select'=>'displayname',
+			),
+			'modified' => array(
+				'alias'=>'modified',
 				'select'=>'displayname',
 			),
 		);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
-		$criteria->compare('resolved_relation.displayname',strtolower($this->resolved_search), true);
-		$criteria->compare('unresolved_relation.displayname',strtolower($this->unresolved_search), true);
+		$criteria->compare('resolved.displayname',strtolower($this->resolved_search), true);
+		$criteria->compare('unresolved.displayname',strtolower($this->unresolved_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 		
 		if(!isset($_GET['Reports_sort']))
 			$criteria->order = 't.report_id DESC';
@@ -203,9 +226,14 @@ class Reports extends CActiveRecord
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'status';
 			$this->defaultColumns[] = 'url';
-			$this->defaultColumns[] = 'body';
+			$this->defaultColumns[] = 'report_body';
 			$this->defaultColumns[] = 'report_date';
 			$this->defaultColumns[] = 'report_ip';
+			$this->defaultColumns[] = 'report_message';
+			$this->defaultColumns[] = 'resolved_date';
+			$this->defaultColumns[] = 'resolved_id';
+			$this->defaultColumns[] = 'unresolved_date';
+			$this->defaultColumns[] = 'unresolved_id';
 		}
 
 		return $this->defaultColumns;
@@ -229,7 +257,7 @@ class Reports extends CActiveRecord
 				);
 			}
 			//$this->defaultColumns[] = 'url';
-			$this->defaultColumns[] = 'body';
+			$this->defaultColumns[] = 'report_body';
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
 				'value' => '$data->user->displayname',
@@ -283,6 +311,7 @@ class Reports extends CActiveRecord
 			else {
 				$this->resolved_id = Yii::app()->user->id;
 				$this->unresolved_id = Yii::app()->user->id;
+				$this->modified_id = Yii::app()->user->id;
 			}
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
