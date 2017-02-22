@@ -99,6 +99,7 @@ class Reports extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewReports', 'cat_id'),
 			'cat' => array(self::BELONGS_TO, 'ReportCategory', 'cat_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'resolved' => array(self::BELONGS_TO, 'Users', 'resolved_id'),
@@ -143,6 +144,26 @@ class Reports extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+			'resolved' => array(
+				'alias'=>'resolved',
+				'select'=>'displayname',
+			),
+			'unresolved' => array(
+				'alias'=>'unresolved',
+				'select'=>'displayname',
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.report_id',$this->report_id);
 		if(isset($_GET['category']))
@@ -170,25 +191,6 @@ class Reports extends CActiveRecord
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id);
 		
-		// Custom Search
-		$criteria->with = array(
-			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname'
-			),
-			'resolved' => array(
-				'alias'=>'resolved',
-				'select'=>'displayname',
-			),
-			'unresolved' => array(
-				'alias'=>'unresolved',
-				'select'=>'displayname',
-			),
-			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
-			),
-		);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 		$criteria->compare('resolved.displayname',strtolower($this->resolved_search), true);
 		$criteria->compare('unresolved.displayname',strtolower($this->unresolved_search), true);

@@ -39,6 +39,12 @@
 class ReportHistory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $report_search;
+	public $user_search;
+	public $modified_search;	
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -67,14 +73,15 @@ class ReportHistory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('status, report_id, user_id, report_message, report_ip, modified_id', 'required'),
+			array('status, report_id, user_id, report_message', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
-			array('report_date, modified_date', 'safe'),
+			array('report_ip', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, status, report_id, user_id, report_message, report_date, report_ip, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('id, status, report_id, user_id, report_message, report_date, report_ip, modified_date, modified_id,
+				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,7 +93,9 @@ class ReportHistory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'report_relation' => array(self::BELONGS_TO, 'OmmuReports', 'report_id'),
+			'report' => array(self::BELONGS_TO, 'Reports', 'report_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -105,6 +114,10 @@ class ReportHistory extends CActiveRecord
 			'report_ip' => Yii::t('attribute', 'Report Ip'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'report_search' => Yii::t('attribute', 'Report'),
+			'user_search' => Yii::t('attribute', 'User'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
 			'ID' => 'ID',
@@ -137,6 +150,22 @@ class ReportHistory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search		
+		$criteria->with = array(
+			'report' => array(
+				'alias'=>'report',
+				'select'=>'cat_id, url, report_body'
+			),
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		$criteria->compare('t.status',$this->status);
@@ -158,6 +187,11 @@ class ReportHistory extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		
+		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
+		$criteria->compare('report.report_body',strtolower($this->report_search), true);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['ReportHistory_sort']))
 			$criteria->order = 't.id DESC';
@@ -219,23 +253,26 @@ class ReportHistory extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['type'])) {
+			if(!isset($_GET['report'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'status',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("status",array("id"=>$data->id)), $data->status, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->report->cat->name)',
+					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
+				$this->defaultColumns[] = array(
+					'name' => 'report_search',
+					'value' => '$data->report->report_body',
+				);
 			}
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'report_message';
+			$this->defaultColumns[] = array(
+				'name' => 'report_message',
+				'value' => '$data->report_message',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'user_search',
+				'value' => '$data->user->displayname',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'report_date',
 				'value' => 'Utility::dateFormat($data->report_date)',
@@ -262,34 +299,25 @@ class ReportHistory extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'report_ip';
 			$this->defaultColumns[] = array(
-				'name' => 'modified_date',
-				'value' => 'Utility::dateFormat($data->modified_date)',
+				'name' => 'report_ip',
+				'value' => '$data->report_ip',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
 			);
-			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = array(
+				'name' => 'status',
+				'value' => '$data->status == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -314,68 +342,12 @@ class ReportHistory extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			// Create action
+		if(parent::beforeValidate()) {		
+			if(!$this->isNewRecord)
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }

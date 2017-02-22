@@ -19,40 +19,30 @@
 	);
 ?>
 
-<?php //begin.Messages ?>
-<?php
-if(Yii::app()->user->hasFlash('success'))
-	echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
-?>
-<?php //end.Messages ?>
-
+<div class="dialog-content">
 <?php $this->widget('application.components.system.FDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		array(
 			'name'=>'id',
 			'value'=>$model->id,
-			//'value'=>$model->id != '' ? $model->id : '-',
 		),
 		array(
 			'name'=>'status',
 			'value'=>$model->status == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-			//'value'=>$model->status,
+			'type'=>'raw',
+		),
+		array(
+			'name'=>'category_search',
+			'value'=>Phrase::trans($model->report->cat->name),
 		),
 		array(
 			'name'=>'report_id',
-			'value'=>$model->report_id,
-			//'value'=>$model->report_id != '' ? $model->report_id : '-',
-		),
-		array(
-			'name'=>'user_id',
-			'value'=>$model->user_id,
-			//'value'=>$model->user_id != '' ? $model->user_id : '-',
+			'value'=>$model->report->report_body,
 		),
 		array(
 			'name'=>'report_message',
 			'value'=>$model->report_message != '' ? $model->report_message : '-',
-			//'value'=>$model->report_message != '' ? CHtml::link($model->report_message, Yii::app()->request->baseUrl.'/public/visit/'.$model->report_message, array('target' => '_blank')) : '-',
 			'type'=>'raw',
 		),
 		array(
@@ -61,8 +51,11 @@ if(Yii::app()->user->hasFlash('success'))
 		),
 		array(
 			'name'=>'report_ip',
-			'value'=>$model->report_ip,
-			//'value'=>$model->report_ip != '' ? $model->report_ip : '-',
+			'value'=>$model->report_ip != '' ? $model->report_ip : '-',
+		),
+		array(
+			'name'=>'user_id',
+			'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
 		),
 		array(
 			'name'=>'modified_date',
@@ -70,13 +63,10 @@ if(Yii::app()->user->hasFlash('success'))
 		),
 		array(
 			'name'=>'modified_id',
-			'value'=>$model->modified_id,
-			//'value'=>$model->modified_id != 0 ? $model->modified_id : '-',
+			'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
 		),
 	),
 )); ?>
-
-<div class="dialog-content">
 </div>
 <div class="dialog-submit">
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
