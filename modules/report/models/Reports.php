@@ -99,7 +99,7 @@ class Reports extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'view' => array(self::BELONGS_TO, 'ViewReports', 'cat_id'),
+			'view' => array(self::BELONGS_TO, 'ViewReports', 'report_id'),
 			'cat' => array(self::BELONGS_TO, 'ReportCategory', 'cat_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'resolved' => array(self::BELONGS_TO, 'Users', 'resolved_id'),
@@ -262,6 +262,30 @@ class Reports extends CActiveRecord
 			}
 			//$this->defaultColumns[] = 'url';
 			$this->defaultColumns[] = 'report_body';
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('attribute', 'Reports'),
+				'value' => 'CHtml::link($data->view->reports != \'0\' ? $data->view->reports : "0", Yii::app()->controller->createUrl("o/history/manage",array(\'report\'=>$data->report_id,\'status\'=>0)))',				
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('attribute', 'Comments'),
+				'value' => 'CHtml::link($data->view->comments != \'0\' ? $data->view->comments : "0", Yii::app()->controller->createUrl("o/comment/manage",array(\'report\'=>$data->report_id,\'publish\'=>1)))',		
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'header' => Yii::t('attribute', 'Users'),
+				'value' => 'CHtml::link($data->view->users != \'0\' ? $data->view->users : "0", Yii::app()->controller->createUrl("o/user/manage",array(\'report\'=>$data->report_id,\'publish\'=>1)))',		
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
 				'value' => '$data->user->displayname',

@@ -168,7 +168,10 @@ class ReportHistory extends CActiveRecord
 		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
-		$criteria->compare('t.status',$this->status);
+		if(isset($_GET['status']))
+			$criteria->compare('t.status',$_GET['status']);
+		else
+			$criteria->compare('t.status',$this->status);
 		if(isset($_GET['report']))
 			$criteria->compare('t.report_id',$_GET['report']);
 		else

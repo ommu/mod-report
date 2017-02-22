@@ -148,16 +148,10 @@ class ReportUser extends CActiveRecord
 		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
-		else {
-			$criteria->addInCondition('t.publish',array(0,1));
+		if(isset($_GET['publish']))
+			$criteria->compare('t.report_id',$_GET['publish']);
+		else
 			$criteria->compare('t.publish',$this->publish);
-		}
 		if(isset($_GET['report']))
 			$criteria->compare('t.report_id',$_GET['report']);
 		else
