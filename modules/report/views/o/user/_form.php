@@ -9,7 +9,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2017 Ommu Platform (ommu.co)
  * @created date 22 February 2017, 12:26 WIB
- * @link http://company.ommu.co
+ * @link https://github.com/ommu/Report
  * @contect (+62)856-299-4114
  *
  */
