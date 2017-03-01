@@ -4,7 +4,7 @@
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2015 Ommu Platform (ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/Report
  * @contact (+62)856-299-4114
  *
