@@ -14,26 +14,26 @@ db_sql_filename	:
 
 plugin_menu		:
 	- urlTitle: View Reports
-		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/category
 	- urlTitle: Add Category
-		urlRules: {report, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/comment
 	- urlTitle: Back to Reports
-		urlRules: {report, o/comment, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
         
 # controller o/history
 	- urlTitle: Back to Reports
-		urlRules: {report, o/history, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
         
 # controller o/user
 	- urlTitle: Back to Reports
-		urlRules: {report, o/user, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
