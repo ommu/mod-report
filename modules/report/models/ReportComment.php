@@ -277,7 +277,7 @@ class ReportComment extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'creation_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'creation_date_filter',
