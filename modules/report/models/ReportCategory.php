@@ -264,7 +264,7 @@ class ReportCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'report_search',
-				'value' => 'CHtml::link($data->view->reports, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
+				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -272,7 +272,7 @@ class ReportCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'report_resolved_search',
-				'value' => 'CHtml::link($data->view->report_resolved, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
+				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -280,7 +280,7 @@ class ReportCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'report_all_search',
-				'value' => 'CHtml::link($data->view->report_all, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
+				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
