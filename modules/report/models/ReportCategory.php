@@ -380,16 +380,26 @@ class ReportCategory extends CActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
+	protected function beforeSave() 
+	{
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$location = Utility::getUrlTitle($currentAction);
+		
 		if(parent::beforeSave()) {
-			if($this->isNewRecord) {
-				$location = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
+			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
 				$title=new OmmuSystemPhrase;
 				$title->location = $location.'_title';
 				$title->en_us = $this->title;
 				if($title->save())
 					$this->name = $title->phrase_id;
-
+				
+			} else {
+				$title = OmmuSystemPhrase::model()->findByPk($this->name);
+				$title->en_us = $this->title;
+				$title->save();
+			}
+			
+			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
 				$desc=new OmmuSystemPhrase;
 				$desc->location = $location.'_description';
 				$desc->en_us = $this->description;
@@ -397,10 +407,6 @@ class ReportCategory extends CActiveRecord
 					$this->desc = $desc->phrase_id;
 				
 			} else {
-				$title = OmmuSystemPhrase::model()->findByPk($this->name);
-				$title->en_us = $this->title;
-				$title->save();
-
 				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
 				$desc->en_us = $this->description;
 				$desc->save();
