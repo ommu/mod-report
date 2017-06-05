@@ -13,9 +13,18 @@ db_table_name	:
 db_sql_filename	: 
 
 plugin_menu		:
-	- urlTitle: View Reports
+	- urlTitle: Abuse Reports
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: Histories
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/history/manage, attr: -, icon: -}
+	- urlTitle: Comments
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/comment/manage, attr: -, icon: -}
+	- urlTitle: Users
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/user/manage, attr: -, icon: -}
 
 content_menu	:
 # controller o/category
