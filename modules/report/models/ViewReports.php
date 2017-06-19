@@ -6,7 +6,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 13:14 WIB
- * @link https://github.com/ommu/Report
+ * @link https://github.com/ommu/mod-report
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -105,17 +105,6 @@ class ViewReports extends CActiveRecord
 			'users' => Yii::t('attribute', 'Users'),
 			'user_all' => Yii::t('attribute', 'User All'),
 		);
-		/*
-			'Report' => 'Report',
-			'Reports' => 'Reports',
-			'Report Resolved' => 'Report Resolved',
-			'Report All' => 'Report All',
-			'Comments' => 'Comments',
-			'Comment All' => 'Comment All',
-			'Users' => 'Users',
-			'User All' => 'User All',
-		
-		*/
 	}
 
 	/**

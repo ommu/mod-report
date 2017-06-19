@@ -6,7 +6,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
- * @link https://github.com/ommu/Report
+ * @link https://github.com/ommu/mod-report
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -119,18 +119,6 @@ class ReportHistory extends CActiveRecord
 			'user_search' => Yii::t('attribute', 'User'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
-		/*
-			'ID' => 'ID',
-			'Status' => 'Status',
-			'Report' => 'Report',
-			'User' => 'User',
-			'Report Message' => 'Report Message',
-			'Report Date' => 'Report Date',
-			'Report Ip' => 'Report Ip',
-			'Modified Date' => 'Modified Date',
-			'Modified' => 'Modified',
-		
-		*/
 	}
 
 	/**
