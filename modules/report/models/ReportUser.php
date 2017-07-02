@@ -30,7 +30,7 @@
  * @property string $creation_date
  *
  * The followings are the available model relations:
- * @property OmmuReports $report
+ * @property Reports $report
  */
 class ReportUser extends CActiveRecord
 {

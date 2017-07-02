@@ -39,7 +39,7 @@
  * @property string $modified_id
  *
  * The followings are the available model relations:
- * @property OmmuReportCategory $cat
+ * @property ReportCategory $cat
  */
 class Reports extends CActiveRecord
 {
