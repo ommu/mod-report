@@ -27,24 +27,24 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'title'); ?>
+			<?php echo $form->labelEx($model,'title_i'); ?>
 			<div class="desc">
 				<?php 
 				if(!$model->getErrors())
-					$model->title = Phrase::trans($model->name);
-				echo $form->textField($model,'title',array('maxlength'=>64,'class'=>'span-8')); ?>
-				<?php echo $form->error($model,'title'); ?>
+					$model->title_i = Phrase::trans($model->name);
+				echo $form->textField($model,'title_i',array('maxlength'=>64,'class'=>'span-8')); ?>
+				<?php echo $form->error($model,'title_i'); ?>
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'description'); ?>
+			<?php echo $form->labelEx($model,'description_i'); ?>
 			<div class="desc">
 				<?php 
 				if(!$model->getErrors())
-					$model->description = Phrase::trans($model->desc);
-				echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller')); ?>
-				<?php echo $form->error($model,'description'); ?>
+					$model->description_i = Phrase::trans($model->desc);
+				echo $form->textArea($model,'description_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller')); ?>
+				<?php echo $form->error($model,'description_i'); ?>
 			</div>
 		</div>
 

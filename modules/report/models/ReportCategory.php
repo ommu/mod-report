@@ -30,6 +30,7 @@
  * @property string $creation_id
  * @property string $modified_date
  * @property string $modified_id
+ * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property Reports[] $Reports
@@ -37,8 +38,8 @@
 class ReportCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $title;
-	public $description;
+	public $title_i;
+	public $description_i;
 	
 	// Variable Search
 	public $report_search;
@@ -46,6 +47,21 @@ class ReportCategory extends CActiveRecord
 	public $report_all_search;
 	public $creation_search;
 	public $modified_search;	
+
+	/**
+	 * Behaviors for this model
+	 */
+	public function behaviors() 
+	{
+		return array(
+			'sluggable' => array(
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'columns' => array('title.en_us'),
+				'unique' => true,
+				'update' => true,
+			),
+		);
+	}
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -74,18 +90,18 @@ class ReportCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('
-				title, description', 'required'),
+				title_i, description_i', 'required'),
 			array('publish, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('name, desc', 'length', 'max'=>11),
 			array('
-				title', 'length', 'max'=>32),
+				title_i', 'length', 'max'=>32),
 			array('
-				description', 'length', 'max'=>128),
+				description_i', 'length', 'max'=>128),
 			array('', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id,
-				title, description, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id, updated_date,
+				title_i, description_i, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,12 +132,13 @@ class ReportCategory extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'name' => Yii::t('attribute', 'Category'),
 			'desc' => Yii::t('attribute', 'Description'),
-			'creation_date' => Yii::t('attribute', 'Creation'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
-			'modified_date' => Yii::t('attribute', 'Modified'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'title' => Yii::t('attribute', 'Category'),
-			'description' => Yii::t('attribute', 'Description'),
+			'updated_date' => Yii::t('attribute', 'Updated Date'),
+			'title_i' => Yii::t('attribute', 'Category'),
+			'description_i' => Yii::t('attribute', 'Description'),
 			'report_search' => Yii::t('attribute', 'Report'),
 			'report_resolved_search' => Yii::t('attribute', 'Resolved'),
 			'report_all_search' => Yii::t('attribute', 'All'),
@@ -188,10 +205,15 @@ class ReportCategory extends CActiveRecord
 		$criteria->compare('t.creation_id',$this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id',$this->modified_id);
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
-		$criteria->compare('title.'.$language,strtolower($this->title), true);
-		$criteria->compare('description.'.$language,strtolower($this->description), true);
+		$criteria->compare('title.'.$language,strtolower($this->title_i), true);
+		$criteria->compare('description.'.$language,strtolower($this->description_i), true);
 		$criteria->compare('view.reports',strtolower($this->report_search), true);
 		$criteria->compare('view.report_resolved',strtolower($this->report_resolved_search), true);
 		$criteria->compare('view.report_all',strtolower($this->report_all_search), true);
@@ -232,6 +254,7 @@ class ReportCategory extends CActiveRecord
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = 'updated_date';
 		}
 
 		return $this->defaultColumns;
@@ -255,36 +278,12 @@ class ReportCategory extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'title',
+				'name' => 'title_i',
 				'value' => 'Phrase::trans($data->name)',
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'description',
+				'name' => 'description_i',
 				'value' => 'Phrase::trans($data->desc)',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'report_search',
-				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'report_resolved_search',
-				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'report_all_search',
-				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
@@ -315,6 +314,30 @@ class ReportCategory extends CActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_search',
+				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_resolved_search',
+				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'report_all_search',
+				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
@@ -389,26 +412,28 @@ class ReportCategory extends CActiveRecord
 			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
 				$title=new OmmuSystemPhrase;
 				$title->location = $location.'_title';
-				$title->en_us = $this->title;
+				$title->en_us = $this->title_i;
 				if($title->save())
 					$this->name = $title->phrase_id;
+
+				$this->slug = Utility::getUrlTitle($this->title_i);	
 				
 			} else {
 				$title = OmmuSystemPhrase::model()->findByPk($this->name);
-				$title->en_us = $this->title;
+				$title->en_us = $this->title_i;
 				$title->save();
 			}
 			
 			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
 				$desc=new OmmuSystemPhrase;
 				$desc->location = $location.'_description';
-				$desc->en_us = $this->description;
+				$desc->en_us = $this->description_i;
 				if($desc->save())
 					$this->desc = $desc->phrase_id;
 				
 			} else {
 				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-				$desc->en_us = $this->description;
+				$desc->en_us = $this->description_i;
 				$desc->save();
 			}
 		}

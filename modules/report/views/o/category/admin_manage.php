@@ -18,6 +18,22 @@
 	);
 ?>
 
+<?php //begin.Search ?>
+<div class="search-form">
+<?php $this->renderPartial('_search',array(
+	'model'=>$model,
+)); ?>
+</div>
+<?php //end.Search ?>
+
+<?php //begin.Grid Option ?>
+<div class="grid-form">
+<?php $this->renderPartial('_option_form',array(
+	'model'=>$model,
+)); ?>
+</div>
+<?php //end.Grid Option ?>
+
 <div id="partial-report-category">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
@@ -44,7 +60,7 @@
 						'options' => array(
 							'class' => 'view'
 						),
-						'url' => 'Yii::app()->controller->createUrl("edit",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
 					'update' => array(
 						'label' => 'update',
 						'imageUrl' => false,
@@ -60,7 +76,7 @@
 						),
 						'url' => 'Yii::app()->controller->createUrl("delete",array("id"=>$data->primaryKey))')
 				),
-				'template' => '{update}|{delete}',
+				'template' => '{view}|{update}|{delete}',
 			));
 
 			$this->widget('application.components.system.OGridView', array(
