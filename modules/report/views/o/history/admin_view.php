@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Report Histories'=>array('manage'),
-		$model->id,
+		$model->history_id,
 	);
 ?>
 
@@ -24,8 +24,8 @@
 	'data'=>$model,
 	'attributes'=>array(
 		array(
-			'name'=>'id',
-			'value'=>$model->id,
+			'name'=>'history_id',
+			'value'=>$model->history_id,
 		),
 		array(
 			'name'=>'status',
@@ -33,17 +33,18 @@
 			'type'=>'raw',
 		),
 		array(
-			'name'=>'category_search',
-			'value'=>Phrase::trans($model->report->cat->name),
-		),
-		array(
 			'name'=>'report_id',
-			'value'=>$model->report->report_body,
+			'value'=>$model->report->report_url || $model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'report_message',
 			'value'=>$model->report_message != '' ? $model->report_message : '-',
 			'type'=>'raw',
+		),
+		array(
+			'name'=>'user_id',
+			'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
 		),
 		array(
 			'name'=>'report_date',
@@ -52,10 +53,6 @@
 		array(
 			'name'=>'report_ip',
 			'value'=>$model->report_ip != '' ? $model->report_ip : '-',
-		),
-		array(
-			'name'=>'user_id',
-			'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
 		),
 		array(
 			'name'=>'modified_date',

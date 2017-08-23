@@ -23,7 +23,7 @@
  * This is the model class for table "ommu_report_history".
  *
  * The followings are the available columns in table 'ommu_report_history':
- * @property string $id
+ * @property string $history_id
  * @property integer $status
  * @property string $report_id
  * @property string $user_id
@@ -43,7 +43,7 @@ class ReportHistory extends CActiveRecord
 	// Variable Search
 	public $category_search;
 	public $report_search;
-	public $user_search;
+	public $reporter_search;
 	public $modified_search;	
 
 	/**
@@ -80,8 +80,8 @@ class ReportHistory extends CActiveRecord
 			array('report_ip', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, status, report_id, user_id, report_message, report_date, report_ip, modified_date, modified_id,
-				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
+			array('history_id, status, report_id, user_id, report_message, report_date, report_ip, modified_date, modified_id,
+				category_search, report_search, reporter_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -105,10 +105,10 @@ class ReportHistory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => Yii::t('attribute', 'ID'),
+			'history_id' => Yii::t('attribute', 'ID'),
 			'status' => Yii::t('attribute', 'Status'),
 			'report_id' => Yii::t('attribute', 'Report'),
-			'user_id' => Yii::t('attribute', 'User'),
+			'user_id' => Yii::t('attribute', 'Reporter'),
 			'report_message' => Yii::t('attribute', 'Report Message'),
 			'report_date' => Yii::t('attribute', 'Report Date'),
 			'report_ip' => Yii::t('attribute', 'Report Ip'),
@@ -116,7 +116,7 @@ class ReportHistory extends CActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'category_search' => Yii::t('attribute', 'Category'),
 			'report_search' => Yii::t('attribute', 'Report'),
-			'user_search' => Yii::t('attribute', 'User'),
+			'reporter_search' => Yii::t('attribute', 'Reporter'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
@@ -143,7 +143,7 @@ class ReportHistory extends CActiveRecord
 		$criteria->with = array(
 			'report' => array(
 				'alias'=>'report',
-				'select'=>'cat_id, url, report_body'
+				'select'=>'cat_id, report_url, report_body'
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -155,7 +155,7 @@ class ReportHistory extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',strtolower($this->id),true);
+		$criteria->compare('t.history_id',$this->history_id);
 		if(isset($_GET['status']))
 			$criteria->compare('t.status',$_GET['status']);
 		else
@@ -181,11 +181,11 @@ class ReportHistory extends CActiveRecord
 		
 		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
 		$criteria->compare('report.report_body',strtolower($this->report_search), true);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('user.displayname',strtolower($this->reporter_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['ReportHistory_sort']))
-			$criteria->order = 't.id DESC';
+			$criteria->order = 't.history_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -213,7 +213,7 @@ class ReportHistory extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			//$this->defaultColumns[] = 'id';
+			//$this->defaultColumns[] = 'history_id';
 			$this->defaultColumns[] = 'status';
 			$this->defaultColumns[] = 'report_id';
 			$this->defaultColumns[] = 'user_id';
@@ -257,11 +257,7 @@ class ReportHistory extends CActiveRecord
 				);
 			}
 			$this->defaultColumns[] = array(
-				'name' => 'report_message',
-				'value' => '$data->report_message',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'user_search',
+				'name' => 'reporter_search',
 				'value' => '$data->user->displayname',
 			);
 			$this->defaultColumns[] = array(
@@ -289,13 +285,6 @@ class ReportHistory extends CActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'report_ip',
-				'value' => '$data->report_ip',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'status',
