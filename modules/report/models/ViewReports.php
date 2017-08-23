@@ -125,14 +125,14 @@ class ViewReports extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.report_id',strtolower($this->report_id),true);
-		$criteria->compare('t.reports',strtolower($this->reports),true);
-		$criteria->compare('t.report_resolved',strtolower($this->report_resolved),true);
-		$criteria->compare('t.report_all',strtolower($this->report_all),true);
-		$criteria->compare('t.comments',strtolower($this->comments),true);
-		$criteria->compare('t.comment_all',strtolower($this->comment_all),true);
-		$criteria->compare('t.users',strtolower($this->users),true);
-		$criteria->compare('t.user_all',strtolower($this->user_all),true);
+		$criteria->compare('t.report_id',$this->report_id);
+		$criteria->compare('t.reports',$this->reports);
+		$criteria->compare('t.report_resolved',$this->report_resolved);
+		$criteria->compare('t.report_all',$this->report_all);
+		$criteria->compare('t.comments',$this->comments);
+		$criteria->compare('t.comment_all',$this->comment_all);
+		$criteria->compare('t.users',$this->users);
+		$criteria->compare('t.user_all',$this->user_all);
 
 		if(!isset($_GET['ViewReports_sort']))
 			$criteria->order = 't.report_id DESC';

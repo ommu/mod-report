@@ -117,9 +117,9 @@ class ViewReportCategory extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.reports',strtolower($this->reports),true);
-		$criteria->compare('t.report_resolved',strtolower($this->report_resolved),true);
-		$criteria->compare('t.report_all',strtolower($this->report_all),true);
+		$criteria->compare('t.reports',$this->reports);
+		$criteria->compare('t.report_resolved',$this->report_resolved);
+		$criteria->compare('t.report_all',$this->report_all);
 
 		if(!isset($_GET['ViewReportCategory_sort']))
 			$criteria->order = 't.cat_id DESC';
