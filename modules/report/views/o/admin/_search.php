@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('report_id'); ?><br/>
-			<?php echo $form->textField($model,'report_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'report_id'); ?>
 		</li>
 
 		<li>
@@ -36,17 +36,22 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'user_id'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('url'); ?><br/>
-			<?php echo $form->textField($model,'url',array('size'=>60,'maxlength'=>255)); ?>
+			<?php echo $model->getAttributeLabel('report_url'); ?><br/>
+			<?php echo $form->textField($model,'report_url'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_body'); ?><br/>
-			<?php echo $form->textArea($model,'report_body',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'report_body'); ?>
+		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('report_message'); ?><br/>
+			<?php echo $form->textField($model,'report_message'); ?>
 		</li>
 
 		<li>
@@ -56,32 +61,22 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_ip'); ?><br/>
-			<?php echo $form->textField($model,'report_ip',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $form->textField($model,'report_ip'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('report_message'); ?><br/>
-			<?php echo $form->textField($model,'report_message',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $model->getAttributeLabel('modified_date'); ?><br/>
+			<?php echo $form->textField($model,'modified_date'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('resolved_date'); ?><br/>
-			<?php echo $form->textField($model,'resolved_date'); ?>
+			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
+			<?php echo $form->textField($model,'modified_id'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('resolved_id'); ?><br/>
-			<?php echo $form->textField($model,'resolved_id',array('size'=>20,'maxlength'=>20)); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('unresolved_date'); ?><br/>
-			<?php echo $form->textField($model,'unresolved_date'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('unresolved_id'); ?><br/>
-			<?php echo $form->textField($model,'unresolved_id',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $model->getAttributeLabel('updated_date'); ?><br/>
+			<?php echo $form->textField($model,'updated_date'); ?>
 		</li>
 
 		<li class="submit">

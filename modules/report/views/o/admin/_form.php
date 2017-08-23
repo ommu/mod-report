@@ -42,11 +42,11 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'url'); ?>
+			<?php echo $form->labelEx($model,'report_url'); ?>
 			<div class="desc">
-				<?php //$model->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-				echo $form->textField($model,'url',array('class'=>'span-11')); ?>
-				<?php echo $form->error($model,'url'); ?>
+				<?php //$model->report_url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+				echo $form->textField($model,'report_url',array('class'=>'span-11')); ?>
+				<?php echo $form->error($model,'report_url'); ?>
 			</div>
 		</div>
 

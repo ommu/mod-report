@@ -22,7 +22,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('comment_id'); ?><br/>
-			<?php echo $form->textField($model,'comment_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'comment_id'); ?>
 		</li>
 
 		<li>
@@ -32,17 +32,17 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_id'); ?><br/>
-			<?php echo $form->textField($model,'report_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'report_id'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'user_id'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('comment_text'); ?><br/>
-			<?php echo $form->textArea($model,'comment_text',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'comment_text'); ?>
 		</li>
 
 		<li>
@@ -57,7 +57,12 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'modified_id'); ?>
+		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('updated_date'); ?><br/>
+			<?php echo $form->textField($model,'updated_date'); ?>
 		</li>
 
 		<li class="submit">

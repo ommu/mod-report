@@ -248,7 +248,6 @@ class CategoryController extends Controller
 			'model'=>$model,
 		));
 	}
-
 	
 	/**
 	 * Deletes a particular model.
