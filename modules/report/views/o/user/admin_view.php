@@ -33,20 +33,33 @@
 			'type'=>'raw',
 		),
 		array(
-			'name'=>'category_search',
-			'value'=>Phrase::trans($model->report->cat->name),
-		),
-		array(
 			'name'=>'report_id',
-			'value'=>$model->report->report_body,
+			'value'=>$model->report->report_url || $model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'user_id',
-			'value'=>$model->user_id != '' ? $model->user->displayname : '-',
+			'value'=>$model->user_id ? $model->user->displayname : '-',
 		),
 		array(
 			'name'=>'creation_date',
 			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
+		),
+		array(
+			'name'=>'creation_date',
+			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
+		),
+		array(
+			'name'=>'modified_date',
+			'value'=>!in_array($model->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->modified_date, true) : '-',
+		),
+		array(
+			'name'=>'modified_id',
+			'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
+		),
+		array(
+			'name'=>'updated_date',
+			'value'=>!in_array($model->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->updated_date, true) : '-',
 		),
 	),
 )); ?>

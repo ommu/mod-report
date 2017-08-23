@@ -28,6 +28,9 @@
  * @property string $report_id
  * @property string $user_id
  * @property string $creation_date
+ * @property string $modified_date
+ * @property string $modified_id
+ * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property Reports $report
@@ -40,6 +43,7 @@ class ReportUser extends CActiveRecord
 	public $category_search;
 	public $report_search;
 	public $user_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -70,12 +74,12 @@ class ReportUser extends CActiveRecord
 		return array(
 			array('report_id, user_id', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
-			array('report_id, user_id', 'length', 'max'=>11),
-			array('creation_date', 'safe'),
+			array('report_id, user_id, modified_id', 'length', 'max'=>11),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, publish, report_id, user_id, creation_date,
-				category_search, report_search, user_search', 'safe', 'on'=>'search'),
+			array('id, publish, report_id, user_id, creation_date, modified_date, modified_id, updated_date,
+				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +93,7 @@ class ReportUser extends CActiveRecord
 		return array(
 			'report' => array(self::BELONGS_TO, 'Reports', 'report_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -103,9 +108,13 @@ class ReportUser extends CActiveRecord
 			'report_id' => Yii::t('attribute', 'Report'),
 			'user_id' => Yii::t('attribute', 'User'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'updated_date' => Yii::t('attribute', 'Updated Date'),
 			'category_search' => Yii::t('attribute', 'Category'),
 			'report_search' => Yii::t('attribute', 'Report'),
 			'user_search' => Yii::t('attribute', 'User'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 
@@ -131,11 +140,15 @@ class ReportUser extends CActiveRecord
 		$criteria->with = array(
 			'report' => array(
 				'alias'=>'report',
-				'select'=>'cat_id, url, report_body'
+				'select'=>'cat_id, report_url, report_body'
 			),
 			'user' => array(
 				'alias'=>'user',
 				'select'=>'displayname'
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
 			),
 		);
 
@@ -154,10 +167,19 @@ class ReportUser extends CActiveRecord
 			$criteria->compare('t.user_id',$this->user_id);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
 		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
 		$criteria->compare('report.report_body',strtolower($this->report_search), true);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['ReportUser_sort']))
 			$criteria->order = 't.id DESC';
@@ -193,6 +215,9 @@ class ReportUser extends CActiveRecord
 			$this->defaultColumns[] = 'report_id';
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = 'updated_date';
 		}
 
 		return $this->defaultColumns;
@@ -290,6 +315,19 @@ class ReportUser extends CActiveRecord
 			$model = self::model()->findByPk($id);
 			return $model;			
 		}
+	}
+
+	/**
+	 * before validate attributes
+	 */
+	protected function beforeValidate() {
+		if(parent::beforeValidate()) {		
+			if($this->isNewRecord)
+				$this->user_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
+		}
+		return true;
 	}
 
 }
