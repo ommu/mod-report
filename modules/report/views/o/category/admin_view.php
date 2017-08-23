@@ -1,20 +1,20 @@
 <?php
 /**
- * Support Contact Category (support-contact-category)
- * @var $this ContactcategoryController
- * @var $model SupportContactCategory
+ * Report Category (report-category)
+ * @var $this CategoryController
+ * @var $model ReportCategory
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
- * @created date 23 August 2017, 08:12 WIB
+ * @created date 23 August 2017, 20:42 WIB
  * @link https://github.com/ommu/mod-support
  * @contact (+62)856-299-4114
  *
  */
 
 	$this->breadcrumbs=array(
-		'Support Contact Categories'=>array('manage'),
+		'Report Categories'=>array('manage'),
 		$model->cat_id,
 	);
 ?>

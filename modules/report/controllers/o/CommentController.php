@@ -245,7 +245,7 @@ class CommentController extends Controller
 
 		$this->pageTitle = Yii::t('phrase', 'View Report Comments');
 		$this->pageDescription = '';
-		$this->pageMeta = $setting->meta_keyword;
+		$this->pageMeta = '';
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));

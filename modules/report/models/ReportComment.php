@@ -31,6 +31,7 @@
  * @property string $creation_date
  * @property string $modified_date
  * @property string $modified_id
+ * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property Reports $report
@@ -75,10 +76,10 @@ class ReportComment extends CActiveRecord
 			array('report_id, user_id, comment_text', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
-			array('modified_date', 'safe'),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('comment_id, publish, report_id, user_id, comment_text, creation_date, modified_date, modified_id,
+			array('comment_id, publish, report_id, user_id, comment_text, creation_date, modified_date, modified_id, updated_date,
 				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -111,6 +112,7 @@ class ReportComment extends CActiveRecord
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'updated_date' => Yii::t('attribute', 'Updated Date'),
 			'category_search' => Yii::t('attribute', 'Category'),
 			'report_search' => Yii::t('attribute', 'Report'),
 			'user_search' => Yii::t('attribute', 'User'),
@@ -140,7 +142,7 @@ class ReportComment extends CActiveRecord
 		$criteria->with = array(
 			'report' => array(
 				'alias'=>'report',
-				'select'=>'cat_id, url, report_body'
+				'select'=>'cat_id, report_url, report_body'
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -174,6 +176,8 @@ class ReportComment extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
 		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
 		$criteria->compare('report.report_body',strtolower($this->report_search), true);
@@ -190,7 +194,6 @@ class ReportComment extends CActiveRecord
 			),
 		));
 	}
-
 
 	/**
 	 * Get column for CGrid View
@@ -217,6 +220,7 @@ class ReportComment extends CActiveRecord
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = 'updated_date';
 		}
 
 		return $this->defaultColumns;
@@ -321,7 +325,7 @@ class ReportComment extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {		
+		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->user_id = Yii::app()->user->id;
 			else
