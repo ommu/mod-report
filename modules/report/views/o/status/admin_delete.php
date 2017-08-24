@@ -1,6 +1,6 @@
 <?php
 /**
- * Report Histories (report-history)
+ * Report Status (report-status)
  * @var $this StatusController
  * @var $model ReportStatus
  * @var $form CActiveForm
@@ -15,13 +15,13 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Histories'=>array('manage'),
+		'Report Status'=>array('manage'),
 		'Delete',
 	);
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
-	'id'=>'report-history-form',
+	'id'=>'report-status-form',
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>

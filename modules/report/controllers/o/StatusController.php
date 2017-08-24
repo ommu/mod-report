@@ -168,7 +168,7 @@ class StatusController extends Controller
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-report-history',
+					'id' => 'partial-report-status',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportStatus success deleted.').'</strong></div>',
 				));
 			}
@@ -204,7 +204,7 @@ class StatusController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='report-history-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='report-status-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

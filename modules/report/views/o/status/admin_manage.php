@@ -1,6 +1,6 @@
 <?php
 /**
- * Report Histories (report-history)
+ * Report Status (report-status)
  * @var $this StatusController
  * @var $model ReportStatus
  * version: 0.0.1
@@ -14,7 +14,7 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Histories'=>array('manage'),
+		'Report Status'=>array('manage'),
 		'Manage',
 	);
 	$this->menu=array(
@@ -50,7 +50,7 @@
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-report-history">
+<div id="partial-report-status">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
@@ -96,7 +96,7 @@
 			));
 
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'report-history-grid',
+				'id'=>'report-status-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'afterAjaxUpdate' => 'reinstallDatePicker',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Report Histories (report-history)
+ * Report Status (report-status)
  * @var $this StatusController
  * @var $model ReportStatus
  * version: 0.0.1
