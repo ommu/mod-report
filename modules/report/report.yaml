@@ -16,9 +16,9 @@ plugin_menu		:
 	- urlTitle: Abuse Reports
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: Histories
+	- urlTitle: Status
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/history/manage, attr: -, icon: -}
+		urlPath: {url: o/status/manage, attr: -, icon: -}
 	- urlTitle: Comments
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/comment/manage, attr: -, icon: -}
@@ -40,9 +40,9 @@ content_menu	:
 		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
         
-# controller o/history
+# controller o/status
 	- urlTitle: Back to Reports
-		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {report, o/status, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
         
 # controller o/user

@@ -1,8 +1,8 @@
 <?php
 /**
- * HistoryController
- * @var $this HistoryController
- * @var $model ReportHistory
+ * StatusController
+ * @var $this StatusController
+ * @var $model ReportStatus
  * @var $form CActiveForm
  * version: 0.0.1
  * Reference start
@@ -25,7 +25,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class HistoryController extends Controller
+class StatusController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -107,10 +107,10 @@ class HistoryController extends Controller
 	 */
 	public function actionManage() 
 	{
-		$model=new ReportHistory('search');
+		$model=new ReportStatus('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ReportHistory'])) {
-			$model->attributes=$_GET['ReportHistory'];
+		if(isset($_GET['ReportStatus'])) {
+			$model->attributes=$_GET['ReportStatus'];
 		}
 
 		$columnTemp = array();
@@ -163,15 +163,14 @@ class HistoryController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-report-history',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportHistory success deleted.').'</strong></div>',
-					));
-				}
+			
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-report-history',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportStatus success deleted.').'</strong></div>',
+				));
 			}
 
 		} else {
@@ -179,7 +178,7 @@ class HistoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'ReportHistory Delete.');
+			$this->pageTitle = Yii::t('phrase', 'ReportStatus Delete.');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -193,7 +192,7 @@ class HistoryController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = ReportHistory::model()->findByPk($id);
+		$model = ReportStatus::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;

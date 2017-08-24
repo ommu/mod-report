@@ -1,13 +1,13 @@
 <?php
 /**
- * Report Users (report-user)
- * @var $this UserController
- * @var $model ReportUser
+ * Report Histories (report-history)
+ * @var $this StatusController
+ * @var $model ReportStatus
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @created date 23 August 2017, 11:02 WIB
+ * @created date 24 August 2017, 06:06 WIB
  * @link https://github.com/ommu/mod-report
  * @contact (+62)856-299-4114
  *

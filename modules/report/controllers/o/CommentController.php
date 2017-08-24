@@ -298,15 +298,15 @@ class CommentController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-report-comment',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success deleted.').'</strong></div>',
-					));
-				}
+			$model->publish = 2;
+			
+			if($model->save()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-report-comment',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success deleted.').'</strong></div>',
+				));
 			}
 
 		} else {
@@ -330,13 +330,8 @@ class CommentController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		if($model->publish == 1) {
-			$title = Yii::t('phrase', 'Unpublish');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Publish');
-			$replace = 1;
-		}
+		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
+		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request

@@ -1,8 +1,8 @@
 <?php
 /**
  * Report Histories (report-history)
- * @var $this HistoryController
- * @var $model ReportHistory
+ * @var $this StatusController
+ * @var $model ReportStatus
  * @var $form CActiveForm
  * version: 0.0.1
  *

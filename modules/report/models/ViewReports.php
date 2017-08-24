@@ -24,9 +24,9 @@
  *
  * The followings are the available columns in table '_view_reports':
  * @property string $report_id
- * @property string $reports
- * @property string $report_resolved
- * @property string $report_all
+ * @property string $history_resolved
+ * @property string $history_unresolved
+ * @property string $history_all
  * @property string $comments
  * @property string $comment_all
  * @property string $users
@@ -72,10 +72,10 @@ class ViewReports extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('report_id', 'length', 'max'=>11),
-			array('reports, report_resolved, report_all, comments, comment_all, users, user_all', 'length', 'max'=>21),
+			array('history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('report_id, reports, report_resolved, report_all, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
+			array('report_id, history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -97,9 +97,9 @@ class ViewReports extends CActiveRecord
 	{
 		return array(
 			'report_id' => Yii::t('attribute', 'Report'),
-			'reports' => Yii::t('attribute', 'Reports'),
-			'report_resolved' => Yii::t('attribute', 'Report Resolved'),
-			'report_all' => Yii::t('attribute', 'Report All'),
+			'history_resolved' => Yii::t('attribute', 'History Resolved'),
+			'history_unresolved' => Yii::t('attribute', 'History Unresolved'),
+			'history_all' => Yii::t('attribute', 'History All'),
 			'comments' => Yii::t('attribute', 'Comments'),
 			'comment_all' => Yii::t('attribute', 'Comment All'),
 			'users' => Yii::t('attribute', 'Users'),
@@ -126,9 +126,9 @@ class ViewReports extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.report_id',$this->report_id);
-		$criteria->compare('t.reports',$this->reports);
-		$criteria->compare('t.report_resolved',$this->report_resolved);
-		$criteria->compare('t.report_all',$this->report_all);
+		$criteria->compare('t.history_resolved',$this->history_resolved);
+		$criteria->compare('t.history_unresolved',$this->history_unresolved);
+		$criteria->compare('t.history_all',$this->history_all);
 		$criteria->compare('t.comments',$this->comments);
 		$criteria->compare('t.comment_all',$this->comment_all);
 		$criteria->compare('t.users',$this->users);
@@ -164,9 +164,9 @@ class ViewReports extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'reports';
-			$this->defaultColumns[] = 'report_resolved';
-			$this->defaultColumns[] = 'report_all';
+			$this->defaultColumns[] = 'history_resolved';
+			$this->defaultColumns[] = 'history_unresolved';
+			$this->defaultColumns[] = 'history_all';
 			$this->defaultColumns[] = 'comments';
 			$this->defaultColumns[] = 'comment_all';
 			$this->defaultColumns[] = 'users';
@@ -194,9 +194,9 @@ class ViewReports extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'reports';
-			$this->defaultColumns[] = 'report_resolved';
-			$this->defaultColumns[] = 'report_all';
+			$this->defaultColumns[] = 'history_resolved';
+			$this->defaultColumns[] = 'history_unresolved';
+			$this->defaultColumns[] = 'history_all';
 			$this->defaultColumns[] = 'comments';
 			$this->defaultColumns[] = 'comment_all';
 			$this->defaultColumns[] = 'users';

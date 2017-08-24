@@ -1,6 +1,6 @@
 <?php
 /**
- * ReportHistory
+ * ReportStatus
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -20,23 +20,23 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "ommu_report_history".
+ * This is the model class for table "ommu_report_status".
  *
- * The followings are the available columns in table 'ommu_report_history':
+ * The followings are the available columns in table 'ommu_report_status':
  * @property string $history_id
  * @property integer $status
  * @property string $report_id
  * @property string $user_id
  * @property string $report_message
- * @property string $report_date
- * @property string $report_ip
+ * @property string $updated_date
+ * @property string $updated_ip
  * @property string $modified_date
  * @property string $modified_id
  *
  * The followings are the available model relations:
  * @property Reports $report
  */
-class ReportHistory extends CActiveRecord
+class ReportStatus extends CActiveRecord
 {
 	public $defaultColumns = array();
 	
@@ -50,7 +50,7 @@ class ReportHistory extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ReportHistory the static model class
+	 * @return ReportStatus the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -62,7 +62,7 @@ class ReportHistory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_report_history';
+		return 'ommu_report_status';
 	}
 
 	/**
@@ -76,11 +76,11 @@ class ReportHistory extends CActiveRecord
 			array('status, report_id, user_id, report_message', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
-			array('report_ip', 'length', 'max'=>20),
-			array('report_ip', 'safe'),
+			array('updated_ip', 'length', 'max'=>20),
+			array('updated_ip', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('history_id, status, report_id, user_id, report_message, report_date, report_ip, modified_date, modified_id,
+			array('history_id, status, report_id, user_id, report_message, updated_date, updated_ip, modified_date, modified_id,
 				category_search, report_search, reporter_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -110,8 +110,8 @@ class ReportHistory extends CActiveRecord
 			'report_id' => Yii::t('attribute', 'Report'),
 			'user_id' => Yii::t('attribute', 'Reporter'),
 			'report_message' => Yii::t('attribute', 'Report Message'),
-			'report_date' => Yii::t('attribute', 'Report Date'),
-			'report_ip' => Yii::t('attribute', 'Report Ip'),
+			'updated_date' => Yii::t('attribute', 'Report Date'),
+			'updated_ip' => Yii::t('attribute', 'Report Ip'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'category_search' => Yii::t('attribute', 'Category'),
@@ -169,9 +169,9 @@ class ReportHistory extends CActiveRecord
 		else
 			$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.report_message',strtolower($this->report_message),true);
-		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.report_date)',date('Y-m-d', strtotime($this->report_date)));
-		$criteria->compare('t.report_ip',strtolower($this->report_ip),true);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
+		$criteria->compare('t.updated_ip',strtolower($this->updated_ip),true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -184,7 +184,7 @@ class ReportHistory extends CActiveRecord
 		$criteria->compare('user.displayname',strtolower($this->reporter_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
-		if(!isset($_GET['ReportHistory_sort']))
+		if(!isset($_GET['ReportStatus_sort']))
 			$criteria->order = 't.history_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -218,8 +218,8 @@ class ReportHistory extends CActiveRecord
 			$this->defaultColumns[] = 'report_id';
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'report_message';
-			$this->defaultColumns[] = 'report_date';
-			$this->defaultColumns[] = 'report_ip';
+			$this->defaultColumns[] = 'updated_date';
+			$this->defaultColumns[] = 'updated_ip';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -261,19 +261,19 @@ class ReportHistory extends CActiveRecord
 				'value' => '$data->user->displayname',
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'report_date',
-				'value' => 'Utility::dateFormat($data->report_date)',
+				'name' => 'updated_date',
+				'value' => 'Utility::dateFormat($data->updated_date)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
 					'model'=>$this,
-					'attribute'=>'report_date',
+					'attribute'=>'updated_date',
 					'language' => 'en',
 					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
-						'id' => 'report_date_filter',
+						'id' => 'updated_date_filter',
 					),
 					'options'=>array(
 						'showOn' => 'focus',

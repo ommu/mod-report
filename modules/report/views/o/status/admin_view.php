@@ -1,8 +1,8 @@
 <?php
 /**
  * Report Histories (report-history)
- * @var $this HistoryController
- * @var $model ReportHistory
+ * @var $this StatusController
+ * @var $model ReportStatus
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -47,12 +47,12 @@
 			'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
 		),
 		array(
-			'name'=>'report_date',
-			'value'=>!in_array($model->report_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->report_date, true) : '-',
+			'name'=>'updated_date',
+			'value'=>!in_array($model->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->updated_date, true) : '-',
 		),
 		array(
-			'name'=>'report_ip',
-			'value'=>$model->report_ip != '' ? $model->report_ip : '-',
+			'name'=>'updated_ip',
+			'value'=>$model->updated_ip != '' ? $model->updated_ip : '-',
 		),
 		array(
 			'name'=>'modified_date',
