@@ -9,6 +9,7 @@
  *
  * TOC :
  *	Index
+ *	Edit
  *	Manual
  *
  *	LoadModel
@@ -101,8 +102,54 @@ class SettingController extends Controller
 	 */
 	public function actionIndex() 
 	{
-		//$this->redirect(array('edit'));
-		$this->redirect(Yii::app()->createUrl('site/login'));
+		$this->redirect(array('edit'));
+	}
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionEdit() 
+	{
+		if(Yii::app()->user->level != 1)
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+		
+		$model = ReportSetting::model()->findByPk(1);
+		if($model == null)
+			$model=new ReportSetting;
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['ReportSetting'])) {
+			$model->attributes=$_POST['ReportSetting'];
+			
+			$jsonError = CActiveForm::validate($model);
+			if(strlen($jsonError) > 2) {
+				echo $jsonError;
+
+			} else {
+				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if($model->save()) {
+						echo CJSON::encode(array(
+							'type' => 0,
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report settings success updated.').'</strong></div>',
+						));
+					} else {
+						print_r($model->getErrors());
+					}
+				}
+			}
+			Yii::app()->end();
+		}
+
+		$this->pageTitle = Yii::t('phrase', 'Settings');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_edit',array(
+			'model'=>$model,
+		));
 	}
 	
 	/**

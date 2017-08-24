@@ -331,6 +331,35 @@ class Reports extends CActiveRecord
 	}
 
 	/**
+	 * User get information
+	 */
+	public static function insertReport($report_url, $report_body)
+	{
+		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+
+		$setting = ReportSetting::model()->findByPk(1, array(
+			'select' => 'auto_report_cat_id',
+		));
+		$criteria=new CDbCriteria;
+		$criteria->select = 'report_id, cat_id, report_url, reports';
+		if($setting != null)
+			$criteria->compare('cat_id', $setting->auto_report_cat_id);
+		$criteria->compare('report_url', $report_url);
+		$findReport = self::model()->find($criteria);
+		
+		if($findReport != null)
+			self::model()->updateByPk($findReport->report_id, array('user_id'=>$user_id, 'reports'=>$findReport->reports + 1, 'report_ip'=>$_SERVER['REMOTE_ADDR']));
+		
+		else {
+			$report=new Reports;
+			$report->cat_id = $setting != null ? $setting->auto_report_cat_id : '1';
+			$report->report_url = $report_url;
+			$report->report_body = $report_body;
+			$report->save();
+		}
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {

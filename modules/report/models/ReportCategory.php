@@ -362,19 +362,12 @@ class ReportCategory extends CActiveRecord
 	 * 0 = unpublish
 	 * 1 = publish
 	 */
-	public static function getCategory($publish=null) {
-		if($publish == null) {
-			$model = self::model()->findAll();
-		} else {
-			$model = self::model()->findAll(array(
-				//'select' => 'publish, name',
-				'condition' => 'publish = :publish',
-				'params' => array(
-					':publish' => $publish,
-				),
-				//'order' => 'cat_id ASC'
-			));
-		}
+	public static function getCategory($publish=null) 
+	{
+		$criteria=new CDbCriteria;
+		if($publish != null)
+			$criteria->compare('publish', $publish);
+		$model = self::model()->findAll($criteria);
 
 		$items = array();
 		if($model != null) {
@@ -382,9 +375,8 @@ class ReportCategory extends CActiveRecord
 				$items[$val->cat_id] = Phrase::trans($val->name);
 			}
 			return $items;
-		} else {
+		} else
 			return false;
-		}
 	}
 
 	/**

@@ -16,6 +16,9 @@ plugin_menu		:
 	- urlTitle: Abuse Reports
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: Histories
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/history/manage, attr: -, icon: -}
 	- urlTitle: Status
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/status/manage, attr: -, icon: -}
@@ -25,8 +28,11 @@ plugin_menu		:
 	- urlTitle: Users
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/user/manage, attr: -, icon: -}
+	- urlTitle: Settings
+		urlRules: {siteType: "0,1", userLevel: "1"}
+		urlPath: {url: o/setting/edit, attr: -, icon: -}
 	- urlTitle: Report Manual
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "2"}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
 content_menu	:
@@ -34,6 +40,11 @@ content_menu	:
 	- urlTitle: Add Category
 		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
+        
+# controller o/history
+	- urlTitle: Back to Reports
+		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}
         
 # controller o/comment
 	- urlTitle: Back to Reports
@@ -49,3 +60,8 @@ content_menu	:
 	- urlTitle: Back to Reports
 		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+        
+# controller o/setting
+	- urlTitle: Report Manual
+		urlRules: {report, o/setting, edit, siteType: "0,1", userLevel: "1"}
+		urlPath: {url: o/setting/manual, attr: -, icon: -}
