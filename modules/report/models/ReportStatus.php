@@ -179,7 +179,7 @@ class ReportStatus extends CActiveRecord
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
-		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
+		$criteria->compare('report.cat_id',$this->category_search);
 		$criteria->compare('report.report_body',strtolower($this->report_search), true);
 		$criteria->compare('user.displayname',strtolower($this->reporter_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);

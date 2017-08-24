@@ -182,7 +182,7 @@ class ReportUser extends CActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
-		$criteria->compare('report.cat_id',strtolower($this->category_search), true);
+		$criteria->compare('report.cat_id',$this->category_search);
 		$criteria->compare('report.report_body',strtolower($this->report_search), true);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
