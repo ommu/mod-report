@@ -256,13 +256,15 @@ class Reports extends CActiveRecord
 			}
 			//$this->defaultColumns[] = 'report_url';
 			$this->defaultColumns[] = 'report_body';
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'reporter_search',
 				'value' => '$data->user->displayname',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'report_date',
-				'value' => 'Utility::dateFormat($data->report_date)',
+				'value' => 'Utility::dateFormat($data->report_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

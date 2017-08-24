@@ -268,7 +268,7 @@ class ReportComment extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
-				'value' => 'Utility::dateFormat($data->creation_date)',
+				'value' => 'Utility::dateFormat($data->creation_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

@@ -262,7 +262,7 @@ class ReportStatus extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'updated_date',
-				'value' => 'Utility::dateFormat($data->updated_date)',
+				'value' => 'Utility::dateFormat($data->updated_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

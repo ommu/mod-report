@@ -225,7 +225,7 @@ class ReportHistory extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'report_date',
-				'value' => 'Utility::dateFormat($data->report_date)',
+				'value' => 'Utility::dateFormat($data->report_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
