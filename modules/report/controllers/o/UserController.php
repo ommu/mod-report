@@ -107,8 +107,18 @@ class UserController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($report=null, $user=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Report Users');
+		if($report != null) {
+			$data = Reports::model()->findByPk($report);
+			$pageTitle = Yii::t('phrase', 'Users: Report $report_body', array ('$report_body'=>$data->report_body));
+		}
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'Users: $user_displayname', array ('$user_displayname'=>$data->displayname));
+		}
+		
 		$model=new ReportUser('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['ReportUser'])) {
@@ -125,7 +135,7 @@ class UserController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Report Users Manage');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -146,7 +156,7 @@ class UserController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Report Users');
+		$this->pageTitle = Yii::t('phrase', 'View User: Report $report_body', array('$report_body'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -208,7 +218,7 @@ class UserController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-report-user',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportUser success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success deleted.').'</strong></div>',
 				));
 			}
 
@@ -217,7 +227,7 @@ class UserController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'ReportUser Delete.');
+			$this->pageTitle = Yii::t('phrase', 'Delete User: Report $report_body', array('$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -247,7 +257,7 @@ class UserController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-report-user',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportUser success updated.').'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -257,7 +267,7 @@ class UserController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = $title;
+			$this->pageTitle = Yii::t('phrase', '$title User: Report $report_body', array('$title'=>$title, '$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(

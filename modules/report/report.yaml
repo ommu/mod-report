@@ -28,9 +28,6 @@ plugin_menu		:
 	- urlTitle: Users
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/user/manage, attr: -, icon: -}
-	- urlTitle: Settings
-		urlRules: {siteType: "0,1", userLevel: "1"}
-		urlPath: {url: o/setting/edit, attr: -, icon: -}
 	- urlTitle: Report Manual
 		urlRules: {siteType: "0,1", userLevel: "2"}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}

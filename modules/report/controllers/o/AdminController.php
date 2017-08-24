@@ -105,8 +105,14 @@ class AdminController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($category=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Abuse Reports');
+		if($category != null) {
+			$data = ReportCategory::model()->findByPk($category);
+			$pageTitle = Yii::t('phrase', 'Reports: Category {category_name}', array ('{category_name}'=>Phrase::trans($data->name)));
+		}
+		
 		$model=new Reports('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Reports'])) {
@@ -123,7 +129,7 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Abuse Reports');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = Yii::t('phrase', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -131,7 +137,9 @@ class AdminController extends Controller
 			'columns' => $columns,
 		));
 
-	}	/**
+	}
+	
+	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
@@ -157,7 +165,7 @@ class AdminController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-reports',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success fixed.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -205,7 +213,7 @@ class AdminController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-reports',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success fixed.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -219,7 +227,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 		
-		$this->pageTitle = Yii::t('phrase', 'Fixed Report');
+		$this->pageTitle = Yii::t('phrase', 'Update Report: $report_body', array('$report_body'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -239,7 +247,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Report Category');
+		$this->pageTitle = Yii::t('phrase', 'View Report: $report_body', array('$report_body'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -258,6 +266,7 @@ class AdminController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
+
 			if($model->delete()) {
 				echo CJSON::encode(array(
 					'type' => 5,
@@ -272,7 +281,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Report');
+			$this->pageTitle = Yii::t('phrase', 'Delete Report: $report_body', array('$report_body'=>$model->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -287,43 +296,51 @@ class AdminController extends Controller
 	public function actionResolve($id) 
 	{
 		$model=$this->loadModel($id);
-		if($model->status == 1) {
-			$title = Yii::t('phrase', 'Unresolved');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Resolved');
-			$replace = 1;
-		}
+		
+		$title = $model->status == 1 ? Yii::t('phrase', 'Unresolved') : Yii::t('phrase', 'Resolved');
+		$replace = $model->status == 1 ? 0 : 1;
 
-		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->status = $replace;
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-reports',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success fixed.').'</strong></div>',
-					));
+		if(isset($_POST['Reports'])) {
+			$model->attributes=$_POST['Reports'];
+			$model->scenario = 'resolveForm';
+
+			$model->status = $replace;
+
+			$jsonError = CActiveForm::validate($model);
+			if(strlen($jsonError) > 2) {
+				echo $jsonError;
+				
+			} else {
+				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if($model->save()) {
+						echo CJSON::encode(array(
+							'type' => 5,
+							'get' => Yii::app()->controller->createUrl('manage'),
+							'id' => 'partial-reports',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
+						));
+					} else {
+						print_r($model->getErrors());
+					}
 				}
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $title;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_resolve',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', '$title Report: $report_body', array('$title'=>$title, '$report_body'=>$model->report_body));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_resolve',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**

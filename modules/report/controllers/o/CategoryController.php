@@ -124,7 +124,7 @@ class CategoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Report Categories');
+		$this->pageTitle = Yii::t('phrase', 'Categories');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -158,7 +158,7 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-report-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report category success created.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Category success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -172,7 +172,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Yii::t('phrase', 'Create Report Category');
+			$this->pageTitle = Yii::t('phrase', 'Create Category');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_add',array(
@@ -206,7 +206,7 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-report-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report category success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Category success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -220,7 +220,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Yii::t('phrase', 'Update Report Category').': '.Phrase::trans($model->name);
+			$this->pageTitle = Yii::t('phrase', 'Update Category: $category_name', array('$category_name'=>Phrase::trans($model->name)));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -241,7 +241,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Report Category');
+		$this->pageTitle = Yii::t('phrase', 'View Category: $category_name', array('$category_name'=>Phrase::trans($model->name)));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -267,7 +267,7 @@ class CategoryController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-report-category',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report category success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Category success deleted.').'</strong></div>',
 				));
 			}
 
@@ -276,7 +276,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Report Category');
+			$this->pageTitle = Yii::t('phrase', 'Delete Category: $category_name', array('$category_name'=>Phrase::trans($model->name)));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -306,7 +306,7 @@ class CategoryController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-report-category',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report category success updated.').'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Category success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -316,7 +316,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = $title;
+			$this->pageTitle = Yii::t('phrase', '$title Category: $category_name', array('$title'=>$title, '$category_name'=>Phrase::trans($model->name)));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(

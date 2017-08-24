@@ -78,6 +78,7 @@ class Reports extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, report_url, report_body', 'required'),
+			array('report_message', 'required', 'on'=>'resolveForm'),
 			array('status, cat_id, user_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('cat_id', 'length', 'max'=>5),
 			array('user_id, modified_id', 'length', 'max'=>11),

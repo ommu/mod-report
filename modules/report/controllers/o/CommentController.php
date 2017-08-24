@@ -109,8 +109,18 @@ class CommentController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($report=null, $user=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Report Comments');
+		if($report != null) {
+			$data = Reports::model()->findByPk($report);
+			$pageTitle = Yii::t('phrase', 'Comments: Report $report_body', array ('$report_body'=>$data->report_body));
+		}
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'Comments: User $user_displayname', array ('$user_displayname'=>$data->displayname));
+		}
+		
 		$model=new ReportComment('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['ReportComment'])) {
@@ -127,7 +137,7 @@ class CommentController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Report Comments Manage');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -161,7 +171,7 @@ class CommentController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-report-comment',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success created.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Comment success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -175,7 +185,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Create Report Comments');
+		$this->pageTitle = Yii::t('phrase', 'Create Comments');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
@@ -209,7 +219,7 @@ class CommentController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-report-comment',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Comment success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -223,7 +233,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Update Report Comments');
+		$this->pageTitle = Yii::t('phrase', 'Update Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -243,7 +253,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Report Comments');
+		$this->pageTitle = Yii::t('phrase', 'View Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -262,7 +272,7 @@ class CommentController extends Controller
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
-			$criteria->addInCondition('id', $id);
+			$criteria->addInCondition('comment_id', $id);
 
 			if($actions == 'publish') {
 				ReportComment::model()->updateAll(array(
@@ -305,7 +315,7 @@ class CommentController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-report-comment',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Comment success deleted.').'</strong></div>',
 				));
 			}
 
@@ -314,7 +324,7 @@ class CommentController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'ReportComment Delete.');
+			$this->pageTitle = Yii::t('phrase', 'Delete Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -344,7 +354,7 @@ class CommentController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-report-comment',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'ReportComment success updated.').'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Comment success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -354,7 +364,7 @@ class CommentController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = $title;
+			$this->pageTitle = Yii::t('phrase', '$title Comments: Report $report_body', array('$title'=>$title, '$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(

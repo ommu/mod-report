@@ -103,8 +103,18 @@ class HistoryController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($report=null, $user=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Report Histories');
+		if($report != null) {
+			$data = Reports::model()->findByPk($report);
+			$pageTitle = Yii::t('phrase', 'Histories: Report $report_body', array ('$report_body'=>$data->report_body));
+		}
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'Histories: User $user_displayname', array ('$user_displayname'=>$data->displayname));
+		}
+		
 		$model=new ReportHistory('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['ReportHistory'])) {
@@ -121,7 +131,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Report Histories');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -146,7 +156,7 @@ class HistoryController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-report-history',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report Histories success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'History success deleted.').'</strong></div>',
 				));
 			}
 
@@ -155,7 +165,7 @@ class HistoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Report Histories');
+			$this->pageTitle = Yii::t('phrase', 'Delete History: Report $report_body', array('$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
