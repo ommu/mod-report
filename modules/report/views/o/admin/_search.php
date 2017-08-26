@@ -55,6 +55,11 @@
 		</li>
 
 		<li>
+			<?php echo $model->getAttributeLabel('reports'); ?><br/>
+			<?php echo $form->textField($model,'reports'); ?>
+		</li>
+
+		<li>
 			<?php echo $model->getAttributeLabel('report_date'); ?><br/>
 			<?php echo $form->textField($model,'report_date'); ?>
 		</li>

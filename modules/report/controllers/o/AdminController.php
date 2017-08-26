@@ -110,7 +110,7 @@ class AdminController extends Controller
 		$pageTitle = Yii::t('phrase', 'Abuse Reports');
 		if($category != null) {
 			$data = ReportCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Reports: Category {category_name}', array ('{category_name}'=>Phrase::trans($data->name)));
+			$pageTitle = Yii::t('phrase', 'Reports: Category $category_name', array ('$category_name'=>Phrase::trans($data->name)));
 		}
 		
 		$model=new Reports('search');

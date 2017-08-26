@@ -185,7 +185,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Create Comments');
+		$this->pageTitle = Yii::t('phrase', 'Create Comment');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
@@ -233,7 +233,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Update Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Update Comment: Report $report_body', array('$report_body'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -253,7 +253,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'View Comment: Report $report_body', array('$report_body'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -324,7 +324,7 @@ class CommentController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Comments: Report $report_body', array('$report_body'=>$model->report->report_body));
+			$this->pageTitle = Yii::t('phrase', 'Delete Comment: Report $report_body', array('$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -364,7 +364,7 @@ class CommentController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', '$title Comments: Report $report_body', array('$title'=>$title, '$report_body'=>$model->report->report_body));
+			$this->pageTitle = Yii::t('phrase', '$title Comment: Report $report_body', array('$title'=>$title, '$report_body'=>$model->report->report_body));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(
