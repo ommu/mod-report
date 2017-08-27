@@ -17,16 +17,16 @@ plugin_menu		:
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 	- urlTitle: Histories
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "1"}
 		urlPath: {url: o/history/manage, attr: -, icon: -}
 	- urlTitle: Status
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "1"}
 		urlPath: {url: o/status/manage, attr: -, icon: -}
 	- urlTitle: Comments
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "1"}
 		urlPath: {url: o/comment/manage, attr: -, icon: -}
 	- urlTitle: Users
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "1"}
 		urlPath: {url: o/user/manage, attr: -, icon: -}
 	- urlTitle: Report Manual
 		urlRules: {siteType: "0,1", userLevel: "2"}
