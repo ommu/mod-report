@@ -1,0 +1,35 @@
+{
+	"name": "ommu/mod-report",
+	"description": "Module Report for Ommu Platform",
+	"keywords": [
+		"module",
+		"report",
+		"ommu",
+		"platform",
+		"ommu platform"
+	],
+	"homepage": "https://github.com/ommu/ommu-report",
+	"type": "ommu-module",
+	"license": "Apache-2.0",
+	"support": {
+		"issues": "https://github.com/ommu/ommu-report/issues",
+		"wiki": "https://github.com/ommu/ommu-report/wiki",
+		"source": "https://github.com/ommu/ommu-report"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ommu/ommu-report.git"
+	},
+	"authors": [
+		{
+			"name": "Putra Sudaryanto",
+			"email": "putra@sudaryanto.id",
+			"homepage": "https://putra.sudaryanto.id",
+			"role": "Creator"
+		}
+	],
+	"require": {
+		"php": ">=5.3.2",
+		"yiisoft/yii": "1.1.16"
+	}
+}
