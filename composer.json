@@ -1,5 +1,5 @@
 {
-	"name": "ommu/mod-report",
+	"name": "ommu/report",
 	"description": "Module Report for Ommu Platform",
 	"keywords": [
 		"module",
@@ -29,6 +29,7 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.2"
+		"php": ">=5.3.2",
+		"yiisoft/yii": "1.1.16"
 	}
 }
