@@ -11,12 +11,8 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-namespace application\modules\report;
-
 class ReportModule extends CWebModule
 {
-	public $controllerNamespace = '\application\modules\report\controllers';
-
 	public $defaultController = 'site'; 
 	
 	// getAssetsUrl()
