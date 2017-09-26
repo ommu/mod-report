@@ -38,7 +38,7 @@
 				<?php //echo $form->textArea($model,'report_message',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
 				if(!$model->getErrors())
 					$model->report_message = '';
-				$this->widget('application.vendors.yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
+				$this->widget('application.vendor.yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>report_message,
 					// Redactor options
