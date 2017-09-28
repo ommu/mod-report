@@ -39,6 +39,7 @@
  * The followings are the available model relations:
  * @property ReportCategory $cat
  */
+
 class Reports extends CActiveRecord
 {
 	public $defaultColumns = array();

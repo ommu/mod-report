@@ -11,12 +11,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-namespace ommu\report;
-
-use Yii;
-use Utility;
-
-class ReportModule extends \CWebModule
+class ReportModule extends CWebModule
 {
 	public $defaultController = 'site'; 
 	
