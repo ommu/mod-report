@@ -27,6 +27,7 @@ class ReportModule extends CWebModule
 		// import the module-level models and components
 		$this->setImport(array(
 			'report.models.*',
+			'report.models.view.*',
 			'report.components.*',
 		));
 	}
