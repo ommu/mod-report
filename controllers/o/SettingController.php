@@ -42,6 +42,7 @@ class SettingController extends Controller
 				$arrThemes = Utility::getCurrentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
+				Utility::applyViewPath(__dir__);
 			} else
 				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		} else
