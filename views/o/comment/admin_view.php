@@ -20,7 +20,7 @@
 ?>
 
 <div class="dialog-content">
-	<?php $this->widget('application.components.system.FDetailView', array(
+	<?php $this->widget('application.libraries.core.components.system.FDetailView', array(
 		'data'=>$model,
 		'attributes'=>array(
 			array(
