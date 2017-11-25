@@ -38,8 +38,8 @@
 class ReportCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $title_i;
-	public $description_i;
+	public $name_i;
+	public $desc_i;
 	
 	// Variable Search
 	public $report_search;
@@ -56,7 +56,7 @@ class ReportCategory extends CActiveRecord
 		return array(
 			'sluggable' => array(
 				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
-				'columns' => array('title.en_us'),
+				'columns' => array('title.message'),
 				'unique' => true,
 				'update' => true,
 			),
@@ -90,18 +90,18 @@ class ReportCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('
-				title_i, description_i', 'required'),
+				name_i, desc_i', 'required'),
 			array('publish, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('name, desc', 'length', 'max'=>11),
 			array('
-				title_i', 'length', 'max'=>32),
+				name_i', 'length', 'max'=>32),
 			array('
-				description_i', 'length', 'max'=>128),
+				desc_i', 'length', 'max'=>128),
 			array('', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id, updated_date,
-				title_i, description_i, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				name_i, desc_i, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -114,8 +114,8 @@ class ReportCategory extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewReportCategory', 'cat_id'),
-			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
-			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
+			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'reports' => array(self::HAS_MANY, 'Reports', 'cat_id'),
@@ -137,8 +137,8 @@ class ReportCategory extends CActiveRecord
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
-			'title_i' => Yii::t('attribute', 'Category'),
-			'description_i' => Yii::t('attribute', 'Description'),
+			'name_i' => Yii::t('attribute', 'Category'),
+			'desc_i' => Yii::t('attribute', 'Description'),
 			'report_search' => Yii::t('attribute', 'Report'),
 			'report_resolved_search' => Yii::t('attribute', 'Resolved'),
 			'report_all_search' => Yii::t('attribute', 'All'),
@@ -159,23 +159,17 @@ class ReportCategory extends CActiveRecord
 		$criteria=new CDbCriteria;
 		
 		// Custom Search
-		$defaultLang = OmmuLanguages::getDefault('code');
-		if(isset(Yii::app()->session['language']))
-			$language = Yii::app()->session['language'];
-		else 
-			$language = $defaultLang;
-		
 		$criteria->with = array(
 			'view' => array(
 				'alias'=>'view',
 			),
 			'title' => array(
 				'alias'=>'title',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'description' => array(
 				'alias'=>'description',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -212,8 +206,8 @@ class ReportCategory extends CActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
-		$criteria->compare('title.'.$language,strtolower($this->title_i), true);
-		$criteria->compare('description.'.$language,strtolower($this->description_i), true);
+		$criteria->compare('title.message', strtolower($this->name_i), true);
+		$criteria->compare('description.message', strtolower($this->desc_i), true);
 		$criteria->compare('view.reports',strtolower($this->report_search), true);
 		$criteria->compare('view.report_resolved',strtolower($this->report_resolved_search), true);
 		$criteria->compare('view.report_all',strtolower($this->report_all_search), true);
@@ -278,12 +272,12 @@ class ReportCategory extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'title_i',
-				'value' => 'Phrase::trans($data->name)',
+				'name' => 'name_i',
+				'value' => '$data->title->message',
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'description_i',
-				'value' => 'Phrase::trans($data->desc)',
+				'name' => 'desc_i',
+				'value' => '$data->description->message',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
@@ -372,7 +366,7 @@ class ReportCategory extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->cat_id] = Phrase::trans($val->name);
+				$items[$val->cat_id] = $val->title->message;
 			}
 			return $items;
 		} else
@@ -380,14 +374,25 @@ class ReportCategory extends CActiveRecord
 	}
 
 	/**
+	 * This is invoked when a record is populated with data from a find() call.
+	 */
+	protected function afterFind()
+	{
+		$this->name_i = $this->title->message;
+		$this->desc_i = $this->description->message;
+		
+		parent::afterFind();
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {		
+		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = Yii::app()->user->id;	
+				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 			else
-				$this->modified_id = Yii::app()->user->id;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 		}
 		return true;
 	}
@@ -397,35 +402,38 @@ class ReportCategory extends CActiveRecord
 	 */
 	protected function beforeSave() 
 	{
-		$currentModule = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
-		$location = Utility::getUrlTitle($currentModule);
+		$module = strtolower(Yii::app()->controller->module->id);
+		$controller = strtolower(Yii::app()->controller->id);
+		$action = strtolower(Yii::app()->controller->action->id);
+
+		$location = $module.' '.$controller;
 		
 		if(parent::beforeSave()) {
-			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
-				$title=new OmmuSystemPhrase;
-				$title->location = $location.'_title';
-				$title->en_us = $this->title_i;
-				if($title->save())
-					$this->name = $title->phrase_id;
-
-				$this->slug = Utility::getUrlTitle($this->title_i);	
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
+				$name=new SourceMessage;
+				$name->message = $this->name_i;
+				$name->location = $location.'_title';
+				if($name->save())
+					$this->name = $name->id;
+				
+				$this->slug = Utility::getUrlTitle($this->name_i);
 				
 			} else {
-				$title = OmmuSystemPhrase::model()->findByPk($this->name);
-				$title->en_us = $this->title_i;
-				$title->save();
+				$name = SourceMessage::model()->findByPk($this->name);
+				$name->message = $this->name_i;
+				$name->save();
 			}
 			
-			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
-				$desc=new OmmuSystemPhrase;
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
+				$desc=new SourceMessage;
+				$desc->message = $this->desc_i;
 				$desc->location = $location.'_description';
-				$desc->en_us = $this->description_i;
 				if($desc->save())
-					$this->desc = $desc->phrase_id;
+					$this->desc = $desc->id;
 				
 			} else {
-				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-				$desc->en_us = $this->description_i;
+				$desc = SourceMessage::model()->findByPk($this->desc);
+				$desc->message = $this->desc_i;
 				$desc->save();
 			}
 		}

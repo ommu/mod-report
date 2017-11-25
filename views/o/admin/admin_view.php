@@ -34,7 +34,7 @@
 			),
 			array(
 				'name'=>'cat_id',
-				'value'=>$model->cat_id ? Phrase::trans($model->cat->name) : '-',
+				'value'=>$model->cat_id ? $model->cat->title->message : '-',
 			),
 			array(
 				'name'=>'user_id',

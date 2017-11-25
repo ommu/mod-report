@@ -247,7 +247,7 @@ class ReportStatus extends CActiveRecord
 			if(!isset($_GET['report'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'category_search',
-					'value' => 'Phrase::trans($data->report->cat->name)',
+					'value' => '$data->report->cat->title->message',
 					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);

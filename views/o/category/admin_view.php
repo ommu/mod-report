@@ -34,11 +34,11 @@
 			),
 			array(
 				'name'=>'name',
-				'value'=>$model->name ? Phrase::trans($model->name) : '-',
+				'value'=>$model->name ? $model->title->message : '-',
 			),
 			array(
 				'name'=>'desc',
-				'value'=>$model->desc ? Phrase::trans($model->desc) : '-',
+				'value'=>$model->desc ? $model->description->message : '-',
 			),
 			array(
 				'name'=>'creation_date',
