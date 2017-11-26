@@ -15,7 +15,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/mod-report
+ * @link https://github.com/ommu/ommu-report
  * @contact (+62)856-299-4114
  *
  *----------------------------------------------------------------------------------------------------------
