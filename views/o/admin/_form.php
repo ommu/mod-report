@@ -54,7 +54,7 @@
 			<?php echo $form->labelEx($model,'report_body'); ?>
 			<div class="desc">
 				<?php //echo $form->textArea($model,'report_body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));				
-				$this->widget('application.vendor.yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
+				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>report_body,
 					// Redactor options
