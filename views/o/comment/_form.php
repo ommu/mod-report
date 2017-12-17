@@ -29,29 +29,28 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'report_id'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'report_id',array('size'=>11,'maxlength'=>11)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'report_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'report_id',array('size'=>11,'maxlength'=>11, 'slass'=>'form-control')); ?>
 				<?php echo $form->error($model,'report_id'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'comment_text'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'comment_text',array('rows'=>6, 'cols'=>50, 'slass'=>'span-11')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'comment_text', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'comment_text',array('rows'=>6, 'cols'=>50, 'slass'=>'form-control')); ?>
 				<?php echo $form->error($model,'comment_text'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
-				<?php echo $form->labelEx($model,'publish'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'publish'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>

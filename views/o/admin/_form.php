@@ -27,33 +27,33 @@
 			<?php echo $form->errorSummary($model); ?>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_id'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				$category = ReportCategory::getCategory(1);
 				if($category != null) {
-					echo $form->dropDownList($model,'cat_id', $category);
+					echo $form->dropDownList($model,'cat_id', $category, array('class'=>'form-control'));
 				} else {
-					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')));
+					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent'), 'class'=>'form-control'));
 				}?>
 				<?php echo $form->error($model,'cat_id'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'report_url'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'report_url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php //$model->report_url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-				echo $form->textField($model,'report_url',array('class'=>'span-11')); ?>
+				echo $form->textField($model,'report_url',array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'report_url'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'report_body'); ?>
-			<div class="desc">
-				<?php //echo $form->textArea($model,'report_body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));				
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'report_body', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php //echo $form->textArea($model,'report_body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>report_body,
@@ -69,17 +69,19 @@
 						'fontcolor' => array('js' => array('fontcolor.js')),
 						'fullscreen' => array('js' => array('fullscreen.js')),
 					),
+					'htmlOptions'=>array(
+						'class' => 'form-control',
+					 ),
 				));?>
 				<?php echo $form->error($model,'report_body'); ?>
 			</div>
 		</div>
 
 		<?php if(!$model->isNewRecord) {?>
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'status'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'status'); ?>
-				<?php echo $form->labelEx($model,'status'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'status', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'status'); ?>
 			</div>
 		</div>

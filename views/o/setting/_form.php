@@ -28,28 +28,28 @@
 
 	<fieldset>
 
-		<div class="clearfix">
-			<label>
+		<div class="form-group row">
+			<label class="col-form-label col-lg-4 col-md-3 col-sm-12">
 				<?php echo $model->getAttributeLabel('license');?> <span class="required">*</span><br/>
-				<span><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
+				<span><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
 			</label>
-			<div class="desc">
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
 					$model->license = ReportSetting::getLicense();
 			
 				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'span-4'));
+					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control'));
 				else
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'span-4','disabled'=>'disabled'));?>
+					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control','disabled'=>'disabled'));?>
 				<?php echo $form->error($model,'license'); ?>
-				<span class="small-px"><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
+				<span class="small-px"><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'permission'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
 				<?php 
 				if($model->isNewRecord && !$model->getErrors())
@@ -57,42 +57,43 @@
 				echo $form->radioButtonList($model, 'permission', array(
 					1 => Yii::t('phrase', 'Yes, the public can view report unless they are made private.'),
 					0 => Yii::t('phrase', 'No, the public cannot view report.'),
-				)); ?>
+				), array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'permission'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'meta_description'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_description'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'meta_keyword'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_keyword'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'auto_report_cat_id'); ?>
-			<div class="desc">
-				<?php $category = ReportCategory::getCategory('1');
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'auto_report_cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php 
+				$category = ReportCategory::getCategory('1');
 				if($category != null)
-					echo $form->dropDownList($model,'auto_report_cat_id', $category, array('prompt'=>''));
+					echo $form->dropDownList($model,'auto_report_cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 				else
-					echo $form->dropDownList($model,'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')));?>
+					echo $form->dropDownList($model,'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent'), 'class'=>'form-control'));?>
 				<?php echo $form->error($model,'auto_report_cat_id'); ?>
 			</div>
 		</div>
 
-		<div class="submit clearfix">
-			<label>&nbsp;</label>
-			<div class="desc">
+		<div class="form-group row submit">
+			<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 			</div>
 		</div>

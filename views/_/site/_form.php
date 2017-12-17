@@ -26,32 +26,32 @@
 			<?php echo $form->errorSummary($model); ?>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'cat_id'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php if(ReportCategory::getCategory(1) != null) {
-					echo $form->dropDownList($model,'cat_id', ReportCategory::getCategory(1));
+					echo $form->dropDownList($model,'cat_id', ReportCategory::getCategory(1), array('class'=>'form-control'));
 				} else {
-					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')));
+					echo $form->dropDownList($model,'cat_id', array('prompt'=>Yii::t('phrase', 'No Parent'), 'class'=>'form-control'));
 				}?>
 				<?php echo $form->error($model,'cat_id'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'url'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				$model->url = $_GET['url'];
-				echo $form->textField($model,'url',array('maxlength'=>255, 'class'=>'span-11')); ?>
+				echo $form->textField($model,'url',array('maxlength'=>255, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'url'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'body'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'body', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'body'); ?>
 			</div>
 		</div>

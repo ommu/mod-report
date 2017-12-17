@@ -26,27 +26,26 @@
 			<?php echo $form->errorSummary($model); ?>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'name_i'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'name_i',array('maxlength'=>64,'class'=>'span-8')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'name_i',array('maxlength'=>64,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'name_i'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'desc_i'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'desc_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'desc_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'desc_i',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'desc_i'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
-				<?php echo $form->labelEx($model,'publish'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'publish'); ?>
 			</div>
 		</div>
