@@ -78,10 +78,11 @@
 		</div>
 
 		<?php if(!$model->isNewRecord) {?>
-		<div class="form-group row">
+		<div class="form-group row publish">
 			<?php echo $form->labelEx($model,'status', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'status', array('class'=>'form-control')); ?>
+				<?php echo $form->labelEx($model, 'status'); ?>
 				<?php echo $form->error($model,'status'); ?>
 			</div>
 		</div>
