@@ -34,5 +34,8 @@
 		"yiisoft/yii": ">=1.1.14",
 		"yiiext/imperavi-redactor-widget": "^1.3.10",
 		"ommu/yii-behavior-sluggable": "^1.0.1"
+	},
+	"require-dev": {
+		"ommu/yii-behavior-sluggable": "dev-master"
 	}
 }
