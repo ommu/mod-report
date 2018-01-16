@@ -85,7 +85,7 @@
 				if($category != null)
 					echo $form->dropDownList($model,'auto_report_cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 				else
-					echo $form->dropDownList($model,'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent'), 'class'=>'form-control'));?>
+					echo $form->dropDownList($model,'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')), array('class'=>'form-control'));?>
 				<?php echo $form->error($model,'auto_report_cat_id'); ?>
 			</div>
 		</div>
