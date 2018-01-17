@@ -6,18 +6,8 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
+ * @modified date 17 January 2018, 23:59 WIB
  * @link https://github.com/ommu/ommu-report
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_report_user".
  *
@@ -33,11 +23,13 @@
  *
  * The followings are the available model relations:
  * @property Reports $report
+ * @property Users $user;
+ * @property Users $modified;
  */
-class ReportUser extends CActiveRecord
+class ReportUser extends OActiveRecord
 {
-	public $defaultColumns = array();
-	
+	public $gridForbiddenColumn = array();
+
 	// Variable Search
 	public $category_search;
 	public $report_search;

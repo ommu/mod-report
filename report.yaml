@@ -16,23 +16,13 @@ plugin_menu		:
 	- urlTitle: Abuse Reports
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: Histories
-		urlRules: {siteType: "0,1", userLevel: "1"}
-		urlPath: {url: o/history/manage, attr: -, icon: -}
-	- urlTitle: Status
-		urlRules: {siteType: "0,1", userLevel: "1"}
-		urlPath: {url: o/status/manage, attr: -, icon: -}
-	- urlTitle: Comments
-		urlRules: {siteType: "0,1", userLevel: "1"}
-		urlPath: {url: o/comment/manage, attr: -, icon: -}
-	- urlTitle: Users
-		urlRules: {siteType: "0,1", userLevel: "1"}
-		urlPath: {url: o/user/manage, attr: -, icon: -}
-	- urlTitle: Report Manual
-		urlRules: {siteType: "0,1", userLevel: "2"}
-		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
 content_menu	:
+# controller o/admin
+	- urlTitle: Manual Book
+		urlRules: {report, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/setting/manual, attr: -, icon: -}
+        
 # controller o/category
 	- urlTitle: Add Category
 		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1,2"}
@@ -42,21 +32,33 @@ content_menu	:
 	- urlTitle: Back to Reports
 		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: View Report Histories Data
+		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/history/manage, attr: -, icon: -}
         
 # controller o/comment
 	- urlTitle: Back to Reports
 		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: View Report Comments Data
+		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/comment/manage, attr: -, icon: -}
         
 # controller o/status
 	- urlTitle: Back to Reports
 		urlRules: {report, o/status, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: View Report Status Data
+		urlRules: {report, o/status, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/status/manage, attr: -, icon: -}
         
 # controller o/user
 	- urlTitle: Back to Reports
 		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+	- urlTitle: View Report Users Data
+		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/user/manage, attr: -, icon: -}
         
 # controller o/setting
 	- urlTitle: Report Manual

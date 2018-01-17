@@ -99,6 +99,22 @@ class SettingController extends Controller
 	{
 		if(Yii::app()->user->level != 1)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+
+		$category=new ReportCategory('search');
+		$category->unsetAttributes();  // clear any default values
+		if(isset($_GET['ReportCategory'])) {
+			$category->attributes=$_GET['ReportCategory'];
+		}
+
+		$columnTemp = array();
+		if(isset($_GET['GridColumn'])) {
+			foreach($_GET['GridColumn'] as $key => $val) {
+				if($_GET['GridColumn'][$key] == 1) {
+					$columnTemp[] = $key;
+				}
+			}
+		}
+		$columns = $category->getGridColumn($columnTemp);
 		
 		$model = ReportSetting::model()->findByPk(1);
 		if($model == null)
@@ -134,6 +150,8 @@ class SettingController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
+			'category'=>$category,
+			'columns' => $columns,
 		));
 	}
 	
