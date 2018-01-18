@@ -19,6 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -92,6 +93,22 @@ class StatusController extends Controller
 	 */
 	public function actionManage($report=null, $user=null) 
 	{
+		$model=new ReportStatus('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['ReportStatus'])) {
+			$model->attributes=$_GET['ReportStatus'];
+		}
+
+		$gridColumn = $_GET['GridColumn'];
+		$columnTemp = array();
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
+					$columnTemp[] = $key;
+			}
+		}
+		$columns = $model->getGridColumn($columnTemp);
+
 		$pageTitle = Yii::t('phrase', 'Report Status');
 		if($report != null) {
 			$data = Reports::model()->findByPk($report);
@@ -102,22 +119,6 @@ class StatusController extends Controller
 			$pageTitle = Yii::t('phrase', 'Status: User $user_displayname', array ('$user_displayname'=>$data->displayname));
 		}
 		
-		$model=new ReportStatus('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ReportStatus'])) {
-			$model->attributes=$_GET['ReportStatus'];
-		}
-
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
-
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -139,7 +140,7 @@ class StatusController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Status: Report $report_body', array('$report_body'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'View Status: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -158,14 +159,17 @@ class StatusController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			
 			if($model->delete()) {
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-report-status',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Status success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report status success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report status success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}
@@ -174,7 +178,7 @@ class StatusController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Status: Report $report_body', array('$report_body'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete Status: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');

@@ -17,6 +17,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -106,12 +107,12 @@ class SettingController extends Controller
 			$category->attributes=$_GET['ReportCategory'];
 		}
 
+		$gridColumn = $_GET['GridColumn'];
 		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
-				}
 			}
 		}
 		$columns = $category->getGridColumn($columnTemp);
@@ -125,7 +126,7 @@ class SettingController extends Controller
 
 		if(isset($_POST['ReportSetting'])) {
 			$model->attributes=$_POST['ReportSetting'];
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
@@ -137,9 +138,12 @@ class SettingController extends Controller
 							'type' => 0,
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report settings success updated.').'</strong></div>',
 						));
-					} else {
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report setting success updated.'));
+						$this->redirect(array('manage'));
+						*/
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -193,7 +197,7 @@ class SettingController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='article-setting-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='report-setting-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

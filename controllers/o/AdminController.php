@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Add
  *	Edit
  *	View
  *	Delete
@@ -20,6 +21,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -70,7 +72,7 @@ class AdminController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','edit','view','delete','resolve'),
+				'actions'=>array('index','manage','add','edit','view','delete','resolve'),
 				'users'=>array('@'),
 				'expression'=>'in_array($user->level, array(1,2))',
 			),
@@ -93,28 +95,28 @@ class AdminController extends Controller
 	 */
 	public function actionManage($category=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'Abuse Reports');
-		if($category != null) {
-			$data = ReportCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Reports: Category $category_name', array ('$category_name'=>$data->title->message));
-		}
-		
 		$model=new Reports('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Reports'])) {
 			$model->attributes=$_GET['Reports'];
 		}
 
+		$gridColumn = $_GET['GridColumn'];
 		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
-				}
 			}
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
+		$pageTitle = Yii::t('phrase', 'Abuse Reports');
+		if($category != null) {
+			$data = ReportCategory::model()->findByPk($category);
+			$pageTitle = Yii::t('phrase', 'Reports: Category $category_name', array ('$category_name'=>$data->title->message));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = Yii::t('phrase', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->pageMeta = '';
@@ -122,13 +124,11 @@ class AdminController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-
 	}
 	
 	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionAdd() 
 	{
@@ -153,9 +153,12 @@ class AdminController extends Controller
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success created.').'</strong></div>',
 						));
-					} else {
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success created.'));
+						$this->redirect(array('manage'));
+						*/
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -164,7 +167,7 @@ class AdminController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		
+
 		$this->pageTitle = Yii::t('phrase', 'Create Report');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -172,7 +175,7 @@ class AdminController extends Controller
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -201,9 +204,12 @@ class AdminController extends Controller
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
 						));
-					} else {
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success updated.'));
+						$this->redirect(array('manage'));
+						*/
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -212,8 +218,8 @@ class AdminController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		
-		$this->pageTitle = Yii::t('phrase', 'Update Report: $report_body', array('$report_body'=>$model->report_body));
+
+		$this->pageTitle = Yii::t('phrase', 'Update Report: {report_body}', array('{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -233,7 +239,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Report: $report_body', array('$report_body'=>$model->report_body));
+		$this->pageTitle = Yii::t('phrase', 'View Report: {report_body}', array('{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -252,16 +258,17 @@ class AdminController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			$model->publish = 2;
-			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
-			
-			if($model->update()) {
+			if($model->delete()) {
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-reports',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}
@@ -270,7 +277,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Report: $report_body', array('$report_body'=>$model->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete Report: {report_body}', array('{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
@@ -310,9 +317,12 @@ class AdminController extends Controller
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
 						));
-					} else {
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success updated.'));
+						$this->redirect(array('manage'));
+						*/
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -322,7 +332,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', '$title Report: $report_body', array('$title'=>$title, '$report_body'=>$model->report_body));
+		$this->pageTitle = Yii::t('phrase', '{title} Report: {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_resolve',array(
