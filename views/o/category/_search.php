@@ -43,7 +43,7 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>
@@ -64,7 +64,7 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>
@@ -85,7 +85,7 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>

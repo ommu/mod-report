@@ -68,7 +68,7 @@
 					'htmlOptions'=>array(
 						'class' => 'form-control',
 					),
-				));; ?>
+				)); ?>
 				<?php echo $form->error($model, 'comment_text'); ?>
 			</div>
 		</div>

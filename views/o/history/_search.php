@@ -43,7 +43,7 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>
