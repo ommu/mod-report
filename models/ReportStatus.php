@@ -6,18 +6,8 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
+ * @modified date 18 January 2018, 00:32 WIB
  * @link https://github.com/ommu/ommu-report
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_report_status".
  *
@@ -34,16 +24,18 @@
  *
  * The followings are the available model relations:
  * @property Reports $report
+ * @property Users $user;
+ * @property Users $modified;
  */
-class ReportStatus extends CActiveRecord
+class ReportStatus extends OActiveRecord
 {
-	public $defaultColumns = array();
-	
+	public $gridForbiddenColumn = array();
+
 	// Variable Search
 	public $category_search;
 	public $report_search;
 	public $reporter_search;
-	public $modified_search;	
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -61,7 +53,8 @@ class ReportStatus extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_report_status';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_report_status';
 	}
 
 	/**
@@ -104,7 +97,7 @@ class ReportStatus extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'history_id' => Yii::t('attribute', 'ID'),
+			'history_id' => Yii::t('attribute', 'History'),
 			'status' => Yii::t('attribute', 'Status'),
 			'report_id' => Yii::t('attribute', 'Report'),
 			'user_id' => Yii::t('attribute', 'Reporter'),
@@ -137,8 +130,8 @@ class ReportStatus extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		// Custom Search		
+
+		// Custom Search
 		$criteria->with = array(
 			'report' => array(
 				'alias'=>'report',
@@ -155,113 +148,76 @@ class ReportStatus extends CActiveRecord
 		);
 
 		$criteria->compare('t.history_id',$this->history_id);
-		if(isset($_GET['status']))
-			$criteria->compare('t.status',$_GET['status']);
-		else
-			$criteria->compare('t.status',$this->status);
-		if(isset($_GET['report']))
-			$criteria->compare('t.report_id',$_GET['report']);
-		else
-			$criteria->compare('t.report_id',$this->report_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.report_message',strtolower($this->report_message),true);
-		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
-		$criteria->compare('t.updated_ip',strtolower($this->updated_ip),true);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
-		else
-			$criteria->compare('t.modified_id',$this->modified_id);
-		
-		$criteria->compare('report.cat_id',$this->category_search);
-		$criteria->compare('report.report_body',strtolower($this->report_search), true);
-		$criteria->compare('user.displayname',strtolower($this->reporter_search), true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('t.status', Yii::app()->getRequest()->getParam('status') ? Yii::app()->getRequest()->getParam('status') : $this->status);
+		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
+		$criteria->compare('t.report_message', strtolower($this->report_message), true);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
+		$criteria->compare('t.updated_ip', strtolower($this->updated_ip), true);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 
-		if(!isset($_GET['ReportStatus_sort']))
+		$criteria->compare('report.cat_id',$this->category_search);
+		$criteria->compare('report.report_body', strtolower($this->report_search), true);
+		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+
+		if(!Yii::app()->getRequest()->getParam('ReportStatus_sort'))
 			$criteria->order = 't.history_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			//$this->defaultColumns[] = 'history_id';
-			$this->defaultColumns[] = 'status';
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'report_message';
-			$this->defaultColumns[] = 'updated_date';
-			$this->defaultColumns[] = 'updated_ip';
-			$this->defaultColumns[] = 'modified_date';
-			$this->defaultColumns[] = 'modified_id';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
 				'class' => 'CCheckBoxColumn',
 				'name' => 'id',
 				'selectableRows' => 2,
 				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			*/
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
-			if(!isset($_GET['report'])) {
-				$this->defaultColumns[] = array(
+			if(!Yii::app()->getRequest()->getParam('report')) {
+				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
-					'value' => '$data->report->cat->title->message',
+					'value' => '$data->report->category->title->message',
 					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['report_search'] = array(
 					'name' => 'report_search',
-					'value' => '$data->report->report_body',
+					'value' => '$data->report->report_body ? $data->report->report_body : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'reporter_search',
-				'value' => '$data->user->displayname',
+			if(!Yii::app()->getRequest()->getParam('user')) {
+				$this->templateColumns['reporter_search'] = array(
+					'name' => 'reporter_search',
+					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
+				);
+			}
+			$this->templateColumns['report_message'] = array(
+				'name' => 'report_message',
+				'value' => '$data->report_message',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['updated_date'] = array(
 				'name' => 'updated_date',
-				'value' => 'Utility::dateFormat($data->updated_date, true)',
+				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->updated_date) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -285,7 +241,43 @@ class ReportStatus extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['updated_ip'] = array(
+				'name' => 'updated_ip',
+				'value' => '$data->updated_ip',
+			);
+			$this->templateColumns['modified_date'] = array(
+				'name' => 'modified_date',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'modified_date',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'modified_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			if(!Yii::app()->getRequest()->getParam('modified')) {
+				$this->templateColumns['modified_search'] = array(
+					'name' => 'modified_search',
+					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
+				);
+			}
+			$this->templateColumns['status'] = array(
 				'name' => 'status',
 				'value' => '$data->status == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
@@ -314,17 +306,18 @@ class ReportStatus extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
-		if(parent::beforeValidate()) {		
+	protected function beforeValidate() 
+	{
+		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
-				$this->modified_id = Yii::app()->user->id;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 		}
 		return true;
 	}

@@ -6,18 +6,8 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 13:14 WIB
+ * @modified date 18 January 2018, 13:01 WIB
  * @link https://github.com/ommu/ommu-report
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "_view_reports".
  *
@@ -31,9 +21,9 @@
  * @property string $users
  * @property string $user_all
  */
-class ViewReports extends CActiveRecord
+class ViewReports extends OActiveRecord
 {
-	public $defaultColumns = array();
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -51,7 +41,8 @@ class ViewReports extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_reports';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'._view_reports';
 	}
 
 	/**
@@ -71,7 +62,8 @@ class ViewReports extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('report_id', 'length', 'max'=>11),
-			array('history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'length', 'max'=>21),
+			array('history_resolved, history_unresolved, comments, users', 'length', 'max'=>23),
+			array('history_all, comment_all, user_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('report_id, history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
@@ -124,82 +116,76 @@ class ViewReports extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.report_id',$this->report_id);
-		$criteria->compare('t.history_resolved',$this->history_resolved);
-		$criteria->compare('t.history_unresolved',$this->history_unresolved);
-		$criteria->compare('t.history_all',$this->history_all);
-		$criteria->compare('t.comments',$this->comments);
-		$criteria->compare('t.comment_all',$this->comment_all);
-		$criteria->compare('t.users',$this->users);
-		$criteria->compare('t.user_all',$this->user_all);
+		$criteria->compare('t.report_id', $this->report_id);
+		$criteria->compare('t.history_resolved', $this->history_resolved);
+		$criteria->compare('t.history_unresolved', $this->history_unresolved);
+		$criteria->compare('t.history_all', $this->history_all);
+		$criteria->compare('t.comments', $this->comments);
+		$criteria->compare('t.comment_all', $this->comment_all);
+		$criteria->compare('t.users', $this->users);
+		$criteria->compare('t.user_all', $this->user_all);
 
-		if(!isset($_GET['ViewReports_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewReports_sort'))
 			$criteria->order = 't.report_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'history_resolved';
-			$this->defaultColumns[] = 'history_unresolved';
-			$this->defaultColumns[] = 'history_all';
-			$this->defaultColumns[] = 'comments';
-			$this->defaultColumns[] = 'comment_all';
-			$this->defaultColumns[] = 'users';
-			$this->defaultColumns[] = 'user_all';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
 				'class' => 'CCheckBoxColumn',
 				'name' => 'id',
 				'selectableRows' => 2,
 				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			*/
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'history_resolved';
-			$this->defaultColumns[] = 'history_unresolved';
-			$this->defaultColumns[] = 'history_all';
-			$this->defaultColumns[] = 'comments';
-			$this->defaultColumns[] = 'comment_all';
-			$this->defaultColumns[] = 'users';
-			$this->defaultColumns[] = 'user_all';
+			$this->templateColumns['report_id'] = array(
+				'name' => 'report_id',
+				'value' => '$data->report_id',
+			);
+			$this->templateColumns['history_resolved'] = array(
+				'name' => 'history_resolved',
+				'value' => '$data->history_resolved',
+			);
+			$this->templateColumns['history_unresolved'] = array(
+				'name' => 'history_unresolved',
+				'value' => '$data->history_unresolved',
+			);
+			$this->templateColumns['history_all'] = array(
+				'name' => 'history_all',
+				'value' => '$data->history_all',
+			);
+			$this->templateColumns['comments'] = array(
+				'name' => 'comments',
+				'value' => '$data->comments',
+			);
+			$this->templateColumns['comment_all'] = array(
+				'name' => 'comment_all',
+				'value' => '$data->comment_all',
+			);
+			$this->templateColumns['users'] = array(
+				'name' => 'users',
+				'value' => '$data->users',
+			);
+			$this->templateColumns['user_all'] = array(
+				'name' => 'user_all',
+				'value' => '$data->user_all',
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -217,7 +203,7 @@ class ViewReports extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

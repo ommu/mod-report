@@ -6,18 +6,8 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 24 August 2017, 13:47 WIB
+ * @modified date 18 January 2018, 00:31 WIB
  * @link https://github.com/ommu/ommu-report
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_report_history".
  *
@@ -30,13 +20,13 @@
  *
  * The followings are the available model relations:
  * @property Reports $report
- * @property Users[] $user;
+ * @property Users $user;
  */
-class ReportHistory extends CActiveRecord
+class ReportHistory extends OActiveRecord
 {
-	public $defaultColumns = array();
+	public $gridForbiddenColumn = array();
 
-	// Variable Search	
+	// Variable Search
 	public $category_search;
 	public $report_search;
 	public $user_search;
@@ -139,92 +129,67 @@ class ReportHistory extends CActiveRecord
 			),
 		);
 		
-		$criteria->compare('t.id',$this->id);
-		if(isset($_GET['report']))
-			$criteria->compare('t.report_id',$_GET['report']);
-		else
-			$criteria->compare('t.report_id',$this->report_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.report_date)',date('Y-m-d', strtotime($this->report_date)));
-		$criteria->compare('t.report_ip',strtolower($this->report_ip),true);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
+		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+			$criteria->compare('date(t.report_date)', date('Y-m-d', strtotime($this->report_date)));
+		$criteria->compare('t.report_ip', strtolower($this->report_ip), true);
 
 		$criteria->compare('report.cat_id',$this->category_search);
-		$criteria->compare('report.report_body',strtolower($this->report_search), true);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('report.report_body', strtolower($this->report_search), true);
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['ReportHistory_sort']))
+		if(!Yii::app()->getRequest()->getParam('ReportHistory_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'report_id';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'report_date';
-			$this->defaultColumns[] = 'report_ip';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			if(!isset($_GET['report'])) {
-				$this->defaultColumns[] = array(
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			if(!Yii::app()->getRequest()->getParam('report')) {
+				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
-					'value' => '$data->report->cat->title->message',
+					'value' => '$data->report->category->title->message',
 					'filter'=> ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['report_search'] = array(
 					'name' => 'report_search',
-					'value' => '$data->report->report_body',
+					'value' => '$data->report->report_body ? $data->report->report_body : \'-\'',
 				);
 			}
-			if(!isset($_GET['user'])) {
-				$this->defaultColumns[] = array(
+			if(!Yii::app()->getRequest()->getParam('user')) {
+				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
-					'value' => '$data->user->displayname',
+					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
+			$this->templateColumns['report_date'] = array(
 				'name' => 'report_date',
-				'value' => 'Utility::dateFormat($data->report_date, true)',
+				'value' => '!in_array($data->report_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->report_date, true) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -248,7 +213,7 @@ class ReportHistory extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['report_ip'] = array(
 				'name' => 'report_ip',
 				'value' => '$data->report_ip',
 			);
@@ -269,7 +234,7 @@ class ReportHistory extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

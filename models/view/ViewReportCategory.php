@@ -5,18 +5,8 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @modified date 18 January 2018, 13:01 WIB
  * @link https://github.com/ommu/ommu-report
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "_view_report_category".
  *
@@ -26,9 +16,9 @@
  * @property string $report_resolved
  * @property string $report_all
  */
-class ViewReportCategory extends CActiveRecord
+class ViewReportCategory extends OActiveRecord
 {
-	public $defaultColumns = array();
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -46,7 +36,8 @@ class ViewReportCategory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_report_category';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'._view_report_category';
 	}
 
 	/**
@@ -66,7 +57,8 @@ class ViewReportCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('reports, report_resolved, report_all', 'safe'),
+			array('reports, report_resolved', 'length', 'max'=>23),
+			array('report_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, reports, report_resolved, report_all', 'safe', 'on'=>'search'),
@@ -115,62 +107,56 @@ class ViewReportCategory extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.reports',$this->reports);
-		$criteria->compare('t.report_resolved',$this->report_resolved);
-		$criteria->compare('t.report_all',$this->report_all);
+		$criteria->compare('t.cat_id', $this->cat_id);
+		$criteria->compare('t.reports', $this->reports);
+		$criteria->compare('t.report_resolved', $this->report_resolved);
+		$criteria->compare('t.report_all', $this->report_all);
 
-		if(!isset($_GET['ViewReportCategory_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewReportCategory_sort'))
 			$criteria->order = 't.cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'reports';
-			$this->defaultColumns[] = 'report_resolved';
-			$this->defaultColumns[] = 'report_all';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'reports';
-			$this->defaultColumns[] = 'report_resolved';
-			$this->defaultColumns[] = 'report_all';
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['cat_id'] = array(
+				'name' => 'cat_id',
+				'value' => '$data->cat_id',
+			);
+			$this->templateColumns['reports'] = array(
+				'name' => 'reports',
+				'value' => '$data->reports',
+			);
+			$this->templateColumns['report_resolved'] = array(
+				'name' => 'report_resolved',
+				'value' => '$data->report_resolved',
+			);
+			$this->templateColumns['report_all'] = array(
+				'name' => 'report_all',
+				'value' => '$data->report_all',
+			);
 		}
 		parent::afterConstruct();
 	}
