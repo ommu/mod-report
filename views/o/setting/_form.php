@@ -1,6 +1,6 @@
 <?php
 /**
- * User Settings (report-setting)
+ * Report Settings (report-setting)
  * @var $this SettingController
  * @var $model ReportSetting
  * @var $form CActiveForm
@@ -9,6 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 24 August 2017, 14:41 WIB
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -17,7 +18,15 @@
 <?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
 	'id'=>'report-setting-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
+	/*
+	'enableClientValidation'=>true,
+	'clientOptions'=>array(
+		'validateOnSubmit'=>true,
+	),
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+	),
+	*/
 )); ?>
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
@@ -38,10 +47,10 @@
 					$model->license = ReportSetting::getLicense();
 			
 				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control'));
+					echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control'));
 				else
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control','disabled'=>'disabled'));?>
-				<?php echo $form->error($model,'license'); ?>
+					echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control', 'disabled'=>'disabled'));?>
+				<?php echo $form->error($model, 'license'); ?>
 				<span class="small-px"><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
 			</div>
 		</div>
@@ -57,36 +66,36 @@
 					1 => Yii::t('phrase', 'Yes, the public can view report unless they are made private.'),
 					0 => Yii::t('phrase', 'No, the public cannot view report.'),
 				), array('class'=>'form-control')); ?>
-				<?php echo $form->error($model,'permission'); ?>
+				<?php echo $form->error($model, 'permission'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
-				<?php echo $form->error($model,'meta_description'); ?>
+				<?php echo $form->textArea($model, 'meta_description', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+				<?php echo $form->error($model, 'meta_description'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
-				<?php echo $form->error($model,'meta_keyword'); ?>
+				<?php echo $form->textArea($model, 'meta_keyword', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+				<?php echo $form->error($model, 'meta_keyword'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'auto_report_cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'auto_report_cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				$category = ReportCategory::getCategory('1');
 				if($category != null)
-					echo $form->dropDownList($model,'auto_report_cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
+					echo $form->dropDownList($model, 'auto_report_cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 				else
-					echo $form->dropDownList($model,'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')), array('class'=>'form-control'));?>
-				<?php echo $form->error($model,'auto_report_cat_id'); ?>
+					echo $form->dropDownList($model, 'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')), array('class'=>'form-control'));?>
+				<?php echo $form->error($model, 'auto_report_cat_id'); ?>
 			</div>
 		</div>
 
@@ -99,5 +108,3 @@
 
 	</fieldset>
 <?php $this->endWidget(); ?>
-
-

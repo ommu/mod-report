@@ -37,7 +37,7 @@
 
 class Reports extends OActiveRecord
 {
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search');
 
 	// Variable Search
 	public $reporter_search;
@@ -279,10 +279,6 @@ class Reports extends OActiveRecord
 				),
 				'type' => 'raw',
 			);
-			$this->templateColumns['report_ip'] = array(
-				'name' => 'report_ip',
-				'value' => '$data->report_ip',
-			);
 			$this->templateColumns['status_search'] = array(
 				'name' => 'status_search',
 				'value' => 'CHtml::link($data->view->history_all ? $data->view->history_all : 0, Yii::app()->controller->createurl("o/status/manage",array(\'report\'=>$data->report_id)))',
@@ -306,6 +302,10 @@ class Reports extends OActiveRecord
 					'class' => 'center',
 				),
 				'type' => 'raw',
+			);
+			$this->templateColumns['report_ip'] = array(
+				'name' => 'report_ip',
+				'value' => '$data->report_ip',
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',

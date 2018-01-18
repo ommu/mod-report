@@ -29,7 +29,7 @@
  */
 class ReportComment extends OActiveRecord
 {
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('modified_date','modified_search','updated_date');
 
 	// Variable Search
 	public $category_search;

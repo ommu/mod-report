@@ -8,6 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:26 WIB
+ * @modified date 18 January 2018, 13:39 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -33,7 +34,7 @@
 		),
 		array(
 			'name'=>'report_id',
-			'value'=>$model->report->report_url || $model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
+			'value'=>$model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
 			'type'=>'raw',
 		),
 		array(
@@ -45,16 +46,12 @@
 			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
 		),
 		array(
-			'name'=>'creation_date',
-			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->creation_date, true) : '-',
-		),
-		array(
 			'name'=>'modified_date',
 			'value'=>!in_array($model->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->modified_date, true) : '-',
 		),
 		array(
 			'name'=>'modified_id',
-			'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
+			'value'=>$model->modified_id ? $model->modified->displayname : '-',
 		),
 		array(
 			'name'=>'updated_date',

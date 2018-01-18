@@ -8,6 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:26 WIB
+ * @modified date 18 January 2018, 13:39 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -18,13 +19,13 @@
 	);
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
@@ -45,6 +46,7 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form',array(
 	'model'=>$model,
+	'gridColumns'=>Utility::getActiveDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
@@ -52,7 +54,7 @@
 <div id="partial-report-user">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
-	<?php
+	<?php 
 	if(Yii::app()->user->hasFlash('error'))
 		echo Utility::flashError(Yii::app()->user->getFlash('error'));
 	if(Yii::app()->user->hasFlash('success'))
@@ -70,26 +72,26 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'View Report User'),
 						'imageUrl' => false,
-						'options' => array(							
+						'options' => array(
 							'class' => 'view',
 						),
-						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'view\',array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update Report User'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
-						'url' => 'Yii::app()->controller->createUrl("edit",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Report User'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'
 						),
-						'url' => 'Yii::app()->controller->createUrl("delete",array("id"=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\',array(\'id\'=>$data->primaryKey))')
 				),
 				'template' => '{view}|{delete}',
 			));

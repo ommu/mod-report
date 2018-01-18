@@ -1,6 +1,6 @@
 <?php
 /**
- * Report Status (report-status)
+ * Report Statuses (report-status)
  * @var $this StatusController
  * @var $model ReportStatus
  * @var $form CActiveForm
@@ -9,12 +9,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
 
 	$this->breadcrumbs=array(
-		'Report Status'=>array('manage'),
+		'Report Statuses'=>array('manage'),
 		'Delete',
 	);
 ?>

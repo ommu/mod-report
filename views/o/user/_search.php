@@ -9,6 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:26 WIB
+ * @modified date 18 January 2018, 13:39 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -20,43 +21,71 @@
 )); ?>
 	<ul>
 		<li>
-			<?php echo $model->getAttributeLabel('id'); ?><br/>
-			<?php echo $form->textField($model,'id'); ?>
+			<?php echo $model->getAttributeLabel('report_search'); ?>
+			<?php echo $form->textField($model, 'report_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('publish'); ?><br/>
-			<?php echo $form->textField($model,'publish'); ?>
+			<?php echo $model->getAttributeLabel('user_search'); ?>
+			<?php echo $form->textField($model, 'user_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('report_id'); ?><br/>
-			<?php echo $form->textField($model,'report_id'); ?>
+			<?php echo $model->getAttributeLabel('creation_date'); ?>
+			<?php //echo $form->textField($model, 'creation_date', array('class'=>'form-control'));
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'creation_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'form-control',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id'); ?>
+			<?php echo $model->getAttributeLabel('modified_date'); ?>
+			<?php //echo $form->textField($model, 'modified_date', array('class'=>'form-control'));
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'modified_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'form-control',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_date'); ?><br/>
-			<?php echo $form->textField($model,'creation_date'); ?>
+			<?php echo $model->getAttributeLabel('modified_search'); ?>
+			<?php echo $form->textField($model, 'modified_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_date'); ?><br/>
-			<?php echo $form->textField($model,'modified_date'); ?>
+			<?php echo $model->getAttributeLabel('updated_date'); ?>
+			<?php //echo $form->textField($model, 'updated_date', array('class'=>'form-control'));
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'updated_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'form-control',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('updated_date'); ?><br/>
-			<?php echo $form->textField($model,'updated_date'); ?>
+			<?php echo $model->getAttributeLabel('publish'); ?>
+			<?php echo $form->dropDownList($model, 'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes')), array('class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">

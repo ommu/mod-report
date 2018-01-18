@@ -1,6 +1,6 @@
 <?php
 /**
- * Report Status (report-status)
+ * Report Statuses (report-status)
  * @var $this StatusController
  * @var $model ReportStatus
  *
@@ -8,12 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
 
 	$this->breadcrumbs=array(
-		'Report Status'=>array('manage'),
+		'Report Statuses'=>array('manage'),
 		$model->history_id,
 	);
 ?>
@@ -33,17 +34,17 @@
 		),
 		array(
 			'name'=>'report_id',
-			'value'=>$model->report->report_url || $model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
-			'type'=>'raw',
-		),
-		array(
-			'name'=>'report_message',
-			'value'=>$model->report_message != '' ? $model->report_message : '-',
+			'value'=>$model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
 			'type'=>'raw',
 		),
 		array(
 			'name'=>'user_id',
-			'value'=>$model->user_id != 0 ? $model->user->displayname : '-',
+			'value'=>$model->user_id ? $model->user->displayname : '-',
+		),
+		array(
+			'name'=>'report_message',
+			'value'=>$model->report_message ? $model->report_message : '-',
+			'type'=>'raw',
 		),
 		array(
 			'name'=>'updated_date',
@@ -51,7 +52,7 @@
 		),
 		array(
 			'name'=>'updated_ip',
-			'value'=>$model->updated_ip != '' ? $model->updated_ip : '-',
+			'value'=>$model->updated_ip ? $model->updated_ip : '-',
 		),
 		array(
 			'name'=>'modified_date',
@@ -59,7 +60,7 @@
 		),
 		array(
 			'name'=>'modified_id',
-			'value'=>$model->modified_id != 0 ? $model->modified->displayname : '-',
+			'value'=>$model->modified_id ? $model->modified->displayname : '-',
 		),
 	),
 )); ?>

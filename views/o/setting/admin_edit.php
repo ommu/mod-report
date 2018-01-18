@@ -1,6 +1,6 @@
 <?php
 /**
- * User Settings (report-setting)
+ * Report Settings (report-setting)
  * @var $this SettingController
  * @var $model ReportSetting
  * @var $form CActiveForm
@@ -9,6 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 24 August 2017, 14:41 WIB
+ * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -24,10 +25,10 @@
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
-		if(Yii::app()->user->hasFlash('error'))
-			echo Utility::flashError(Yii::app()->user->getFlash('error'));
-		if(Yii::app()->user->hasFlash('success'))
-			echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
+	if(Yii::app()->user->hasFlash('error'))
+		echo Utility::flashError(Yii::app()->user->getFlash('error'));
+	if(Yii::app()->user->hasFlash('success'))
+		echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
 	?>
 	</div>
 	<?php //begin.Messages ?>
@@ -37,25 +38,25 @@
 		<?php 
 			$columnData   = $columns;
 			array_push($columnData, array(
-				'header' => 'Option',
+				'header' => Yii::t('phrase', 'Options'),
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'View Report Category'),
 						'imageUrl' => false,
 						'options' => array(
-							'class' => 'view'
+							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl("o/category/view",array("id"=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update Report Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
 						'url' => 'Yii::app()->controller->createUrl("o/category/edit",array("id"=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Report Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'

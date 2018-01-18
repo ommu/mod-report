@@ -29,7 +29,7 @@
  */
 class ReportCategory extends OActiveRecord
 {
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
 	public $name_i;
 	public $desc_i;
 

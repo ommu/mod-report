@@ -8,6 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 24 August 2017, 14:01 WIB
+ * @modified date 18 January 2018, 13:37 WIB
  * @link https://github.com/ommu/ommu-report
  *
  */
@@ -18,13 +19,13 @@
 	);
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
@@ -45,6 +46,7 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form',array(
 	'model'=>$model,
+	'gridColumns'=>Utility::getActiveDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
@@ -70,21 +72,21 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'View Report History'),
 						'imageUrl' => false,
-						'options' => array(							
+						'options' => array(
 							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'view\',array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update Report History'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Report History'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'

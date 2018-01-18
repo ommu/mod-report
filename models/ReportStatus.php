@@ -29,7 +29,7 @@
  */
 class ReportStatus extends OActiveRecord
 {
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('report_message','modified_date','modified_search');
 
 	// Variable Search
 	public $category_search;
