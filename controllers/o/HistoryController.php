@@ -43,7 +43,6 @@ class HistoryController extends Controller
 				$arrThemes = Utility::getCurrentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
-				Utility::applyViewPath(__dir__);
 			}
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
