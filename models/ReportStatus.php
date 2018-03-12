@@ -221,6 +221,8 @@ class ReportStatus extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'updated_date',
@@ -240,6 +242,7 @@ class ReportStatus extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			$this->templateColumns['updated_ip'] = array(
 				'name' => 'updated_ip',
@@ -251,6 +254,8 @@ class ReportStatus extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'modified_date',
@@ -270,6 +275,7 @@ class ReportStatus extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(

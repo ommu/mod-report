@@ -223,6 +223,8 @@ class ReportUser extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'creation_date',
@@ -242,6 +244,7 @@ class ReportUser extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
@@ -249,6 +252,8 @@ class ReportUser extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'modified_date',
@@ -268,6 +273,7 @@ class ReportUser extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(
@@ -281,6 +287,8 @@ class ReportUser extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'updated_date',
@@ -300,6 +308,7 @@ class ReportUser extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
