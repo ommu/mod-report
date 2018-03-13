@@ -51,8 +51,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_date'); ?>
-			<?php //echo $form->textField($model, 'report_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'report_date',
 				//'mode'=>'datetime',
@@ -62,7 +61,8 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'report_date', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -72,8 +72,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?>
-			<?php //echo $form->textField($model, 'modified_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'modified_date',
 				//'mode'=>'datetime',
@@ -83,7 +82,8 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'modified_date', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -93,8 +93,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('updated_date'); ?>
-			<?php //echo $form->textField($model, 'updated_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'updated_date',
 				//'mode'=>'datetime',
@@ -104,7 +103,8 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'updated_date', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
