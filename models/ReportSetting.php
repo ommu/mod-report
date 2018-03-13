@@ -197,6 +197,8 @@ class ReportSetting extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'modified_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
