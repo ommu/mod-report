@@ -8,9 +8,9 @@
  * @modified date 18 January 2018, 13:01 WIB
  * @link https://github.com/ommu/ommu-report
  *
- * This is the model class for table "_view_report_category".
+ * This is the model class for table "_report_category".
  *
- * The followings are the available columns in table '_view_report_category':
+ * The followings are the available columns in table '_report_category':
  * @property integer $cat_id
  * @property string $reports
  * @property string $report_resolved
@@ -37,7 +37,7 @@ class ViewReportCategory extends OActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_report_category';
+		return $matches[1].'._report_category';
 	}
 
 	/**

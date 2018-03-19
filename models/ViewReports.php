@@ -9,9 +9,9 @@
  * @modified date 18 January 2018, 13:01 WIB
  * @link https://github.com/ommu/ommu-report
  *
- * This is the model class for table "_view_reports".
+ * This is the model class for table "_reports".
  *
- * The followings are the available columns in table '_view_reports':
+ * The followings are the available columns in table '_reports':
  * @property string $report_id
  * @property string $history_resolved
  * @property string $history_unresolved
@@ -42,7 +42,7 @@ class ViewReports extends OActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_reports';
+		return $matches[1].'._reports';
 	}
 
 	/**
