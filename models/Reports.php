@@ -418,7 +418,7 @@ class Reports extends OActiveRecord
 	 */
 	public static function insertReport($report_url, $report_body)
 	{
-		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 		$setting = ReportSetting::model()->findByPk(1, array(
 			'select' => 'auto_report_cat_id',
@@ -435,7 +435,7 @@ class Reports extends OActiveRecord
 		
 		else {
 			$report=new Reports;
-			$report->cat_id = $setting != null ? $setting->auto_report_cat_id : '1';
+			$report->cat_id = $setting ? $setting->auto_report_cat_id : '1';
 			$report->report_url = $report_url;
 			$report->report_body = $report_body;
 			$report->save();
@@ -449,9 +449,9 @@ class Reports extends OActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			else
-				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
