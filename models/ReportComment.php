@@ -24,8 +24,8 @@
  *
  * The followings are the available model relations:
  * @property Reports $report
- * @property Users $user;
- * @property Users $modified;
+ * @property Users $user
+ * @property Users $modified
  */
 class ReportComment extends OActiveRecord
 {

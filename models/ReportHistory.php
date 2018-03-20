@@ -20,7 +20,7 @@
  *
  * The followings are the available model relations:
  * @property Reports $report
- * @property Users $user;
+ * @property Users $user
  */
 class ReportHistory extends OActiveRecord
 {
