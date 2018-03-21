@@ -382,7 +382,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\',array(\'id\'=>$data->report_id)), $data->status)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'resolve\',array(\'id\'=>$data->report_id)), $data->status, Yii::t(\'phrase\', \'Resolved,Unresolved\'))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
