@@ -28,13 +28,13 @@ content_menu	:
 		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
-# controller o/history
+# controller history/admin
 	- urlTitle: Back to Reports
-		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {report, history/admin, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 	- urlTitle: View Report Histories Data
-		urlRules: {report, o/history, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/history/manage, attr: -, icon: -}
+		urlRules: {report, history/admin, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: history/admin/manage, attr: -, icon: -}
         
 # controller o/comment
 	- urlTitle: Back to Reports

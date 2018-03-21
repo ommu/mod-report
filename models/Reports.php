@@ -278,7 +278,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['reports'] = array(
 				'name' => 'reports',
-				'value' => 'CHtml::link($data->reports ? $data->reports : 0, Yii::app()->controller->createurl("o/history/manage",array(\'report\'=>$data->report_id,\'status\'=>0)))',
+				'value' => 'CHtml::link($data->reports ? $data->reports : 0, Yii::app()->controller->createurl("history/admin/manage",array(\'report\'=>$data->report_id,\'status\'=>0)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

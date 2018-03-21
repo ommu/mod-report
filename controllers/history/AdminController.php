@@ -1,7 +1,7 @@
 <?php
 /**
- * HistoryController
- * @var $this HistoryController
+ * AdminController
+ * @var $this AdminController
  * @var $model ReportHistory
  * @var $form CActiveForm
  *
@@ -24,7 +24,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class HistoryController extends Controller
+class AdminController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

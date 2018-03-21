@@ -232,7 +232,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Category: {name}', array('{name}'=>$model->title->message));
+		$this->pageTitle = Yii::t('phrase', 'Detail Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(

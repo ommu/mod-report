@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Histories (report-history)
- * @var $this HistoryController
+ * @var $this AdminController
  * @var $model ReportHistory
  * @var $form CActiveForm
  *

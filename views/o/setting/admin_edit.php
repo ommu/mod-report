@@ -42,7 +42,7 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => Yii::t('phrase', 'View Report Category'),
+						'label' => Yii::t('phrase', 'Detail Report Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'view',

@@ -141,7 +141,7 @@ class UserController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View User: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Detail User: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(

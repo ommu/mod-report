@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Histories (report-history)
- * @var $this HistoryController
+ * @var $this AdminController
  * @var $model ReportHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -72,7 +72,7 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => Yii::t('phrase', 'View Report History'),
+						'label' => Yii::t('phrase', 'Detail Report History'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'view',
