@@ -102,13 +102,13 @@ class SettingController extends Controller
 
 		$category=new ReportCategory('search');
 		$category->unsetAttributes();  // clear any default values
-		if(isset($_GET['ReportCategory'])) {
-			$category->attributes=$_GET['ReportCategory'];
+		if(Yii::app()->getRequest()->getParam('ReportCategory')) {
+			$category->attributes=Yii::app()->getRequest()->getParam('ReportCategory');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
@@ -131,7 +131,7 @@ class SettingController extends Controller
 				echo $jsonError;
 
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,

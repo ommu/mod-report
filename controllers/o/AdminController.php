@@ -96,13 +96,13 @@ class AdminController extends Controller
 	{
 		$model=new Reports('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Reports'])) {
-			$model->attributes=$_GET['Reports'];
+		if(Yii::app()->getRequest()->getParam('Reports')) {
+			$model->attributes=Yii::app()->getRequest()->getParam('Reports');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
@@ -144,7 +144,7 @@ class AdminController extends Controller
 				echo $jsonError;
 				
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
@@ -195,7 +195,7 @@ class AdminController extends Controller
 				echo $jsonError;
 				
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
@@ -308,7 +308,7 @@ class AdminController extends Controller
 				echo $jsonError;
 				
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,

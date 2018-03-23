@@ -94,13 +94,13 @@ class StatusController extends Controller
 	{
 		$model=new ReportStatus('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ReportStatus'])) {
-			$model->attributes=$_GET['ReportStatus'];
+		if(Yii::app()->getRequest()->getParam('ReportStatus')) {
+			$model->attributes=Yii::app()->getRequest()->getParam('ReportStatus');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
