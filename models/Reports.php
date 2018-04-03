@@ -80,7 +80,7 @@ class Reports extends OActiveRecord
 			array('cat_id', 'length', 'max'=>5),
 			array('user_id, modified_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
-			array('report_ip, report_message, reports', 'safe'),
+			array('user_id, reports, report_message, report_ip', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('report_id, status, cat_id, user_id, report_url, report_body, report_message, reports, report_date, report_ip, modified_date, modified_id, updated_date,
