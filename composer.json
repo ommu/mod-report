@@ -1,24 +1,23 @@
 {
 	"name": "ommu/report",
-	"description": "Module Report for Ommu Platform",
+	"description": "Module Report from Ommu Platform",
 	"keywords": [
 		"module",
 		"report",
 		"ommu",
-		"platform",
 		"ommu platform"
 	],
-	"homepage": "https://github.com/ommu/ommu-report",
+	"homepage": "https://github.com/ommu/mod-report",
 	"type": "ommu-module",
 	"license": "Apache-2.0",
 	"support": {
-		"issues": "https://github.com/ommu/ommu-report/issues",
-		"wiki": "https://github.com/ommu/ommu-report/wiki",
-		"source": "https://github.com/ommu/ommu-report"
+		"issues": "https://github.com/ommu/mod-report/issues",
+		"wiki": "https://github.com/ommu/mod-report/wiki",
+		"source": "https://github.com/ommu/mod-report"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ommu/ommu-report.git"
+		"url": "https://github.com/ommu/mod-report.git"
 	},
 	"authors": [
 		{
