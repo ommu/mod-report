@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
  * @modified date 18 January 2018, 00:31 WIB
- * @link https://github.com/ommu/ommu-report
+ * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_category".
  *

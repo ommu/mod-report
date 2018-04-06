@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 24 August 2017, 14:15 WIB
  * @modified date 18 January 2018, 00:32 WIB
- * @link https://github.com/ommu/ommu-report
+ * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_setting".
  *
