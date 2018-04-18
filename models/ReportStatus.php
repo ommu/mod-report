@@ -1,7 +1,14 @@
 <?php
 /**
  * ReportStatus
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 19 September 2017, 23:27 WIB
+ * @modified date 18 April 2018, 22:16 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_report_status".
  *
@@ -17,13 +24,9 @@
  * @property integer $modified_id
  *
  * The followings are the available model relations:
- * @property Reports $reports
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 19 September 2017, 23:27 WIB
- * @contact (+62)856-299-4114
+ * @property Reports $report
+ * @property Users $user
+ * @property Users $modified
  *
  */
 
@@ -31,11 +34,19 @@ namespace app\modules\report\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\coremodules\user\models\Users;
 
 class ReportStatus extends \app\components\ActiveRecord
 {
+	use \app\components\traits\GridViewSystem;
+
 	public $gridForbiddenColumn = [];
+
+	// Variable Search
+	public $report_search;
+	public $user_search;
+	public $modified_search;
 
 	/**
 	 * @return string the associated database table name
@@ -59,19 +70,40 @@ class ReportStatus extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['status', 'report_id', 'user_id', 'report_message', 'updated_ip', 'modified_id'], 'required'],
-			[['status', 'report_id', 'user_id'], 'integer'],
+			[['status', 'report_id', 'report_message', 'updated_ip'], 'required'],
+			[['status', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['report_message'], 'string'],
-			[['updated_date', 'modified_date'], 'safe'],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
+			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
+		];
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'history_id' => Yii::t('app', 'History'),
+			'status' => Yii::t('app', 'Status'),
+			'report_id' => Yii::t('app', 'Report'),
+			'user_id' => Yii::t('app', 'User'),
+			'report_message' => Yii::t('app', 'Report Message'),
+			'updated_date' => Yii::t('app', 'Updated Date'),
+			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'modified_date' => Yii::t('app', 'Modified Date'),
+			'modified_id' => Yii::t('app', 'Modified'),
+			'report_search' => Yii::t('app', 'Report'),
+			'user_search' => Yii::t('app', 'User'),
+			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getReports()
+	public function getReport()
 	{
 		return $this->hasOne(Reports::className(), ['report_id' => 'report_id']);
 	}
@@ -93,27 +125,6 @@ class ReportStatus extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'history_id' => Yii::t('app', 'History'),
-			'status' => Yii::t('app', 'Status'),
-			'report_id' => Yii::t('app', 'Report'),
-			'user_id' => Yii::t('app', 'User'),
-			'report_message' => Yii::t('app', 'Report Message'),
-			'updated_date' => Yii::t('app', 'Updated Date'),
-			'updated_ip' => Yii::t('app', 'Updated Ip'),
-			'modified_date' => Yii::t('app', 'Modified Date'),
-			'modified_id' => Yii::t('app', 'Modified'),
-			'reports_search' => Yii::t('app', 'Reports'),
-			'user_search' => Yii::t('app', 'User'),
-			'modified_search' => Yii::t('app', 'Modified'),
-		];
-	}
-	
-	/**
 	 * Set default columns to display
 	 */
 	public function init() 
@@ -123,58 +134,110 @@ class ReportStatus extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
-		];
-		$this->templateColumns['reports_search'] = [
-			'attribute' => 'reports_search',
-			'value' => function($model, $key, $index, $column) {
-				return $model->reports->reports;
-			},
-		];
-		$this->templateColumns['user_search'] = [
-			'attribute' => 'user_search',
-			'value' => function($model, $key, $index, $column) {
-				return $model->user->displayname ? $model->user->displayname : '-';
-			},
-		];
-		$this->templateColumns['report_message'] = 'report_message';
-		$this->templateColumns['updated_date'] = [
-			'attribute' => 'updated_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'updated_date',
-				'model'	 => $this,
-			]),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'date'/*datetime*/) : '-';
-			},
-			'format'	=> 'html',
-		];
-		$this->templateColumns['updated_ip'] = 'updated_ip';
-		$this->templateColumns['modified_date'] = [
-			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'	 => $this,
-			]),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'date'/*datetime*/) : '-';
-			},
-			'format'	=> 'html',
-		];
-		$this->templateColumns['modified_search'] = [
-			'attribute' => 'modified_search',
-			'value' => function($model, $key, $index, $column) {
-				return $model->modified->displayname ? $model->modified->displayname : '-';
-			},
-		];
-		$this->templateColumns['status'] = [
-			'attribute' => 'status',
-			'value' => function($model, $key, $index, $column) {
-				return $model->status;
-			},
 			'contentOptions' => ['class'=>'center'],
 		];
+		if(!Yii::$app->request->get('report')) {
+			$this->templateColumns['report_search'] = [
+				'attribute' => 'report_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->report) ? $model->report->report_id : '-';
+				},
+			];
+		}
+		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
+		}
+		$this->templateColumns['report_message'] = [
+			'attribute' => 'report_message',
+			'value' => function($model, $key, $index, $column) {
+				return $model->report_message;
+			},
+			'format' => 'html',
+		];
+		$this->templateColumns['updated_date'] = [
+			'attribute' => 'updated_date',
+			'filter' => Html::input('date', 'updated_date', Yii::$app->request->get('updated_date'), ['class'=>'form-control']),
+			'value' => function($model, $key, $index, $column) {
+				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
+			},
+			'format' => 'html',
+		];
+		$this->templateColumns['updated_ip'] = [
+			'attribute' => 'updated_ip',
+			'value' => function($model, $key, $index, $column) {
+				return $model->updated_ip;
+			},
+		];
+		$this->templateColumns['modified_date'] = [
+			'attribute' => 'modified_date',
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
+			'value' => function($model, $key, $index, $column) {
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+			},
+			'format' => 'html',
+		];
+		if(!Yii::$app->request->get('modified')) {
+			$this->templateColumns['modified_search'] = [
+				'attribute' => 'modified_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->modified) ? $model->modified->displayname : '-';
+				},
+			];
+		}
+		$this->templateColumns['status'] = [
+			'attribute' => 'status',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['status', 'id' => $model->primaryKey]);
+				return $this->quickAction($url, $model->status, 'Resolved,Unresolved');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['history_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+	/**
+	 * function getreportStatus
+	 */
+	public static function getreportStatus($array=true) 
+	{
+		$model = self::find()->alias('t');
+		$model = $model->orderBy('t.history_id ASC')->all();
+
+		if($array == true) {
+			$items = [];
+			if($model !== null) {
+				foreach($model as $val) {
+					$items[$val->history_id] = $val->history_id;
+				}
+				return $items;
+			} else
+				return false;
+		} else 
+			return $model;
 	}
 
 	/**
@@ -184,10 +247,59 @@ class ReportStatus extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+		}
+		return true;
+	}
+
+	/**
+	 * after validate attributes
+	 */
+	public function afterValidate()
+	{
+		parent::afterValidate();
+		// Create action
+		
+		return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		if(parent::beforeSave($insert)) {
 			// Create action
 		}
 		return true;
 	}
 
+	/**
+	 * After save attributes
+	 */
+	public function afterSave($insert, $changedAttributes) 
+	{
+		parent::afterSave($insert, $changedAttributes);
+
+	}
+
+	/**
+	 * Before delete attributes
+	 */
+	public function beforeDelete() 
+	{
+		if(parent::beforeDelete()) {
+			// Create action
+		}
+		return true;
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	public function afterDelete() 
+	{
+		parent::afterDelete();
+
+	}
 }
