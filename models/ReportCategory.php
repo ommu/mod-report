@@ -1,7 +1,13 @@
 <?php
 /**
  * ReportCategory
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 19 September 2017, 22:56 WIB
+ * @modified date 18 April 2018, 22:14 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_report_category".
  *
@@ -19,12 +25,10 @@
  *
  * The followings are the available model relations:
  * @property Reports[] $reports
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 19 September 2017, 22:56 WIB
- * @contact (+62)856-299-4114
+ * @property SourceMessage $title
+ * @property SourceMessage $description
+ * @property Users $creation
+ * @property Users $modified
  *
  */
 
@@ -32,13 +36,23 @@ namespace app\modules\report\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
+use app\models\SourceMessage;
 use app\coremodules\user\models\Users;
-use app\libraries\grid\GridView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {
+	use \app\components\traits\GridViewSystem;
+	use \app\components\traits\FileSystem;
+
 	public $gridForbiddenColumn = [];
+	public $name_i;
+	public $desc_i;
+
+	// Variable Search
+	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * @return string the associated database table name
@@ -62,9 +76,9 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class'		=> SluggableBehavior::className(),
-				'attribute'	=> 'name',
-				'immutable'	=> true,
+				'class'	 => SluggableBehavior::className(),
+				'attribute' => 'title.message',
+				'immutable' => true,
 				'ensureUnique' => true,
 			],
 		];
@@ -76,10 +90,34 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
+			[['name_i', 'desc_i'], 'required'],
 			[['publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
-			[['name', 'desc', 'creation_id', 'modified_id', 'slug'], 'required'],
-			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
-			[['slug'], 'string'],
+			[['name_i', 'desc_i', 'slug'], 'string'],
+			[['name_i'], 'string', 'max' => 64],
+			[['desc_i'], 'string', 'max' => 128],
+		];
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'cat_id' => Yii::t('app', 'Category'),
+			'publish' => Yii::t('app', 'Publish'),
+			'name' => Yii::t('app', 'Name'),
+			'desc' => Yii::t('app', 'Desc'),
+			'creation_date' => Yii::t('app', 'Creation Date'),
+			'creation_id' => Yii::t('app', 'Creation'),
+			'modified_date' => Yii::t('app', 'Modified Date'),
+			'modified_id' => Yii::t('app', 'Modified'),
+			'updated_date' => Yii::t('app', 'Updated Date'),
+			'slug' => Yii::t('app', 'Slug'),
+			'name_i' => Yii::t('app', 'Name'),
+			'desc_i' => Yii::t('app', 'Desc'),
+			'creation_search' => Yii::t('app', 'Creation'),
+			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -89,6 +127,22 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function getReports()
 	{
 		return $this->hasMany(Reports::className(), ['cat_id' => 'cat_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getDescription()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
 	}
 
 	/**
@@ -108,27 +162,6 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'cat_id' => Yii::t('app', 'Cat'),
-			'publish' => Yii::t('app', 'Publish'),
-			'name' => Yii::t('app', 'Name'),
-			'desc' => Yii::t('app', 'Desc'),
-			'creation_date' => Yii::t('app', 'Creation Date'),
-			'creation_id' => Yii::t('app', 'Creation'),
-			'modified_date' => Yii::t('app', 'Modified Date'),
-			'modified_id' => Yii::t('app', 'Modified'),
-			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
-			'creation_search' => Yii::t('app', 'Creation'),
-			'modified_search' => Yii::t('app', 'Modified'),
-		];
-	}
-	
-	/**
 	 * Set default columns to display
 	 */
 	public function init() 
@@ -138,65 +171,70 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
+			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['name'] = 'name';
-		$this->templateColumns['desc'] = 'desc';
+		$this->templateColumns['name_i'] = [
+			'attribute' => 'name_i',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->title) ? $model->title->message : '-';
+			},
+		];
+		$this->templateColumns['desc_i'] = [
+			'attribute' => 'desc_i',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->description) ? $model->description->message : '-';
+			},
+		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'creation_date',
-				'model'	 => $this,
-			]),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['creation_search'] = [
-			'attribute' => 'creation_search',
-			'value' => function($model, $key, $index, $column) {
-				return $model->creation->displayname ? $model->creation->displayname : '-';
-			},
-		];
+		if(!Yii::$app->request->get('creation')) {
+			$this->templateColumns['creation_search'] = [
+				'attribute' => 'creation_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->creation) ? $model->creation->displayname : '-';
+				},
+			];
+		}
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'	 => $this,
-			]),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['modified_search'] = [
-			'attribute' => 'modified_search',
-			'value' => function($model, $key, $index, $column) {
-				return $model->modified->displayname ? $model->modified->displayname : '-';
-			},
-		];
+		if(!Yii::$app->request->get('modified')) {
+			$this->templateColumns['modified_search'] = [
+				'attribute' => 'modified_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->modified) ? $model->modified->displayname : '-';
+				},
+			];
+		}
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'updated_date',
-				'model'	 => $this,
-			]),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['slug'] = 'slug';
+		$this->templateColumns['slug'] = [
+			'attribute' => 'slug',
+			'value' => function($model, $key, $index, $column) {
+				return $model->slug;
+			},
+		];
 		if(!isset($_GET['trash'])) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => GridView::getFilterYesNo(),
+				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['publish', 'id' => $model->primaryKey]);
-					return GridView::getPublish($url, $model->publish);
+					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format'	=> 'raw',
@@ -205,18 +243,55 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getCategory
+	 * User get information
 	 */
-	public function getCategory()	{
-		$items = [];
-		$model = self::find()->orderBy('name ASC')->all();
-		if($model !== null) {
-			foreach($model as $val) {
-				$items[$val->cat_id] = $val->name;
-			}
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['cat_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
 		}
-		
-		return $items;
+	}
+
+	/**
+	 * function getreportCategory
+	 */
+	public static function getCategory($publish=null, $array=true) 
+	{
+		$model = self::find()->alias('t');
+		$model->with(['title title']);
+		if($publish != null)
+			$model = $model->andWhere(['t.publish' => $publish]);
+
+		$model = $model->orderBy('title.message ASC')->all();
+
+		if($array == true) {
+			$items = [];
+			if($model !== null) {
+				foreach($model as $val) {
+					$items[$val->cat_id] = $val->title->message;
+				}
+				return $items;
+			} else
+				return false;
+		} else 
+			return $model;
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind() 
+	{
+		$this->name_i = isset($this->title) ? $this->title->message : '';
+		$this->desc_i = isset($this->description) ? $this->description->message : '';
 	}
 
 	/**
@@ -226,12 +301,52 @@ class ReportCategory extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
-			// Create action
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
 	}
 
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		$module = strtolower(Yii::$app->controller->module->id);
+		$controller = strtolower(Yii::$app->controller->id);
+		$action = strtolower(Yii::$app->controller->action->id);
+
+		$location = $this->getUrlTitle($module.' '.$controller);
+
+		if(parent::beforeSave($insert)) {
+
+			if($insert || (!$insert && !$this->name)) {
+				$name = new SourceMessage();
+				$name->location = $location.'_title';
+				$name->message = $this->name_i;
+				if($name->save())
+					$this->name = $name->id;
+				
+			} else {
+				$name = SourceMessage::findOne($this->name);
+				$name->message = $this->name_i;
+				$name->save();
+			}
+
+			if($insert || (!$insert && !$this->desc)) {
+				$desc = new SourceMessage();
+				$desc->location = $location.'_description';
+				$desc->message = $this->desc_i;
+				if($desc->save())
+					$this->desc = $desc->id;
+				
+			} else {
+				$desc = SourceMessage::findOne($this->desc);
+				$desc->message = $this->desc_i;
+				$desc->save();
+			}
+		}
+		return true;
+	}
 }
