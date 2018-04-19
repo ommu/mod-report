@@ -264,7 +264,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getreportCategory
+	 * function getCategory
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
@@ -312,6 +312,17 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * after validate attributes
+	 */
+	public function afterValidate()
+	{
+		parent::afterValidate();
+		// Create action
+		
+		return true;
+	}
+
+	/**
 	 * before save attributes
 	 */
 	public function beforeSave($insert)
@@ -349,7 +360,37 @@ class ReportCategory extends \app\components\ActiveRecord
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
+			// Create action
 		}
 		return true;
+	}
+
+	/**
+	 * After save attributes
+	 */
+	public function afterSave($insert, $changedAttributes) 
+	{
+		parent::afterSave($insert, $changedAttributes);
+
+	}
+
+	/**
+	 * Before delete attributes
+	 */
+	public function beforeDelete() 
+	{
+		if(parent::beforeDelete()) {
+			// Create action
+		}
+		return true;
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	public function afterDelete() 
+	{
+		parent::afterDelete();
+
 	}
 }
