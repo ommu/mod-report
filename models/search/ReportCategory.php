@@ -99,7 +99,6 @@ class ReportCategory extends ReportCategoryModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.cat_id' => $this->cat_id,
-			't.publish' => isset($params['publish']) ? 1 : $this->publish,
             't.name' => $this->name,
             't.desc' => $this->desc,
             'cast(t.creation_date as date)' => $this->creation_date,
@@ -108,11 +107,15 @@ class ReportCategory extends ReportCategoryModel
             't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
             'cast(t.updated_date as date)' => $this->updated_date,
         ]);
-		
-		if(!isset($_GET['trash']))
-			$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-		else
+
+		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+		else {
+			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
+				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
+			else
+				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
 
         $query->andFilterWhere(['like', 't.slug', $this->slug])
             ->andFilterWhere(['like', 'creation.displayname', $this->creation_search])

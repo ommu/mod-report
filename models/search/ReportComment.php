@@ -105,7 +105,6 @@ class ReportComment extends ReportCommentModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.comment_id' => $this->comment_id,
-			't.publish' => isset($params['publish']) ? 1 : $this->publish,
 			't.report_id' => isset($params['reports']) ? $params['reports'] : $this->report_id,
             't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
             'cast(t.creation_date as date)' => $this->creation_date,
@@ -113,11 +112,15 @@ class ReportComment extends ReportCommentModel
             't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
             'cast(t.updated_date as date)' => $this->updated_date,
         ]);
-		
-		if(!isset($_GET['trash']))
-			$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-		else
+
+		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+		else {
+			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
+				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
+			else
+				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
 
         $query->andFilterWhere(['like', 't.comment_text', $this->comment_text])
             ->andFilterWhere(['like', 'reports.comment_id', $this->reports_search])

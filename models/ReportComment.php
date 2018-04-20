@@ -189,7 +189,7 @@ class ReportComment extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		if(!isset($_GET['trash'])) {
+		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
 				'filter' => $this->filterYesNo(),

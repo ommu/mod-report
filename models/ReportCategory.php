@@ -231,7 +231,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		if(!isset($_GET['trash'])) {
+		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
 				'filter' => $this->filterYesNo(),
