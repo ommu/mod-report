@@ -93,6 +93,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			[['name_i', 'desc_i'], 'required'],
 			[['publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
 			[['name_i', 'desc_i', 'slug'], 'string'],
+			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 		];
@@ -268,10 +269,10 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
-		$model = self::find()->alias('t');
-		$model->with(['title title']);
+		$model = self::find()->alias('t')
+			->leftJoin(SourceMessage::tableName().' title', 't.name=title.id');
 		if($publish != null)
-			$model = $model->andWhere(['t.publish' => $publish]);
+			$model->andWhere(['t.publish' => $publish]);
 
 		$model = $model->orderBy('title.message ASC')->all();
 

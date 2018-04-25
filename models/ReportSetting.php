@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 19 September 2017, 23:28 WIB
  * @modified date 18 April 2018, 22:16 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_report_setting".
@@ -22,6 +21,9 @@
  * @property string $modified_date
  * @property integer $modified_id
  *
+ * The followings are the available model relations:
+ * @property Users $modified
+ *
  */
 
 namespace app\modules\report\models;
@@ -33,6 +35,8 @@ use app\coremodules\user\models\Users;
 
 class ReportSetting extends \app\components\ActiveRecord
 {
+	use \app\components\traits\GridViewSystem;
+
 	public $gridForbiddenColumn = [];
 
 	// Variable Search
@@ -63,6 +67,7 @@ class ReportSetting extends \app\components\ActiveRecord
 			[['license', 'meta_keyword', 'meta_description', 'auto_report_cat_id'], 'required'],
 			[['permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
 			[['meta_keyword', 'meta_description'], 'string'],
+			[['modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}
@@ -174,24 +179,30 @@ class ReportSetting extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getreportSetting
+	 * get Module License
 	 */
-	public static function getreportSetting($array=true) 
+	public static function getLicense($source='1234567890', $length=16, $char=4)
 	{
-		$model = self::find()->alias('t');
-		$model = $model->orderBy('t.id ASC')->all();
+		$mod = $length%$char;
+		if($mod == 0)
+			$sep = ($length/$char);
+		else
+			$sep = (int)($length/$char)+1;
+		
+		$sourceLength = strlen($source);
+		$random = '';
+		for ($i = 0; $i < $length; $i++)
+			$random .= $source[rand(0, $sourceLength - 1)];
+		
+		$license = '';
+		for ($i = 0; $i < $sep; $i++) {
+			if($i != $sep-1)
+				$license .= substr($random,($i*$char),$char).'-';
+			else
+				$license .= substr($random,($i*$char),$char);
+		}
 
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->id] = $val->id;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
+		return $license;
 	}
 
 	/**
@@ -204,56 +215,5 @@ class ReportSetting extends \app\components\ActiveRecord
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After save attributes
-	 */
-	public function afterSave($insert, $changedAttributes) 
-	{
-		parent::afterSave($insert, $changedAttributes);
-
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-
 	}
 }

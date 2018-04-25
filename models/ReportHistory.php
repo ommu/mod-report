@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 19 September 2017, 23:26 WIB
  * @modified date 18 April 2018, 22:15 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_report_history".
@@ -166,9 +165,9 @@ class ReportHistory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getreportHistory
+	 * function getHistory
 	 */
-	public static function getreportHistory($array=true) 
+	public static function getHistory($array=true) 
 	{
 		$model = self::find()->alias('t');
 		$model = $model->orderBy('t.id ASC')->all();
@@ -192,6 +191,8 @@ class ReportHistory extends \app\components\ActiveRecord
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
+			if($this->isNewRecord)
+				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
 	}

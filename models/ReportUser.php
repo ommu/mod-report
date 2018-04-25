@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 19 September 2017, 23:29 WIB
  * @modified date 18 April 2018, 22:16 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_report_user".
@@ -71,6 +70,7 @@ class ReportUser extends \app\components\ActiveRecord
 		return [
 			[['report_id'], 'required'],
 			[['publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
+			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -213,9 +213,9 @@ class ReportUser extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getreportUser
+	 * function getUser
 	 */
-	public static function getreportUser($publish=null, $array=true) 
+	public static function getUser($publish=null, $array=true) 
 	{
 		$model = self::find()->alias('t');
 		if($publish != null)
@@ -242,7 +242,9 @@ class ReportUser extends \app\components\ActiveRecord
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if(!$this->isNewRecord)
+			if($this->isNewRecord)
+				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;

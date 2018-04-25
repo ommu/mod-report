@@ -7,7 +7,6 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 19 September 2017, 22:55 WIB
  * @modified date 18 April 2018, 22:17 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_reports".
@@ -81,6 +80,7 @@ class Reports extends \app\components\ActiveRecord
 			[['report_url', 'report_body', 'report_message', 'report_ip'], 'required'],
 			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message'], 'string'],
+			[['report_date', 'modified_date', 'updated_date'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
@@ -290,9 +290,9 @@ class Reports extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getreport
+	 * function getReports
 	 */
-	public static function getreport($array=true) 
+	public static function getReport($array=true) 
 	{
 		$model = self::find()->alias('t');
 		$model = $model->orderBy('t.report_id ASC')->all();
@@ -316,7 +316,9 @@ class Reports extends \app\components\ActiveRecord
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if(!$this->isNewRecord)
+			if($this->isNewRecord)
+				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
