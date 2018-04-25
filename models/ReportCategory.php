@@ -46,7 +46,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	use \app\components\traits\GridViewSystem;
 	use \app\components\traits\FileSystem;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','slug'];
 	public $name_i;
 	public $desc_i;
 
