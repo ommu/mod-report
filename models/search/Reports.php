@@ -1,15 +1,17 @@
 <?php
 /**
  * Reports
- * version: 0.0.1
  *
  * Reports represents the model behind the search form about `app\modules\report\models\Reports`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 15:57 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 15:57 WIB
+ * @modified date 25 April 2018, 17:15 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,16 +21,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\Reports as ReportsModel;
-//use app\modules\report\models\ReportCategory;
-//use app\coremodules\user\models\Users;
 
 class Reports extends ReportsModel
 {
-	// Variable Search	
-	public $category_search;
-	public $user_search;
-	public $modified_search;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -36,7 +31,7 @@ class Reports extends ReportsModel
 	{
 		return [
 			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
-            [['report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
+			[['report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
 				'category_search', 'user_search', 'modified_search'], 'safe'],
 		];
 	}
@@ -69,7 +64,11 @@ class Reports extends ReportsModel
 	public function search($params)
 	{
 		$query = ReportsModel::find()->alias('t');
-		$query->joinWith(['category category', 'user user', 'modified modified']);
+		$query->joinWith([
+			'category.title category',
+			'user user', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -77,9 +76,9 @@ class Reports extends ReportsModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
-			'asc' => ['category.name' => SORT_ASC],
-			'desc' => ['category.name' => SORT_DESC],
+		$attributes['cat_id'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
 		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
@@ -96,7 +95,7 @@ class Reports extends ReportsModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -105,23 +104,23 @@ class Reports extends ReportsModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.report_id' => $this->report_id,
-            't.status' => $this->status,
+			't.status' => $this->status,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
-            't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-            't.reports' => $this->reports,
-            'cast(t.report_date as date)' => $this->report_date,
-            'cast(t.modified_date as date)' => $this->modified_date,
-            't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-            'cast(t.updated_date as date)' => $this->updated_date,
-        ]);
+			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
+			't.reports' => $this->reports,
+			'cast(t.report_date as date)' => $this->report_date,
+			'cast(t.modified_date as date)' => $this->modified_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
+		]);
 
-        $query->andFilterWhere(['like', 't.report_url', $this->report_url])
-            ->andFilterWhere(['like', 't.report_body', $this->report_body])
-            ->andFilterWhere(['like', 't.report_message', $this->report_message])
-            ->andFilterWhere(['like', 't.report_ip', $this->report_ip])
-            ->andFilterWhere(['like', 'category.name', $this->category_search])
-            ->andFilterWhere(['like', 'user.displayname', $this->user_search])
-            ->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+		$query->andFilterWhere(['like', 't.report_url', $this->report_url])
+			->andFilterWhere(['like', 't.report_body', $this->report_body])
+			->andFilterWhere(['like', 't.report_message', $this->report_message])
+			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
+			->andFilterWhere(['like', 'category.message', $this->category_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}

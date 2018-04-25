@@ -48,12 +48,15 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \app\components\traits\GridViewSystem;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search'];
 
 	// Variable Search
 	public $category_search;
 	public $user_search;
 	public $modified_search;
+
+	const SCENARIOREPORT = 'reportForm';
+	const SCENARIORESOLVED = 'resolveForm';
 
 	/**
 	 * @return string the associated database table name
@@ -77,13 +80,22 @@ class Reports extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['report_url', 'report_body', 'report_message', 'report_ip'], 'required'],
+			[['cat_id', 'report_url', 'report_body', 'report_message'], 'required'],
 			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message'], 'string'],
-			[['report_date', 'modified_date', 'updated_date'], 'safe'],
+			[['report_date', 'report_ip', 'modified_date', 'updated_date'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
+		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		return [
+			self::SCENARIOREPORT => ['cat_id', 'report_url', 'report_body'],
+			self::SCENARIORESOLVED => ['report_message'],
 		];
 	}
 
@@ -181,10 +193,11 @@ class Reports extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('category')) {
-			$this->templateColumns['category_search'] = [
-				'attribute' => 'category_search',
+			$this->templateColumns['cat_id'] = [
+				'attribute' => 'cat_id',
+				'filter' => ReportCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->category) ? $model->category->name : '-';
+					return isset($model->category) ? $model->category->title->message : '-';
 				},
 			];
 		}
@@ -214,12 +227,6 @@ class Reports extends \app\components\ActiveRecord
 				return $model->report_message;
 			},
 			'format' => 'html',
-		];
-		$this->templateColumns['reports'] = [
-			'attribute' => 'reports',
-			'value' => function($model, $key, $index, $column) {
-				return $model->reports;
-			},
 		];
 		$this->templateColumns['report_date'] = [
 			'attribute' => 'report_date',
@@ -259,12 +266,19 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
+		$this->templateColumns['reports'] = [
+			'attribute' => 'reports',
+			'value' => function($model, $key, $index, $column) {
+				return $model->reports;
+			},
+			'contentOptions' => ['class'=>'center'],
+		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['status', 'id' => $model->primaryKey]);
-				return $this->quickAction($url, $model->status, 'Resolved,Unresolved');
+				return Html::a($model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved'), $url);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -290,24 +304,35 @@ class Reports extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getReports
+	 * insertReport
 	 */
-	public static function getReport($array=true) 
+	public static function insertReport($report_url, $report_body)
 	{
-		$model = self::find()->alias('t');
-		$model = $model->orderBy('t.report_id ASC')->all();
+		$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->report_id] = $val->report_id;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
+		$setting = ReportSetting::find()
+			->select(['auto_report_cat_id'])
+			->where(['id' => 1])->one();
+
+		$auto_report_cat_id = $setting !== null ? $setting->auto_report_cat_id : 1;
+		
+		$findReport = self::find()
+			->select(['report_id','cat_id','report_url','reports'])
+			->where(['cat_id' => $auto_report_cat_id])
+			->andWhere(['report_url' => $report_url])
+			->one();
+			
+		if($findReport !== null)
+			$findReport->updateAttributes(['user_id'=>$user_id, 'reports'=>$findReport->reports+1, 'report_ip'=>$_SERVER['REMOTE_ADDR']]);
+
+		else {
+			$report = new Reports();
+			$report->scenario = 'reportForm';
+			$report->cat_id = $auto_report_cat_id;
+			$report->report_url = $report_url;
+			$report->report_body = $report_body;
+			$report->save();
+		}
 	}
 
 	/**
@@ -320,58 +345,9 @@ class Reports extends \app\components\ActiveRecord
 				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
+			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After save attributes
-	 */
-	public function afterSave($insert, $changedAttributes) 
-	{
-		parent::afterSave($insert, $changedAttributes);
-
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-
 	}
 }

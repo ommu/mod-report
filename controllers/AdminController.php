@@ -3,7 +3,6 @@
  * AdminController
  * @var $this yii\web\View
  * @var $model app\modules\report\models\Reports
- * version: 0.0.1
  *
  * AdminController implements the CRUD actions for Reports model.
  * Reference start
@@ -13,26 +12,28 @@
  *	Update
  *	View
  *	Delete
+ *	Status
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 19 September 2017, 22:58 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 19 September 2017, 22:58 WIB
+ * @modified date 25 April 2018, 17:15 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\report\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\report\models\Reports;
 use app\modules\report\models\search\Reports as ReportsSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use mdm\admin\components\AccessControl;
 
 class AdminController extends Controller
 {
@@ -42,9 +43,9 @@ class AdminController extends Controller
 	public function behaviors()
 	{
 		return [
-            'access' => [
-                'class' => AccessControl::className(),
-            ],
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -79,7 +80,7 @@ class AdminController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -91,19 +92,23 @@ class AdminController extends Controller
 	public function actionCreate()
 	{
 		$model = new Reports();
+		$model->scenario = 'reportForm';
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->report_id]);
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create Reports');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->report_id]);
+			} 
 		}
+
+		$this->view->title = Yii::t('app', 'Create Report');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_create', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -115,19 +120,24 @@ class AdminController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
+		$model->scenario = 'reportForm';
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->report_id]);
-			return $this->redirect(['index']);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
 
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {report_id}', ['modelClass' => 'Reports', 'report_id' => $model->report_id]);
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-			]);
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->report_id]);
+			}
 		}
+
+		$this->view->title = Yii::t('app', 'Update {model-class}: {report-body} category {cat-id}', ['model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_update', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -138,8 +148,9 @@ class AdminController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
+		//Reports::insertReport($model->report_url, $model->report_body);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {report_id}', ['modelClass' => 'Reports', 'report_id' => $model->report_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body} category {cat-id}', ['model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -157,7 +168,42 @@ class AdminController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Report success deleted.'));
 		return $this->redirect(['index']);
+	}
+
+	/**
+	 * actionStatus an existing Reports model.
+	 * If status is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionStatus($id)
+	{
+		$model = $this->findModel($id);
+		$model->scenario = 'resolveForm';
+
+		$title = $model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved');
+		$replace = $model->status == 1 ? 0 : 1;
+		
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			$model->status = $replace;
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->report_id]);
+			}
+		}
+
+		$this->view->title = Yii::t('app', '{title} {model-class}: {report-body} category {cat-id}', ['title' => $title, 'model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_status', [
+			'model' => $model,
+			'title' => $title,
+		]);
 	}
 
 	/**
@@ -169,7 +215,7 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = Reports::findOne($id)) !== null) 
+		if(($model = Reports::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

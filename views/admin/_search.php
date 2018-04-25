@@ -5,13 +5,13 @@
  * @var $this app\modules\report\controllers\AdminController
  * @var $model app\modules\report\models\search\Reports
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 19 September 2017, 22:58 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 19 September 2017, 22:58 WIB
+ * @modified date 25 April 2018, 17:15 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,31 +24,32 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'report_id') ?>
+		<?php echo $form->field($model, 'status')->checkbox();?>
 
-		<?= $form->field($model, 'status') ?>
+		<?php echo $form->field($model, 'category_search');?>
 
-		<?= $form->field($model, 'cat_id') ?>
+		<?php echo $form->field($model, 'user_search');?>
 
-		<?= $form->field($model, 'user_id') ?>
+		<?php echo $form->field($model, 'report_url');?>
 
-		<?= $form->field($model, 'report_url') ?>
+		<?php echo $form->field($model, 'report_body');?>
 
-		<?= $form->field($model, 'report_body') ?>
+		<?php echo $form->field($model, 'report_message');?>
 
-		<?= $form->field($model, 'report_message') ?>
+		<?php echo $form->field($model, 'reports');?>
 
-		<?= $form->field($model, 'reports') ?>
+		<?php echo $form->field($model, 'report_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'report_date') ?>
+		<?php echo $form->field($model, 'report_ip');?>
 
-		<?= $form->field($model, 'report_ip') ?>
+		<?php echo $form->field($model, 'modified_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'modified_date') ?>
+		<?php echo $form->field($model, 'modified_search');?>
 
-		<?= $form->field($model, 'modified_id') ?>
-
-		<?= $form->field($model, 'updated_date') ?>
+		<?php echo $form->field($model, 'updated_date')
+			->input('date');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
