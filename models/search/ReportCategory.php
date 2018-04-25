@@ -1,15 +1,17 @@
 <?php
 /**
  * ReportCategory
- * version: 0.0.1
  *
  * ReportCategory represents the model behind the search form about `app\modules\report\models\ReportCategory`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 16:13 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 16:13 WIB
+ * @modified date 25 April 2018, 16:36 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,14 +21,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\ReportCategory as ReportCategoryModel;
-//use app\coremodules\user\models\Users;
 
 class ReportCategory extends ReportCategoryModel
 {
-	// Variable Search	
-	public $creation_search;
-	public $modified_search;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -34,7 +31,7 @@ class ReportCategory extends ReportCategoryModel
 	{
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
-            [['creation_date', 'modified_date', 'updated_date', 'slug',
+			[['creation_date', 'modified_date', 'updated_date', 'slug', 'name_i', 'desc_i',
 				'creation_search', 'modified_search'], 'safe'],
 		];
 	}
@@ -67,7 +64,12 @@ class ReportCategory extends ReportCategoryModel
 	public function search($params)
 	{
 		$query = ReportCategoryModel::find()->alias('t');
-		$query->joinWith(['creation creation', 'modified modified']);
+		$query->joinWith([
+			'title title', 
+			'description description', 
+			'creation creation', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -75,6 +77,14 @@ class ReportCategory extends ReportCategoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['name_i'] = [
+			'asc' => ['title.message' => SORT_ASC],
+			'desc' => ['title.message' => SORT_DESC],
+		];
+		$attributes['desc_i'] = [
+			'asc' => ['description.message' => SORT_ASC],
+			'desc' => ['description.message' => SORT_DESC],
+		];
 		$attributes['creation_search'] = [
 			'asc' => ['creation.displayname' => SORT_ASC],
 			'desc' => ['creation.displayname' => SORT_DESC],
@@ -90,7 +100,7 @@ class ReportCategory extends ReportCategoryModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -99,14 +109,14 @@ class ReportCategory extends ReportCategoryModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.cat_id' => $this->cat_id,
-            't.name' => $this->name,
-            't.desc' => $this->desc,
-            'cast(t.creation_date as date)' => $this->creation_date,
-            't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
-            'cast(t.modified_date as date)' => $this->modified_date,
-            't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-            'cast(t.updated_date as date)' => $this->updated_date,
-        ]);
+			't.name' => $this->name,
+			't.desc' => $this->desc,
+			'cast(t.creation_date as date)' => $this->creation_date,
+			't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
+			'cast(t.modified_date as date)' => $this->modified_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
+		]);
 
 		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
@@ -117,9 +127,11 @@ class ReportCategory extends ReportCategoryModel
 				$query->andFilterWhere(['t.publish' => $this->publish]);
 		}
 
-        $query->andFilterWhere(['like', 't.slug', $this->slug])
-            ->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
-            ->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+		$query->andFilterWhere(['like', 't.slug', $this->slug])
+			->andFilterWhere(['like', 'title.message', $this->name_i])
+			->andFilterWhere(['like', 'description.message', $this->desc_i])
+			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}
