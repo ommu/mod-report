@@ -104,7 +104,7 @@ class Reports extends ReportsModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.report_id' => $this->report_id,
-			't.status' => $this->status,
+			't.status' => isset($params['status']) ? $params['status'] : $this->status,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.reports' => $this->reports,

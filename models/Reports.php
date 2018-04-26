@@ -43,6 +43,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use app\coremodules\user\models\Users;
+use app\modules\report\models\view\Reports as ReportsView;
 
 class Reports extends \app\components\ActiveRecord
 {
@@ -181,6 +182,14 @@ class Reports extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(ReportsView::className(), ['report_id' => 'report_id']);
+	}
+
+	/**
 	 * Set default columns to display
 	 */
 	public function init() 
@@ -268,6 +277,7 @@ class Reports extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['history/index', 'report' => $model->primaryKey]);
 				return Html::a($model->reports, $url);
