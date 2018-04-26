@@ -47,7 +47,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	use \app\components\traits\GridViewSystem;
 	use \app\components\traits\FileSystem;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','slug'];
+	public $gridForbiddenColumn = ['desc_i','modified_date','modified_search','updated_date','slug'];
 	public $name_i;
 	public $desc_i;
 
@@ -315,7 +315,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	public static function getCategory($publish=null, $array=true) 
 	{
 		$model = self::find()->alias('t')
-			->leftJoin(SourceMessage::tableName().' title', 't.name=title.id');
+			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($publish != null)
 			$model->andWhere(['t.publish' => $publish]);
 
