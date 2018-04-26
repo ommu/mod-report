@@ -32,7 +32,7 @@ class Reports extends ReportsModel
 		return [
 			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
-				'category_search', 'reporter_search', 'modified_search'], 'safe'],
+				'category_search', 'reporter_search', 'modified_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -65,6 +65,7 @@ class Reports extends ReportsModel
 	{
 		$query = ReportsModel::find()->alias('t');
 		$query->joinWith([
+			'view view', 
 			'category.title category',
 			'user user', 
 			'modified modified'
@@ -87,6 +88,10 @@ class Reports extends ReportsModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['user_search'] = [
+			'asc' => ['view.users' => SORT_ASC],
+			'desc' => ['view.users' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

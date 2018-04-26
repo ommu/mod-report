@@ -55,6 +55,7 @@ class Reports extends \app\components\ActiveRecord
 	public $category_search;
 	public $reporter_search;
 	public $modified_search;
+	public $user_search;
 
 	const SCENARIOREPORT = 'reportForm';
 	const SCENARIORESOLVED = 'resolveForm';
@@ -122,6 +123,7 @@ class Reports extends \app\components\ActiveRecord
 			'category_search' => Yii::t('app', 'Category'),
 			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
+			'user_search' => Yii::t('app', 'Users'),
 		];
 	}
 
@@ -281,6 +283,16 @@ class Reports extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['history/index', 'report' => $model->primaryKey]);
 				return Html::a($model->reports, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['user_search'] = [
+			'attribute' => 'user_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['user/index', 'report' => $model->primaryKey, 'publish'=>1]);
+				return Html::a($model->view->users, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
