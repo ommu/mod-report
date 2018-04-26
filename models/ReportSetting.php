@@ -38,6 +38,7 @@ class ReportSetting extends \app\components\ActiveRecord
 	use \app\components\traits\GridViewSystem;
 
 	public $gridForbiddenColumn = [];
+	public $auto_report_i;
 
 	// Variable Search
 	public $modified_search;
@@ -64,10 +65,10 @@ class ReportSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'meta_keyword', 'meta_description', 'auto_report_cat_id'], 'required'],
-			[['permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
+			[['license', 'permission', 'meta_keyword', 'meta_description'], 'required'],
+			[['permission', 'auto_report_cat_id', 'modified_id', 'auto_report_i'], 'integer'],
 			[['meta_keyword', 'meta_description'], 'string'],
-			[['modified_date'], 'safe'],
+			[['auto_report_cat_id', 'modified_date', 'auto_report_i'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}
@@ -83,9 +84,10 @@ class ReportSetting extends \app\components\ActiveRecord
 			'permission' => Yii::t('app', 'Permission'),
 			'meta_keyword' => Yii::t('app', 'Meta Keyword'),
 			'meta_description' => Yii::t('app', 'Meta Description'),
-			'auto_report_cat_id' => Yii::t('app', 'Auto Report Cat'),
+			'auto_report_cat_id' => Yii::t('app', 'Auto Report Category'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
+			'auto_report_i' => Yii::t('app', 'Enable Auto Report'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -213,6 +215,9 @@ class ReportSetting extends \app\components\ActiveRecord
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
+			if($this->auto_report_i == 1)
+				$this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('auto_report_cat_id')]));
 		}
 		return true;
 	}

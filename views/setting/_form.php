@@ -28,7 +28,7 @@ use app\modules\report\models\ReportSetting;
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
-	'enableClientValidation' => true,
+	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
 ]); ?>
@@ -57,6 +57,10 @@ echo $form->field($model, 'permission', ['template' => '{label}<div class="col-m
 <?php echo $form->field($model, 'meta_description', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->textarea(['rows'=>2,'rows'=>6])
 	->label($model->getAttributeLabel('meta_description'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+
+<?php echo $form->field($model, 'auto_report_i', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+	->checkbox(['label'=>''])
+	->label($model->getAttributeLabel('auto_report_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php
 $auto_report_cat_id = ReportCategory::getCategory(1);
