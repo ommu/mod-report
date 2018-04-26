@@ -269,9 +269,11 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
 			'value' => function($model, $key, $index, $column) {
-				return $model->reports;
+				$url = Url::to(['history/index', 'report' => $model->primaryKey]);
+				return Html::a($model->reports, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',

@@ -65,8 +65,8 @@ class ReportHistory extends ReportHistoryModel
 	{
 		$query = ReportHistoryModel::find()->alias('t');
 		$query->joinWith([
-			'report.category.title category', 
 			'report report', 
+			'report.category.title category', 
 			'user user'
 		]);
 
