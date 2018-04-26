@@ -1,15 +1,17 @@
 <?php
 /**
  * ReportStatus
- * version: 0.0.1
  *
  * ReportStatus represents the model behind the search form about `app\modules\report\models\ReportStatus`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 16:03 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 16:03 WIB
+ * @modified date 26 April 2018, 09:31 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,16 +21,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\ReportStatus as ReportStatusModel;
-//use app\modules\report\models\Reports;
-//use app\coremodules\user\models\Users;
 
 class ReportStatus extends ReportStatusModel
 {
-	// Variable Search	
-	public $reports_search;
-	public $user_search;
-	public $modified_search;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -36,8 +31,8 @@ class ReportStatus extends ReportStatusModel
 	{
 		return [
 			[['history_id', 'status', 'report_id', 'user_id', 'modified_id'], 'integer'],
-            [['report_message', 'updated_date', 'updated_ip', 'modified_date',
-				'reports_search', 'user_search', 'modified_search'], 'safe'],
+			[['report_message', 'updated_date', 'updated_ip', 'modified_date',
+				'category_search', 'report_search', 'reporter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -69,7 +64,12 @@ class ReportStatus extends ReportStatusModel
 	public function search($params)
 	{
 		$query = ReportStatusModel::find()->alias('t');
-		$query->joinWith(['reports reports', 'user user', 'modified modified']);
+		$query->joinWith([
+			'report report', 
+			'report.category.title category', 
+			'user user', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -77,11 +77,15 @@ class ReportStatus extends ReportStatusModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['reports_search'] = [
-			'asc' => ['reports.history_id' => SORT_ASC],
-			'desc' => ['reports.history_id' => SORT_DESC],
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['report_search'] = [
+			'asc' => ['report.report_body' => SORT_ASC],
+			'desc' => ['report.report_body' => SORT_DESC],
+		];
+		$attributes['reporter_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -96,7 +100,7 @@ class ReportStatus extends ReportStatusModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -105,19 +109,20 @@ class ReportStatus extends ReportStatusModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.history_id' => $this->history_id,
-            't.status' => $this->status,
-			't.report_id' => isset($params['reports']) ? $params['reports'] : $this->report_id,
-            't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-            'cast(t.updated_date as date)' => $this->updated_date,
-            'cast(t.modified_date as date)' => $this->modified_date,
-            't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-        ]);
+			't.status' => $this->status,
+			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
+			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
+			'cast(t.modified_date as date)' => $this->modified_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+		]);
 
-        $query->andFilterWhere(['like', 't.report_message', $this->report_message])
-            ->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-            ->andFilterWhere(['like', 'reports.history_id', $this->reports_search])
-            ->andFilterWhere(['like', 'user.displayname', $this->user_search])
-            ->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+		$query->andFilterWhere(['like', 't.report_message', $this->report_message])
+			->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
+			->andFilterWhere(['like', 'report.report_body', $this->report_search])
+			->andFilterWhere(['like', 'user.displayname', $this->reporter_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}

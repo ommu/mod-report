@@ -40,11 +40,12 @@ class ReportStatus extends \app\components\ActiveRecord
 {
 	use \app\components\traits\GridViewSystem;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date'];
 
 	// Variable Search
+	public $category_search;
 	public $report_search;
-	public $user_search;
+	public $reporter_search;
 	public $modified_search;
 
 	/**
@@ -94,8 +95,9 @@ class ReportStatus extends \app\components\ActiveRecord
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
+			'category_search' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
-			'user_search' => Yii::t('app', 'User'),
+			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -137,16 +139,25 @@ class ReportStatus extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('report')) {
+			if(!Yii::$app->request->get('category')) {
+				$this->templateColumns['category_search'] = [
+					'attribute' => 'category_search',
+					'filter' => ReportCategory::getCategory(),
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->report) ? $model->report->category->title->message : '-';
+					},
+				];
+			}
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->report) ? $model->report->report_id : '-';
+					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['reporter_search'] = [
+				'attribute' => 'reporter_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -193,8 +204,7 @@ class ReportStatus extends \app\components\ActiveRecord
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['status', 'id' => $model->primaryKey]);
-				return $this->quickAction($url, $model->status, 'Resolved,Unresolved');
+				return $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -252,56 +262,5 @@ class ReportStatus extends \app\components\ActiveRecord
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After save attributes
-	 */
-	public function afterSave($insert, $changedAttributes) 
-	{
-		parent::afterSave($insert, $changedAttributes);
-
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-
 	}
 }

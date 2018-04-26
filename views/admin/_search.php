@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'category_search');?>
 
-		<?php echo $form->field($model, 'user_search');?>
+		<?php echo $form->field($model, 'reporter_search');?>
 
 		<?php echo $form->field($model, 'report_url');?>
 

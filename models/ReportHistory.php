@@ -38,7 +38,7 @@ class ReportHistory extends \app\components\ActiveRecord
 	// Variable Search
 	public $category_search;
 	public $report_search;
-	public $user_search;
+	public $reporter_search;
 
 	/**
 	 * @return string the associated database table name
@@ -82,9 +82,9 @@ class ReportHistory extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'report_date' => Yii::t('app', 'Report Date'),
 			'report_ip' => Yii::t('app', 'Report Ip'),
-			'category_search' => Yii::t('attribute', 'Category'),
+			'category_search' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
-			'user_search' => Yii::t('app', 'User'),
+			'reporter_search' => Yii::t('app', 'Reporter'),
 		];
 	}
 
@@ -134,8 +134,8 @@ class ReportHistory extends \app\components\ActiveRecord
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['reporter_search'] = [
+				'attribute' => 'reporter_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},

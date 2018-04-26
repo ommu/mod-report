@@ -32,7 +32,7 @@ class ReportHistory extends ReportHistoryModel
 		return [
 			[['id', 'report_id', 'user_id'], 'integer'],
 			[['report_date', 'report_ip',
-				'category_search', 'report_search', 'user_search'], 'safe'],
+				'category_search', 'report_search', 'reporter_search'], 'safe'],
 		];
 	}
 
@@ -84,7 +84,7 @@ class ReportHistory extends ReportHistoryModel
 			'asc' => ['report.report_body' => SORT_ASC],
 			'desc' => ['report.report_body' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['reporter_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -112,7 +112,7 @@ class ReportHistory extends ReportHistoryModel
 
 		$query->andFilterWhere(['like', 't.report_ip', $this->report_ip])
 			->andFilterWhere(['like', 'report.report_body', $this->report_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->reporter_search]);
 
 		return $dataProvider;
 	}

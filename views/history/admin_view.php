@@ -36,15 +36,15 @@ $this->params['menu']['content'] = [
 	],
 	'attributes' => [
 		[
-			'attribute' => 'report_search',
-			'value' => isset($model->report) ? $model->report->report_body : '-',
-		],
-		[
 			'attribute' => 'category_search',
 			'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'report_search',
+			'value' => isset($model->report) ? $model->report->report_body : '-',
+		],
+		[
+			'attribute' => 'reporter_search',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
