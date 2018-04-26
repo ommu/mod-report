@@ -49,11 +49,11 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \app\components\traits\GridViewSystem;
 
-	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search'];
+	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date'];
 
 	// Variable Search
 	public $category_search;
-	public $user_search;
+	public $reporter_search;
 	public $modified_search;
 
 	const SCENARIOREPORT = 'reportForm';
@@ -120,7 +120,7 @@ class Reports extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'category_search' => Yii::t('app', 'Category'),
-			'user_search' => Yii::t('app', 'User'),
+			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -210,14 +210,6 @@ class Reports extends \app\components\ActiveRecord
 				},
 			];
 		}
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-		}
 		$this->templateColumns['report_url'] = [
 			'attribute' => 'report_url',
 			'value' => function($model, $key, $index, $column) {
@@ -245,6 +237,14 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
+		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['reporter_search'] = [
+				'attribute' => 'reporter_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
+		}
 		$this->templateColumns['report_ip'] = [
 			'attribute' => 'report_ip',
 			'value' => function($model, $key, $index, $column) {
@@ -290,7 +290,7 @@ class Reports extends \app\components\ActiveRecord
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['status', 'id' => $model->primaryKey]);
-				return Html::a($model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved'), $url);
+				return Html::a($model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'), $url);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

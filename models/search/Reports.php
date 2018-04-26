@@ -32,7 +32,7 @@ class Reports extends ReportsModel
 		return [
 			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
-				'category_search', 'user_search', 'modified_search'], 'safe'],
+				'category_search', 'reporter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -80,7 +80,7 @@ class Reports extends ReportsModel
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['reporter_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -119,7 +119,7 @@ class Reports extends ReportsModel
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
 			->andFilterWhere(['like', 'category.message', $this->category_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.displayname', $this->reporter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
