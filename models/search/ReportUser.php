@@ -1,15 +1,17 @@
 <?php
 /**
  * ReportUser
- * version: 0.0.1
  *
  * ReportUser represents the model behind the search form about `app\modules\report\models\ReportUser`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 13:56 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 13:56 WIB
+ * @modified date 26 April 2018, 11:12 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,16 +21,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\ReportUser as ReportUserModel;
-//use app\modules\report\models\Reports;
-//use app\coremodules\user\models\Users;
 
 class ReportUser extends ReportUserModel
 {
-	// Variable Search	
-	public $reports_search;
-	public $user_search;
-	public $modified_search;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -36,8 +31,8 @@ class ReportUser extends ReportUserModel
 	{
 		return [
 			[['id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-            [['creation_date', 'modified_date', 'updated_date',
-				'reports_search', 'user_search', 'modified_search'], 'safe'],
+			[['creation_date', 'modified_date', 'updated_date',
+				'category_search', 'report_search', 'user_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -69,7 +64,12 @@ class ReportUser extends ReportUserModel
 	public function search($params)
 	{
 		$query = ReportUserModel::find()->alias('t');
-		$query->joinWith(['reports reports', 'user user', 'modified modified']);
+		$query->joinWith([
+			'report report', 
+			'report.category.title category', 
+			'user user', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -77,9 +77,13 @@ class ReportUser extends ReportUserModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['reports_search'] = [
-			'asc' => ['reports.id' => SORT_ASC],
-			'desc' => ['reports.id' => SORT_DESC],
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
+		$attributes['report_search'] = [
+			'asc' => ['report.report_body' => SORT_ASC],
+			'desc' => ['report.report_body' => SORT_DESC],
 		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
@@ -96,7 +100,7 @@ class ReportUser extends ReportUserModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -105,13 +109,14 @@ class ReportUser extends ReportUserModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.id' => $this->id,
-			't.report_id' => isset($params['reports']) ? $params['reports'] : $this->report_id,
-            't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-            'cast(t.creation_date as date)' => $this->creation_date,
-            'cast(t.modified_date as date)' => $this->modified_date,
-            't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-            'cast(t.updated_date as date)' => $this->updated_date,
-        ]);
+			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
+			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
+			'cast(t.creation_date as date)' => $this->creation_date,
+			'cast(t.modified_date as date)' => $this->modified_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+		]);
 
 		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
@@ -122,9 +127,9 @@ class ReportUser extends ReportUserModel
 				$query->andFilterWhere(['t.publish' => $this->publish]);
 		}
 
-        $query->andFilterWhere(['like', 'reports.id', $this->reports_search])
-            ->andFilterWhere(['like', 'user.displayname', $this->user_search])
-            ->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+		$query->andFilterWhere(['like', 'report.report_body', $this->report_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}

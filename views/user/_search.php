@@ -5,13 +5,15 @@
  * @var $this app\modules\report\controllers\UserController
  * @var $model app\modules\report\models\search\ReportUser
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 13:56 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 13:56 WIB
+ * @modified date 26 April 2018, 11:12 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,21 +26,22 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'id') ?>
+		<?php echo $form->field($model, 'publish')->checkbox();?>
 
-		<?= $form->field($model, 'publish') ?>
+		<?php echo $form->field($model, 'report_search');?>
 
-		<?= $form->field($model, 'report_id') ?>
+		<?php echo $form->field($model, 'user_search');?>
 
-		<?= $form->field($model, 'user_id') ?>
+		<?php echo $form->field($model, 'creation_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'creation_date') ?>
+		<?php echo $form->field($model, 'modified_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'modified_date') ?>
+		<?php echo $form->field($model, 'modified_search');?>
 
-		<?= $form->field($model, 'modified_id') ?>
-
-		<?= $form->field($model, 'updated_date') ?>
+		<?php echo $form->field($model, 'updated_date')
+			->input('date');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

@@ -41,7 +41,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'report_search',
-			'value' => isset($model->report) ? $model->report->category->title->message : '-',
+			'value' => isset($model->report) ? $model->report->report_body : '-',
 		],
 		[
 			'attribute' => 'status',
