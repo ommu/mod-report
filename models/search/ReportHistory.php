@@ -1,15 +1,17 @@
 <?php
 /**
  * ReportHistory
- * version: 0.0.1
  *
  * ReportHistory represents the model behind the search form about `app\modules\report\models\ReportHistory`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 22 September 2017, 13:57 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 September 2017, 13:57 WIB
+ * @modified date 26 April 2018, 06:34 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,15 +21,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\ReportHistory as ReportHistoryModel;
-//use app\modules\report\models\Reports;
-//use app\coremodules\user\models\Users;
 
 class ReportHistory extends ReportHistoryModel
 {
-	// Variable Search	
-	public $reports_search;
-	public $user_search;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -35,8 +31,8 @@ class ReportHistory extends ReportHistoryModel
 	{
 		return [
 			[['id', 'report_id', 'user_id'], 'integer'],
-            [['report_date', 'report_ip',
-				'reports_search', 'user_search'], 'safe'],
+			[['report_date', 'report_ip',
+				'category_search', 'report_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -68,7 +64,11 @@ class ReportHistory extends ReportHistoryModel
 	public function search($params)
 	{
 		$query = ReportHistoryModel::find()->alias('t');
-		$query->joinWith(['reports reports', 'user user']);
+		$query->joinWith([
+			'report.category.title category', 
+			'report report', 
+			'user user'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -76,9 +76,13 @@ class ReportHistory extends ReportHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['reports_search'] = [
-			'asc' => ['reports.id' => SORT_ASC],
-			'desc' => ['reports.id' => SORT_DESC],
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
+		$attributes['report_search'] = [
+			'asc' => ['report.report_body' => SORT_ASC],
+			'desc' => ['report.report_body' => SORT_DESC],
 		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
@@ -91,7 +95,7 @@ class ReportHistory extends ReportHistoryModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -100,14 +104,15 @@ class ReportHistory extends ReportHistoryModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.id' => $this->id,
-			't.report_id' => isset($params['reports']) ? $params['reports'] : $this->report_id,
-            't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-            'cast(t.report_date as date)' => $this->report_date,
-        ]);
+			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
+			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
+			'cast(t.report_date as date)' => $this->report_date,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+		]);
 
-        $query->andFilterWhere(['like', 't.report_ip', $this->report_ip])
-            ->andFilterWhere(['like', 'reports.id', $this->reports_search])
-            ->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+		$query->andFilterWhere(['like', 't.report_ip', $this->report_ip])
+			->andFilterWhere(['like', 'report.report_body', $this->report_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
 
 		return $dataProvider;
 	}

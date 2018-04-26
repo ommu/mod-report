@@ -36,6 +36,7 @@ class ReportHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Variable Search
+	public $category_search;
 	public $report_search;
 	public $user_search;
 
@@ -81,6 +82,7 @@ class ReportHistory extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'report_date' => Yii::t('app', 'Report Date'),
 			'report_ip' => Yii::t('app', 'Report Ip'),
+			'category_search' => Yii::t('attribute', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
 			'user_search' => Yii::t('app', 'User'),
 		];
@@ -115,10 +117,18 @@ class ReportHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('report')) {
+			if(!Yii::$app->request->get('category')) {
+				$this->templateColumns['category_search'] = [
+					'attribute' => 'category_search',
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->report) ? $model->report->category->title->message : '-';
+					},
+				];
+			}
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->report) ? $model->report->report_id : '-';
+					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
@@ -165,27 +175,6 @@ class ReportHistory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getHistory
-	 */
-	public static function getHistory($array=true) 
-	{
-		$model = self::find()->alias('t');
-		$model = $model->orderBy('t.id ASC')->all();
-
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->id] = $val->id;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
-	}
-
-	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
@@ -195,56 +184,5 @@ class ReportHistory extends \app\components\ActiveRecord
 				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After save attributes
-	 */
-	public function afterSave($insert, $changedAttributes) 
-	{
-		parent::afterSave($insert, $changedAttributes);
-
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-
 	}
 }
