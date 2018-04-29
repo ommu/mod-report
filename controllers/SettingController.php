@@ -95,13 +95,13 @@ class SettingController extends Controller
 			$model->load(Yii::$app->request->post());
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Setting success updated.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
 				return $this->redirect(['update']);
 				//return $this->redirect(['view', 'id' => $model->id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Settings');
+		$this->view->title = Yii::t('app', 'Report Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [

@@ -24,6 +24,7 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['setting/index']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['create']), 'icon' => 'plus-square'],
 ];
 $this->params['menu']['option'] = [

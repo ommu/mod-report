@@ -37,16 +37,16 @@ use app\modules\report\models\ReportSetting;
 
 <?php if($model->isNewRecord)
 	$model->license = ReportSetting::getLicense();
-echo $form->field($model, 'license', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px mb-10">'.Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'</span>{input}{error}<span class="small-px">'.Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX').'</span></div>'])
+echo $form->field($model, 'license', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px mb-10">'.Yii::t('app', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'</span>{input}{error}<span class="small-px">'.Yii::t('app', 'Format: XXXX-XXXX-XXXX-XXXX').'</span></div>'])
 	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('license'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php 
 $permission = [
-	1 => Yii::t('phrase', 'Yes, the public can view report unless they are made private.'),
-	0 => Yii::t('phrase', 'No, the public cannot view report.'),
+	1 => Yii::t('app', 'Yes, the public can view report unless they are made private.'),
+	0 => Yii::t('app', 'No, the public cannot view report.'),
 ];
-echo $form->field($model, 'permission', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.').'</span>{input}{error}</div>'])
+echo $form->field($model, 'permission', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.').'</span>{input}{error}</div>'])
 	->radioList($permission, ['class'=>'desc mt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('permission'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 

@@ -78,7 +78,7 @@ class CategoryController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Categories');
+		$this->view->title = Yii::t('app', 'Report Categories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -100,7 +100,7 @@ class CategoryController extends Controller
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Category success created.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success created.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id' => $model->cat_id]);
 			} 
@@ -127,13 +127,13 @@ class CategoryController extends Controller
 			$model->load(Yii::$app->request->post());
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Category success updated.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success updated.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id' => $model->cat_id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Report Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -150,7 +150,7 @@ class CategoryController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Report Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -170,7 +170,7 @@ class CategoryController extends Controller
 		$model->publish = 2;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Category success deleted.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success deleted.'));
 			return $this->redirect(['index']);
 			//return $this->redirect(['view', 'id' => $model->cat_id]);
 		}
@@ -189,7 +189,7 @@ class CategoryController extends Controller
 		$model->publish = $replace;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Category success updated.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success updated.'));
 			return $this->redirect(['index']);
 		}
 	}
