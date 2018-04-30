@@ -260,6 +260,8 @@ class ReportStatus extends \app\components\ActiveRecord
 				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			
+			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
 	}
