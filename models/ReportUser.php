@@ -134,16 +134,16 @@ class ReportUser extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
+		if(!Yii::$app->request->get('category') && !Yii::$app->request->get('report')) {
+			$this->templateColumns['category_search'] = [
+				'attribute' => 'category_search',
+				'filter' => ReportCategory::getCategory(),
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->report) ? $model->report->category->title->message : '-';
+				},
+			];
+		}
 		if(!Yii::$app->request->get('report')) {
-			if(!Yii::$app->request->get('category')) {
-				$this->templateColumns['category_search'] = [
-					'attribute' => 'category_search',
-					'filter' => ReportCategory::getCategory(),
-					'value' => function($model, $key, $index, $column) {
-						return isset($model->report) ? $model->report->category->title->message : '-';
-					},
-				];
-			}
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
