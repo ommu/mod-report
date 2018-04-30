@@ -208,6 +208,15 @@ class ReportSetting extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * after find attributes
+	 */
+	public function afterFind() 
+	{
+		if($this->auto_report_cat_id)
+			$this->auto_report_i = 1;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
@@ -216,8 +225,21 @@ class ReportSetting extends \app\components\ActiveRecord
 			if(!$this->isNewRecord)
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
-			if($this->auto_report_i == 1)
+			if($this->auto_report_i && !$this->auto_report_cat_id)
 				$this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('auto_report_cat_id')]));
+		}
+		return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		if(parent::beforeSave($insert)) {
+			if(!$this->auto_report_i)
+				$this->auto_report_cat_id = null;
+
 		}
 		return true;
 	}
