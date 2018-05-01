@@ -281,7 +281,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'reports',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['history/index', 'report' => $model->primaryKey]);
+				$url = Url::to(['history/index', 'report'=>$model->primaryKey]);
 				return Html::a($model->reports, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -291,7 +291,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'user_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['user/index', 'report' => $model->primaryKey, 'publish'=>1]);
+				$url = Url::to(['user/index', 'report'=>$model->primaryKey, 'publish'=>1]);
 				return Html::a($model->view->users, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -301,7 +301,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['status', 'id' => $model->primaryKey]);
+				$url = Url::to(['status', 'id'=>$model->primaryKey]);
 				return Html::a($model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'), $url);
 			},
 			'contentOptions' => ['class'=>'center'],

@@ -251,7 +251,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'report_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'status' => 0]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'status' => 0]);
 				return Html::a($model->view->reports, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -261,7 +261,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'report_resolved_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'status' => 1]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'status' => 1]);
 				return Html::a($model->view->report_resolved, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -271,7 +271,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'report_all_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey]);
 				return Html::a($model->view->report_all, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -282,7 +282,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				'attribute' => 'publish',
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['category/publish', 'id' => $model->primaryKey]);
+					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
 					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
