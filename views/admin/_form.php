@@ -43,7 +43,7 @@ $redactorOptions = [
 <?php 
 $cat_id = ReportCategory::getCategory(1);
 echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->dropDownList($cat_id)
+	->dropDownList($cat_id, ['prompt'=>''])
 	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'report_url', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
