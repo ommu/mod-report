@@ -34,7 +34,7 @@ namespace app\modules\report\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 
 class ReportStatus extends \app\components\ActiveRecord
 {

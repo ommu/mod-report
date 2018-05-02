@@ -20,7 +20,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\report\models\ReportComment as ReportCommentModel;
 //use app\modules\report\models\Reports;
-//use app\coremodules\user\models\Users;
+//use app\modules\user\models\Users;
 
 class ReportComment extends ReportCommentModel
 {

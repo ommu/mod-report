@@ -42,7 +42,7 @@ namespace app\modules\report\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\modules\report\models\view\Reports as ReportsView;
 
 class Reports extends \app\components\ActiveRecord
