@@ -44,8 +44,8 @@ use app\modules\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
-	use \app\components\traits\FileSystem;
+	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['desc_i','modified_date','modified_search','updated_date','slug'];
 	public $name_i;
@@ -366,7 +366,7 @@ class ReportCategory extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
 
-		$location = $this->getUrlTitle($module.' '.$controller);
+		$location = $this->urlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
 

@@ -35,7 +35,7 @@ use app\modules\user\models\Users;
 
 class ReportSetting extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
+	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = [];
 	public $auto_report_i;
