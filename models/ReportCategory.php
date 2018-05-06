@@ -80,7 +80,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class'	 => SluggableBehavior::className(),
+				'class' => SluggableBehavior::className(),
 				'attribute' => 'title.message',
 				'immutable' => true,
 				'ensureUnique' => true,
