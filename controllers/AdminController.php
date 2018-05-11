@@ -92,7 +92,7 @@ class AdminController extends Controller
 	public function actionCreate()
 	{
 		$model = new Reports();
-		$model->scenario = 'reportForm';
+		$model->scenario = Reports::SCENARIO_REPORT;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -120,7 +120,7 @@ class AdminController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = 'reportForm';
+		$model->scenario = Reports::SCENARIO_REPORT;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -181,7 +181,7 @@ class AdminController extends Controller
 	public function actionStatus($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = 'resolveForm';
+		$model->scenario = Reports::SCENARIO_RESOLVED;
 
 		$title = $model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved');
 		$replace = $model->status == 1 ? 0 : 1;

@@ -57,8 +57,8 @@ class Reports extends \app\components\ActiveRecord
 	public $modified_search;
 	public $user_search;
 
-	const SCENARIOREPORT = 'reportForm';
-	const SCENARIORESOLVED = 'resolveForm';
+	const SCENARIO_REPORT = 'reportForm';
+	const SCENARIO_RESOLVED = 'resolveForm';
 
 	/**
 	 * @return string the associated database table name
@@ -96,8 +96,8 @@ class Reports extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		return [
-			self::SCENARIOREPORT => ['cat_id', 'report_url', 'report_body'],
-			self::SCENARIORESOLVED => ['report_message'],
+			self::SCENARIO_REPORT => ['cat_id', 'report_url', 'report_body'],
+			self::SCENARIO_RESOLVED => ['report_message'],
 		];
 	}
 
