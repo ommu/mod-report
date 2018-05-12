@@ -106,9 +106,9 @@ echo GridView::widget([
 
 <div class="col-md-12 col-sm-12 col-xs-12">
 	<?php if(Yii::$app->session->hasFlash('success'))
-		echo Utility::flashMessage(Yii::$app->session->getFlash('success'));
+		echo $this->flashMessage(Yii::$app->session->getFlash('success'));
 	else if(Yii::$app->session->hasFlash('error'))
-		echo Utility::flashMessage(Yii::$app->session->getFlash('error'), 'danger');?>
+		echo $this->flashMessage(Yii::$app->session->getFlash('error'), 'danger');?>
 
 	<div class="x_panel">
 		<div class="x_content">
