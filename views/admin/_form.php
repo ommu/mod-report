@@ -55,14 +55,15 @@ echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-9 
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('report_body'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php 
-$status = [
-	0 => Yii::t('app', 'Resolved'),
-	1 => Yii::t('app', 'Unresolved'),
-];
-echo $form->field($model, 'status', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->radioList($status, ['class'=>'desc mt-10', 'separator' => '<br />'])
-	->label($model->getAttributeLabel('status'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+<?php if(!$model->isNewRecord) {
+	$status = [
+		1 => Yii::t('app', 'Resolved'),
+		0 => Yii::t('app', 'Unresolved'),
+	];
+	echo $form->field($model, 'status', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
+		->radioList($status, ['class'=>'desc mt-10', 'separator' => '<br />'])
+		->label($model->getAttributeLabel('status'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
+} ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">
