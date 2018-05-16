@@ -1,0 +1,49 @@
+{
+	"name": "ommu/report",
+	"description": "Module Report from Ommu Platform",
+	"keywords": [
+		"module",
+		"report",
+		"ommu",
+		"ommu-platform",
+		"yii2"
+	],
+	"homepage": "https://github.com/ommu/mod-report",
+	"type": "ommu-module",
+	"license": "Apache-2.0",
+	"support": {
+		"issues": "https://github.com/ommu/mod-report/issues",
+		"wiki": "https://github.com/ommu/mod-report/wiki",
+		"source": "https://github.com/ommu/mod-report"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ommu/mod-report.git"
+	},
+	"authors": [
+		{
+			"name": "Putra Sudaryanto",
+			"email": "putra@sudaryanto.id",
+			"homepage": "https://putra.sudaryanto.id",
+			"role": "Creator"
+		}
+	],
+	"require": {
+		"php": "~7.0",
+		"oomphinc/composer-installers-extender": "^1.0",
+		"yiisoft/yii2": "~2.0.13",
+		"yiisoft/yii2-jui": "^2.0",
+		"mdmsoft/yii2-admin": "^2.7",
+		"components/jqueryui": "~1.10",
+		"ommu/yii2-traits": "*",
+		"dimd4/yii2-redactor": "^1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"ommu\\report\\": ""
+		}
+	},
+	"suggest": {
+		"components/jqueryui": "move to bower/jquery-ui or bower-asset/jquery-ui"
+	}
+}
