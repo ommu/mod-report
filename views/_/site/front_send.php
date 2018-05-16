@@ -18,7 +18,7 @@
 	);
 ?>
 
-<?php if(isset($_GET['type']) && $_GET['type'] == 'success') {?>
+<?php if(Yii::app()->getRequest()->getParam('type') == 'success') {?>
 	<div class="dialog-content">
 		Report send success
 	</div>

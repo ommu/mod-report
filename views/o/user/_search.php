@@ -37,7 +37,7 @@
 				'attribute'=>'creation_date',
 				//'mode'=>'datetime',
 				'options'=>array(
-					'dateFormat' => 'dd-mm-yy',
+					'dateFormat' => 'yy-mm-dd',
 				),
 				'htmlOptions'=>array(
 					'class' => 'form-control',
@@ -53,7 +53,7 @@
 				'attribute'=>'modified_date',
 				//'mode'=>'datetime',
 				'options'=>array(
-					'dateFormat' => 'dd-mm-yy',
+					'dateFormat' => 'yy-mm-dd',
 				),
 				'htmlOptions'=>array(
 					'class' => 'form-control',
@@ -74,7 +74,7 @@
 				'attribute'=>'updated_date',
 				//'mode'=>'datetime',
 				'options'=>array(
-					'dateFormat' => 'dd-mm-yy',
+					'dateFormat' => 'yy-mm-dd',
 				),
 				'htmlOptions'=>array(
 					'class' => 'form-control',
