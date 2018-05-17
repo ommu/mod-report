@@ -54,9 +54,9 @@ $this->params['menu']['option'] = [
 		<div class="x_content">
 			<?php echo $this->description != '' ? "<p class=\"text-muted font-13 m-b-30\">$this->description</p>" : '';?>
 
-			<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+			<?php // echo $this->render('_search', ['model'=>$searchModel]); ?>
 
-			<?php echo $this->render('_option_form', ['model' => $searchModel, 'gridColumns' => GridView::getActiveDefaultColumns($columns), 'route' => $this->context->route]); ?>
+			<?php echo $this->render('_option_form', ['model'=>$searchModel, 'gridColumns'=>$this->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
 
 			<?php 
 			$columnData = $columns;
