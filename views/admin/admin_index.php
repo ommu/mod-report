@@ -2,8 +2,8 @@
 /**
  * Reports (reports)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\AdminController
- * @var $model app\modules\report\models\Reports
+ * @var $this ommu\report\controllers\AdminController
+ * @var $model ommu\report\models\Reports
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

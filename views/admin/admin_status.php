@@ -2,10 +2,9 @@
 /**
  * Reports (reports)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\AdminController
- * @var $model app\modules\report\models\Reports
+ * @var $this ommu\report\controllers\AdminController
+ * @var $model ommu\report\models\Reports
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id

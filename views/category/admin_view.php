@@ -2,16 +2,14 @@
 /**
  * Report Categories (report-category)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\CategoryController
- * @var $model app\modules\report\models\ReportCategory
+ * @var $this ommu\report\controllers\CategoryController
+ * @var $model ommu\report\models\ReportCategory
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 16:13 WIB
  * @modified date 25 April 2018, 16:36 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */

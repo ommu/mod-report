@@ -2,8 +2,8 @@
 /**
  * Report Settings (report-setting)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\SettingController
- * @var $model app\modules\report\models\ReportSetting
+ * @var $this ommu\report\controllers\SettingController
+ * @var $model ommu\report\models\ReportSetting
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -19,8 +19,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\modules\report\models\ReportCategory;
-use app\modules\report\models\ReportSetting;
+use ommu\report\models\ReportCategory;
+use ommu\report\models\ReportSetting;
 ?>
 
 <?php $form = ActiveForm::begin([

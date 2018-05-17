@@ -1,9 +1,8 @@
 <?php
-namespace app\modules\report;
+namespace ommu\report;
 
 /**
  * report module definition class
- * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
@@ -19,7 +18,7 @@ class Module extends \app\components\Module
 	/**
 	 * @inheritdoc
 	 */
-	public $controllerNamespace = 'app\modules\report\controllers';
+	public $controllerNamespace = 'ommu\report\controllers';
 
 	/**
 	 * @inheritdoc

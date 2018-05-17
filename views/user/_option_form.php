@@ -2,17 +2,15 @@
 /**
  * Report Users (report-user)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\UserController
- * @var $model app\modules\report\models\search\ReportUser
+ * @var $this ommu\report\controllers\UserController
+ * @var $model ommu\report\models\search\ReportUser
  * @var $form yii\widgets\ActiveForm
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 13:56 WIB
  * @modified date 26 April 2018, 11:12 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */

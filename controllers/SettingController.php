@@ -2,7 +2,7 @@
 /**
  * SettingController
  * @var $this yii\web\View
- * @var $model app\modules\report\models\ReportSetting
+ * @var $model ommu\report\models\ReportSetting
  *
  * SettingController implements the CRUD actions for ReportSetting model.
  * Reference start
@@ -13,27 +13,25 @@
  *
  *	findModel
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 13:49 WIB
  * @modified date 25 April 2018, 15:36 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */
  
-namespace app\modules\report\controllers;
+namespace ommu\report\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\report\models\ReportSetting;
-use app\modules\report\models\search\ReportSetting as ReportSettingSearch;
-use app\modules\report\models\search\ReportCategory as ReportCategorySearch;
+use ommu\report\models\ReportSetting;
+use ommu\report\models\search\ReportSetting as ReportSettingSearch;
+use ommu\report\models\search\ReportCategory as ReportCategorySearch;
 
 class SettingController extends Controller
 {

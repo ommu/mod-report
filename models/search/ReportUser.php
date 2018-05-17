@@ -2,25 +2,23 @@
 /**
  * ReportUser
  *
- * ReportUser represents the model behind the search form about `app\modules\report\models\ReportUser`.
+ * ReportUser represents the model behind the search form about `ommu\report\models\ReportUser`.
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 13:56 WIB
  * @modified date 26 April 2018, 11:12 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */
 
-namespace app\modules\report\models\search;
+namespace ommu\report\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\report\models\ReportUser as ReportUserModel;
+use ommu\report\models\ReportUser as ReportUserModel;
 
 class ReportUser extends ReportUserModel
 {

@@ -32,7 +32,7 @@
  *
  */
 
-namespace app\modules\report\models;
+namespace ommu\report\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -40,7 +40,7 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use app\modules\user\models\Users;
-use app\modules\report\models\view\ReportCategory as ReportCategoryView;
+use ommu\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {

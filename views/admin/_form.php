@@ -2,8 +2,8 @@
 /**
  * Reports (reports)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\AdminController
- * @var $model app\modules\report\models\Reports
+ * @var $this ommu\report\controllers\AdminController
+ * @var $model ommu\report\models\Reports
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -18,7 +18,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\redactor\widgets\Redactor;
-use app\modules\report\models\ReportCategory;
+use ommu\report\models\ReportCategory;
 
 $redactorOptions = [
 	'imageManagerJson' => ['/redactor/upload/image-json'],

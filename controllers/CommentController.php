@@ -2,8 +2,7 @@
 /**
  * CommentController
  * @var $this yii\web\View
- * @var $model app\modules\report\models\ReportComment
- * version: 0.0.1
+ * @var $model ommu\report\models\ReportComment
  *
  * CommentController implements the CRUD actions for ReportComment model.
  * Reference start
@@ -18,19 +17,19 @@
  *
  *	findModel
  *
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @created date 22 September 2017, 13:54 WIB
- * @contact (+62)857-4115-5177
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
-namespace app\modules\report\controllers;
+namespace ommu\report\controllers;
 
 use Yii;
-use app\modules\report\models\ReportComment;
-use app\modules\report\models\search\ReportComment as ReportCommentSearch;
+use ommu\report\models\ReportComment;
+use ommu\report\models\search\ReportComment as ReportCommentSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -2,7 +2,7 @@
 /**
  * AdminController
  * @var $this yii\web\View
- * @var $model app\modules\report\models\Reports
+ * @var $model ommu\report\models\Reports
  *
  * AdminController implements the CRUD actions for Reports model.
  * Reference start
@@ -25,15 +25,15 @@
  *
  */
  
-namespace app\modules\report\controllers;
+namespace ommu\report\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\report\models\Reports;
-use app\modules\report\models\search\Reports as ReportsSearch;
+use ommu\report\models\Reports;
+use ommu\report\models\search\Reports as ReportsSearch;
 
 class AdminController extends Controller
 {

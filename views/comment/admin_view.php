@@ -2,15 +2,14 @@
 /**
  * Report Comments (report-comment)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\CommentController
- * @var $model app\modules\report\models\ReportComment
- * version: 0.0.1
+ * @var $this ommu\report\controllers\CommentController
+ * @var $model ommu\report\models\ReportComment
  *
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @created date 22 September 2017, 13:54 WIB
- * @contact (+62)857-4115-5177
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 

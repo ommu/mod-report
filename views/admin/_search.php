@@ -2,8 +2,8 @@
 /**
  * Reports (reports)
  * @var $this yii\web\View
- * @var $this app\modules\report\controllers\AdminController
- * @var $model app\modules\report\models\search\Reports
+ * @var $this ommu\report\controllers\AdminController
+ * @var $model ommu\report\models\search\Reports
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

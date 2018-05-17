@@ -2,7 +2,7 @@
 /**
  * UserController
  * @var $this yii\web\View
- * @var $model app\modules\report\models\ReportUser
+ * @var $model ommu\report\models\ReportUser
  *
  * UserController implements the CRUD actions for ReportUser model.
  * Reference start
@@ -17,26 +17,24 @@
  *
  *	findModel
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 13:56 WIB
  * @modified date 26 April 2018, 11:12 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */
  
-namespace app\modules\report\controllers;
+namespace ommu\report\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\report\models\ReportUser;
-use app\modules\report\models\search\ReportUser as ReportUserSearch;
+use ommu\report\models\ReportUser;
+use ommu\report\models\search\ReportUser as ReportUserSearch;
 
 class UserController extends Controller
 {

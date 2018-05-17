@@ -2,25 +2,23 @@
 /**
  * ReportCategory
  *
- * ReportCategory represents the model behind the search form about `app\modules\report\models\ReportCategory`.
+ * ReportCategory represents the model behind the search form about `ommu\report\models\ReportCategory`.
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 22 September 2017, 16:13 WIB
  * @modified date 25 April 2018, 16:36 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link http://ecc.ft.ugm.ac.id
  *
  */
 
-namespace app\modules\report\models\search;
+namespace ommu\report\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\report\models\ReportCategory as ReportCategoryModel;
+use ommu\report\models\ReportCategory as ReportCategoryModel;
 
 class ReportCategory extends ReportCategoryModel
 {

@@ -22,7 +22,7 @@
  *
  */
 
-namespace app\modules\report\models\view;
+namespace ommu\report\models\view;
 
 use Yii;
 use yii\helpers\Url;
