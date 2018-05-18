@@ -33,7 +33,7 @@ namespace ommu\report\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\Users;
+use ommu\users\models\Users;
 
 class ReportUser extends \app\components\ActiveRecord
 {

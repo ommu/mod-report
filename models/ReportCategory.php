@@ -39,7 +39,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
-use app\modules\user\models\Users;
+use ommu\users\models\Users;
 use ommu\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
