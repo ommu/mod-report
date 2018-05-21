@@ -36,7 +36,7 @@
 		"mdmsoft/yii2-admin": "^2.7",
 		"components/jqueryui": "~1.10",
 		"ommu/yii2-traits": "*",
-		"dimd4/yii2-redactor": "^1.0"
+		"ommu/yii2-redactor": "~2.0"
 	},
 	"autoload": {
 		"psr-4": {
