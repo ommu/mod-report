@@ -8,8 +8,6 @@
  * Reference start
  * TOC :
  *	Index
- *	Create
- *	Update
  *	View
  *	Delete
  *	RunAction
