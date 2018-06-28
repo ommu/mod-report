@@ -42,7 +42,7 @@
 			<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
-				$model->url = $_GET['url'];
+				$model->url = Yii::app()->getRequest()->getParam('url');
 				echo $form->textField($model,'url',array('maxlength'=>255, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'url'); ?>
 			</div>

@@ -56,11 +56,10 @@ class ReportSetting extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, meta_keyword, meta_description, auto_report_cat_id, modified_id', 'required'),
+			array('license, meta_keyword, meta_description, auto_report_cat_id', 'required'),
 			array('permission, auto_report_cat_id', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
-			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id, 
@@ -77,6 +76,7 @@ class ReportSetting extends OActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'category' => array(self::BELONGS_TO, 'ReportCategory', 'auto_report_cat_id'),
 		);
 	}
 
@@ -169,6 +169,11 @@ class ReportSetting extends OActiveRecord
 				'name' => 'license',
 				'value' => '$data->license',
 			);
+			$this->templateColumns['permission'] = array(
+				'name' => 'permission',
+				'value' => '$data->permission ? Yii::t(\'phrase\', \'Yes\') : Yii::t(\'phrase\, \'No\')',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\',array(\'id\'=>$data->id)), $data->permission)',
+			);
 			$this->templateColumns['meta_keyword'] = array(
 				'name' => 'meta_keyword',
 				'value' => '$data->meta_keyword',
@@ -179,7 +184,7 @@ class ReportSetting extends OActiveRecord
 			);
 			$this->templateColumns['auto_report_cat_id'] = array(
 				'name' => 'auto_report_cat_id',
-				'value' => '$data->auto_report_cat_id',
+				'value' => '$data->auto_report_cat_id ? $data->category->title->message : \'-\'',
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
@@ -218,18 +223,6 @@ class ReportSetting extends OActiveRecord
 					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
 				);
 			}
-			$this->templateColumns['permission'] = array(
-				'name' => 'permission',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\',array(\'id\'=>$data->id)), $data->permission)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Yes'),
-					0=>Yii::t('phrase', 'No'),
-				),
-				'type' => 'raw',
-			);
 		}
 		parent::afterConstruct();
 	}
@@ -237,16 +230,19 @@ class ReportSetting extends OActiveRecord
 	/**
 	 * User get information
 	 */
-	public static function getInfo($id, $column=null)
+	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
-				'select' => $column
+			$model = self::model()->findByPk(1,array(
+				'select' => $column,
 			));
-			return $model->$column;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
-			$model = self::model()->findByPk($id);
+			$model = self::model()->findByPk(1);
 			return $model;
 		}
 	}
