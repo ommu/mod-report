@@ -24,6 +24,7 @@
 class ReportSetting extends OActiveRecord
 {
 	public $gridForbiddenColumn = array();
+	public $auto_report_i;
 
 	// Variable Search
 	public $modified_search;
@@ -56,14 +57,15 @@ class ReportSetting extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, meta_keyword, meta_description, auto_report_cat_id', 'required'),
-			array('permission, auto_report_cat_id', 'numerical', 'integerOnly'=>true),
+			array('license, permission, meta_keyword, meta_description', 'required'),
+			array('permission, auto_report_cat_id, modified_id, auto_report_i', 'numerical', 'integerOnly'=>true),
+			array('auto_report_cat_id, auto_report_i', 'safe'),
 			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id, 
-				modified_search', 'safe', 'on'=>'search'),
+				auto_report_i, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,8 +77,8 @@ class ReportSetting extends OActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'category' => array(self::BELONGS_TO, 'ReportCategory', 'auto_report_cat_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -130,7 +132,7 @@ class ReportSetting extends OActiveRecord
 		$criteria->compare('t.meta_keyword', strtolower($this->meta_keyword), true);
 		$criteria->compare('t.meta_description', strtolower($this->meta_description), true);
 		$criteria->compare('t.auto_report_cat_id', $this->auto_report_cat_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 
@@ -188,7 +190,7 @@ class ReportSetting extends OActiveRecord
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

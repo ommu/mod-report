@@ -132,7 +132,7 @@ class ReportHistory extends OActiveRecord
 		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
-		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->report_date != null && !in_array($this->report_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.report_date)', date('Y-m-d', strtotime($this->report_date)));
 		$criteria->compare('t.report_ip', strtolower($this->report_ip), true);
 
@@ -189,7 +189,7 @@ class ReportHistory extends OActiveRecord
 			}
 			$this->templateColumns['report_date'] = array(
 				'name' => 'report_date',
-				'value' => '!in_array($data->report_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->report_date, true) : \'-\'',
+				'value' => '!in_array($data->report_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->report_date, true) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
