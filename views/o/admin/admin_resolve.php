@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/mod-report
  *
@@ -45,7 +45,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->status == 1 ? Yii::t('phrase', 'Are you sure you want to unresolved this item?') : Yii::t('phrase', 'Are you sure you want to resolved this item?')?></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php //echo $form->textArea($model,'report_message',array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
+				<?php //echo $form->textArea($model,'report_message', array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
 				if(!$model->getErrors())
 					$model->report_message = '';
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(

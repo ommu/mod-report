@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:15 WIB
  * @modified date 18 January 2018, 00:32 WIB
  * @link https://github.com/ommu/mod-report
@@ -174,7 +174,7 @@ class ReportSetting extends OActiveRecord
 			$this->templateColumns['permission'] = array(
 				'name' => 'permission',
 				'value' => '$data->permission ? Yii::t(\'phrase\', \'Yes\') : Yii::t(\'phrase\, \'No\')',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\',array(\'id\'=>$data->id)), $data->permission)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\', array(\'id\'=>$data->id)), $data->permission)',
 			);
 			$this->templateColumns['meta_keyword'] = array(
 				'name' => 'meta_keyword',
@@ -235,7 +235,7 @@ class ReportSetting extends OActiveRecord
 	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk(1,array(
+			$model = self::model()->findByPk(1, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)

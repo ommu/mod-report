@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/mod-report
  *
@@ -51,7 +51,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'report_date',
 				//'mode'=>'datetime',
@@ -72,7 +72,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'modified_date',
 				//'mode'=>'datetime',
@@ -93,7 +93,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('updated_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'updated_date',
 				//'mode'=>'datetime',

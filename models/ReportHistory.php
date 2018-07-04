@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 13:47 WIB
  * @modified date 18 January 2018, 00:31 WIB
  * @link https://github.com/ommu/mod-report
@@ -136,7 +136,7 @@ class ReportHistory extends OActiveRecord
 			$criteria->compare('date(t.report_date)', date('Y-m-d', strtotime($this->report_date)));
 		$criteria->compare('t.report_ip', strtolower($this->report_ip), true);
 
-		$criteria->compare('report.cat_id',$this->category_search);
+		$criteria->compare('report.cat_id', $this->category_search);
 		$criteria->compare('report.report_body', strtolower($this->report_search), true);
 		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
@@ -232,7 +232,7 @@ class ReportHistory extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

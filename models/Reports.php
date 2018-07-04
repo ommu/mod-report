@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 00:29 WIB
  * @link https://github.com/ommu/mod-report
  *
@@ -278,7 +278,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['reports'] = array(
 				'name' => 'reports',
-				'value' => 'CHtml::link($data->reports ? $data->reports : 0, Yii::app()->controller->createurl("history/admin/manage",array(\'report\'=>$data->report_id,\'status\'=>0)))',
+				'value' => 'CHtml::link($data->reports ? $data->reports : 0, Yii::app()->controller->createurl("history/admin/manage", array(\'report\'=>$data->report_id,\'status\'=>0)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -286,7 +286,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['status_search'] = array(
 				'name' => 'status_search',
-				'value' => 'CHtml::link($data->view->history_all ? $data->view->history_all : 0, Yii::app()->controller->createurl("o/status/manage",array(\'report\'=>$data->report_id)))',
+				'value' => 'CHtml::link($data->view->history_all ? $data->view->history_all : 0, Yii::app()->controller->createurl("o/status/manage", array(\'report\'=>$data->report_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -294,7 +294,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['comment_search'] = array(
 				'name' => 'comment_search',
-				'value' => 'CHtml::link($data->view->comments ? $data->view->comments : 0, Yii::app()->controller->createurl("o/comment/manage",array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
+				'value' => 'CHtml::link($data->view->comments ? $data->view->comments : 0, Yii::app()->controller->createurl("o/comment/manage", array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -302,7 +302,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['user_search'] = array(
 				'name' => 'user_search',
-				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, Yii::app()->controller->createurl("o/user/manage",array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
+				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, Yii::app()->controller->createurl("o/user/manage", array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -382,7 +382,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'resolve\',array(\'id\'=>$data->report_id)), $data->status, Yii::t(\'phrase\', \'Resolved,Unresolved\'))',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'resolve\', array(\'id\'=>$data->report_id)), $data->status, Yii::t(\'phrase\', \'Resolved,Unresolved\'))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -402,7 +402,7 @@ class Reports extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

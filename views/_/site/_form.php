@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -43,7 +43,7 @@
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				$model->url = Yii::app()->getRequest()->getParam('url');
-				echo $form->textField($model,'url',array('maxlength'=>255, 'class'=>'form-control')); ?>
+				echo $form->textField($model,'url', array('maxlength'=>255, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'url'); ?>
 			</div>
 		</div>
@@ -51,7 +51,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'body', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'body',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+				<?php echo $form->textArea($model,'body', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'body'); ?>
 			</div>
 		</div>
@@ -59,7 +59,7 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save')) ,array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save')) , array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
 </div>
 

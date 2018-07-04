@@ -19,7 +19,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:26 WIB
  * @modified date 18 January 2018, 13:39 WIB
  * @link https://github.com/ommu/mod-report
@@ -123,7 +123,7 @@ class UserController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -144,7 +144,7 @@ class UserController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Detail User: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -180,7 +180,7 @@ class UserController extends Controller
 		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!(Yii::app()->getRequest()->getParam('ajax'))) {
+		if(!Yii::app()->getRequest()->getParam('ajax')) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
 		}
 	}
@@ -264,7 +264,7 @@ class UserController extends Controller
 		$this->pageTitle = Yii::t('phrase', '{title} User: Report {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

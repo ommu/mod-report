@@ -12,7 +12,7 @@ class FrontReportAdd extends CWidget
 
 	protected function renderContent() {
 		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		$this->render('front_report_add',array(
+		$this->render('front_report_add', array(
 			'url' => $url,
 		));	
 	}

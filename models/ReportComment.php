@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
  * @modified date 18 January 2018, 00:31 WIB
  * @link https://github.com/ommu/mod-report
@@ -168,7 +168,7 @@ class ReportComment extends OActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
 
-		$criteria->compare('report.cat_id',$this->category_search);
+		$criteria->compare('report.cat_id', $this->category_search);
 		$criteria->compare('report.report_body', strtolower($this->report_search), true);
 		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
@@ -326,7 +326,7 @@ class ReportComment extends OActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->comment_id)), $data->publish)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->comment_id)), $data->publish)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -347,7 +347,7 @@ class ReportComment extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

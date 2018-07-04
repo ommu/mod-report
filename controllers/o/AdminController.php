@@ -20,7 +20,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 13:38 WIB
  * @link https://github.com/ommu/mod-report
  *
@@ -119,7 +119,7 @@ class AdminController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = Yii::t('phrase', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -170,7 +170,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Report');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -221,7 +221,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Report: {report_body}', array('{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 		));
 	}
@@ -241,7 +241,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Detail Report: {report_body}', array('{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -334,7 +334,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', '{title} Report: {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_resolve',array(
+		$this->render('admin_resolve', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

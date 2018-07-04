@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 00:31 WIB
  * @link https://github.com/ommu/mod-report
  *
@@ -47,7 +47,7 @@ class ReportCategory extends OActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'class'=>'ext.yii-sluggable.SluggableBehavior',
 				'columns' => array('title.message'),
 				'unique' => true,
 				'update' => true,
@@ -191,8 +191,8 @@ class ReportCategory extends OActiveRecord
 			$criteria->addInCondition('t.publish', array(0,1));
 			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('name',$this->name);
-		$criteria->compare('desc',$this->desc);
+		$criteria->compare('name', $this->name);
+		$criteria->compare('desc', $this->desc);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
@@ -287,7 +287,7 @@ class ReportCategory extends OActiveRecord
 			}
 			$this->templateColumns['report_search'] = array(
 				'name' => 'report_search',
-				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>0)))',
+				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id,\'status\'=>0)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -295,7 +295,7 @@ class ReportCategory extends OActiveRecord
 			);
 			$this->templateColumns['report_resolved_search'] = array(
 				'name' => 'report_resolved_search',
-				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id,\'status\'=>1)))',
+				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id,\'status\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -303,7 +303,7 @@ class ReportCategory extends OActiveRecord
 			);
 			$this->templateColumns['report_all_search'] = array(
 				'name' => 'report_all_search',
-				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage",array(\'category\'=>$data->cat_id)))',
+				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -384,7 +384,7 @@ class ReportCategory extends OActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->cat_id)), $data->publish)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cat_id)), $data->publish)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -405,7 +405,7 @@ class ReportCategory extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

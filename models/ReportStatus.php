@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
  * @modified date 18 January 2018, 00:32 WIB
  * @link https://github.com/ommu/mod-report
@@ -147,7 +147,7 @@ class ReportStatus extends OActiveRecord
 			),
 		);
 
-		$criteria->compare('t.history_id',$this->history_id);
+		$criteria->compare('t.history_id', $this->history_id);
 		$criteria->compare('t.status', Yii::app()->getRequest()->getParam('status') ? Yii::app()->getRequest()->getParam('status') : $this->status);
 		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
@@ -159,7 +159,7 @@ class ReportStatus extends OActiveRecord
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 
-		$criteria->compare('report.cat_id',$this->category_search);
+		$criteria->compare('report.cat_id', $this->category_search);
 		$criteria->compare('report.report_body', strtolower($this->report_search), true);
 		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
@@ -309,7 +309,7 @@ class ReportStatus extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

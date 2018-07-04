@@ -21,7 +21,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
  * @modified date 18 January 2018, 13:37 WIB
  * @link https://github.com/ommu/mod-report
@@ -125,7 +125,7 @@ class CommentController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -176,7 +176,7 @@ class CommentController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Comment');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -227,7 +227,7 @@ class CommentController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Comment: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 		));
 	}
@@ -247,7 +247,7 @@ class CommentController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Detail Comment: Report {report_body}', array('{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -283,7 +283,7 @@ class CommentController extends Controller
 		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!(Yii::app()->getRequest()->getParam('ajax'))) {
+		if(!Yii::app()->getRequest()->getParam('ajax')) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
 		}
 	}
@@ -367,7 +367,7 @@ class CommentController extends Controller
 		$this->pageTitle = Yii::t('phrase', '{title} Comment: {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

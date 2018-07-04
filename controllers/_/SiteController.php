@@ -14,7 +14,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ class SiteController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'Report this page');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('front_send',array(
+			$this->render('front_send', array(
 				'model'=>$model,
 			));
 		}
