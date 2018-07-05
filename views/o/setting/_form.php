@@ -42,13 +42,11 @@
 				<span><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
 			</label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php 
-				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-					$model->license = ReportSetting::getLicense();
-			
-				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
+				<?php
+				if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
+					$model->license = $this->licenseCode();
 					echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control'));
-				else
+				} else
 					echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control', 'disabled'=>'disabled'));?>
 				<?php echo $form->error($model, 'license'); ?>
 				<span class="small-px"><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
