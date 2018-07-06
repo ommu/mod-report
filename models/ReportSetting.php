@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:15 WIB
- * @modified date 18 January 2018, 00:32 WIB
+ * @modified date 4 July 2018, 23:09 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_setting".
@@ -19,8 +19,9 @@
  * @property string $meta_description
  * @property integer $auto_report_cat_id
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  */
+
 class ReportSetting extends OActiveRecord
 {
 	public $gridForbiddenColumn = array();
@@ -57,15 +58,15 @@ class ReportSetting extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description', 'required'),
+			array('license, meta_keyword, meta_description', 'required'),
 			array('permission, auto_report_cat_id, modified_id, auto_report_i', 'numerical', 'integerOnly'=>true),
 			array('auto_report_cat_id, auto_report_i', 'safe'),
-			array('license', 'length', 'max'=>32),
 			array('modified_id', 'length', 'max'=>11),
+			array('license', 'length', 'max'=>32),
+			// array('modified_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id, 
-				auto_report_i, modified_search', 'safe', 'on'=>'search'),
+			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,6 +97,7 @@ class ReportSetting extends OActiveRecord
 			'auto_report_cat_id' => Yii::t('attribute', 'Auto Report Cat'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'auto_report_i' => Yii::t('attribute', 'Enable Auto Report'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
@@ -117,15 +119,13 @@ class ReportSetting extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'modified' => array(
 				'alias'=>'modified',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 		);
-		
+
 		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.license', strtolower($this->license), true);
 		$criteria->compare('t.permission', $this->permission);
@@ -144,7 +144,7 @@ class ReportSetting extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -174,7 +174,6 @@ class ReportSetting extends OActiveRecord
 			$this->templateColumns['permission'] = array(
 				'name' => 'permission',
 				'value' => '$data->permission ? Yii::t(\'phrase\', \'Yes\') : Yii::t(\'phrase\, \'No\')',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\', array(\'id\'=>$data->id)), $data->permission)',
 			);
 			$this->templateColumns['meta_keyword'] = array(
 				'name' => 'meta_keyword',
@@ -230,7 +229,7 @@ class ReportSetting extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($column=null)
 	{
@@ -250,30 +249,15 @@ class ReportSetting extends OActiveRecord
 	}
 
 	/**
-	 * get Module License
+	 * This is invoked when a record is populated with data from a find() call.
 	 */
-	public static function getLicense($source='1234567890', $length=16, $char=4)
+	protected function afterFind()
 	{
-		$mod = $length%$char;
-		if($mod == 0)
-			$sep = ($length/$char);
-		else
-			$sep = (int)($length/$char)+1;
-		
-		$sourceLength = strlen($source);
-		$random = '';
-		for ($i = 0; $i < $length; $i++)
-			$random .= $source[rand(0, $sourceLength - 1)];
-		
-		$license = '';
-		for ($i = 0; $i < $sep; $i++) {
-			if($i != $sep-1)
-				$license .= substr($random,($i*$char),$char).'-';
-			else
-				$license .= substr($random,($i*$char),$char);
-		}
+		parent::afterFind();
+		if($this->auto_report_cat_id)
+			$this->auto_report_i = 1;
 
-		return $license;
+		return true;
 	}
 
 	/**
@@ -284,8 +268,22 @@ class ReportSetting extends OActiveRecord
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+
+			if($this->auto_report_i && !$this->auto_report_cat_id)
+				$this->addError('auto_report_cat_id', Yii::t('attribute', '{attribute} cannot be blank.', ['{attribute}'=>$this->getAttributeLabel('auto_report_cat_id')]));
 		}
 		return true;
 	}
 
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() 
+	{
+		if(parent::beforeSave()) {
+			if(!$this->auto_report_i)
+				$this->auto_report_cat_id = null;
+		}
+		return true;
+	}
 }

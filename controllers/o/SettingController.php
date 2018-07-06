@@ -39,9 +39,10 @@ class SettingController extends Controller
 	{
 		if(!Yii::app()->user->isGuest) {
 			if(in_array(Yii::app()->user->level, array(1,2))) {
-				$arrThemes = Utility::getCurrentTemplate('admin');
+				$arrThemes = $this->currentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
+				print_r($arrThemes);
 			}
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
