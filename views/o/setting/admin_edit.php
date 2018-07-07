@@ -43,25 +43,25 @@
 				'buttons' => array(
 					'view' => array(
 						'label' => Yii::t('phrase', 'Detail Report Category'),
-						'imageUrl' => false,
+						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'view',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/view", array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl("o/category/view", array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
 						'label' => Yii::t('phrase', 'Update Report Category'),
-						'imageUrl' => false,
+						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
-							'class' => 'update'
+							'class' => 'update',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/edit", array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl("o/category/edit", array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
 						'label' => Yii::t('phrase', 'Delete Report Category'),
-						'imageUrl' => false,
+						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
-							'class' => 'delete'
+							'class' => 'delete',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/delete", array("id"=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl("o/category/delete", array(\'id\'=>$data->primaryKey))')
 				),
 				'template' => '{view}|{update}|{delete}',
 			));
@@ -70,8 +70,9 @@
 				'id'=>'report-category-grid',
 				'dataProvider'=>$category->search(),
 				'filter'=>$category,
-				'columns' => $columnData,
-				'pager' => array('header' => ''),
+				'columns'=>$columnData,
+				'template'=>Yii::app()->params['grid-view']['gridTemplate'],
+				'pager'=>array('header'=>''),
 			));
 		?>
 		<?php //end.Grid Item ?>

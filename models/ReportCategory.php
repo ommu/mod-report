@@ -30,6 +30,7 @@
 class ReportCategory extends OActiveRecord
 {
 	use UtilityTrait;
+	use GridViewTrait;
 
 	public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
 	public $name_i;
@@ -390,10 +391,7 @@ class ReportCategory extends OActiveRecord
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'filter' => $this->filterYesNo(),
 					'type' => 'raw',
 				);
 			}

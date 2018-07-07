@@ -37,6 +37,8 @@
 
 class Reports extends OActiveRecord
 {
+	use GridViewTrait;
+
 	public $gridForbiddenColumn = array('report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search');
 
 	// Variable Search
@@ -386,10 +388,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Yes'),
-					0=>Yii::t('phrase', 'No'),
-				),
+				'filter' => $this->filterYesNo(),
 				'type' => 'raw',
 			);
 		}
