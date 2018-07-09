@@ -15,7 +15,7 @@
 ?>
 
 <div class="dialog-content">
-<?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
+<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'reports-form',
 	'enableAjaxValidation'=>true,
 	/*
