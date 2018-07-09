@@ -32,7 +32,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
+			<?php /* $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'report_date',
 				//'mode'=>'datetime',
