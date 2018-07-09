@@ -253,30 +253,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'report_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'report_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'report_date'),
 			);
 			$this->templateColumns['reports'] = array(
 				'name' => 'reports',
@@ -320,30 +297,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'modified_date'),
 			);
 			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(
@@ -357,30 +311,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'updated_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'updated_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'updated_date'),
 			);
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
