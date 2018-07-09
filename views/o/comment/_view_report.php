@@ -16,7 +16,7 @@
 	$category_name = $model->report->category->name ? $model->report->category->title->message : '-';
 	$report_url = $model->report->report_url ? $model->report->report_url : '-';
 	$report_body = $model->report->report_body ? $model->report->report_body : '-';
-	$report_date = $model->report->report_date ? Utility::dateFormat($model->report->report_date, true) : '-';
+	$report_date = $model->report->report_date ? $this->dateFormat($model->report->report_date, true) : '-';
 ?>
 
 <ul>

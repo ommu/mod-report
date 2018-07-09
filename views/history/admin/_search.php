@@ -32,18 +32,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_date'); ?>
-			<?php /* $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-				'model'=>$model,
-				'attribute'=>'report_date',
-				//'mode'=>'datetime',
-				'options'=>array(
-					'dateFormat' => 'yy-mm-dd',
-				),
-				'htmlOptions'=>array(
-					'class' => 'form-control',
-				 ),
-			)); */
-			echo $form->dateField($model, 'report_date', array('class'=>'form-control')); ?>
+			<?php echo $this->filterDatepicker($model, 'report_date', false); ?>
 		</li>
 
 		<li>
