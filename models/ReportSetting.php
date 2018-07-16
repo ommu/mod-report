@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:15 WIB
- * @modified date 4 July 2018, 23:09 WIB
+ * @modified date 13 July 2018, 10:16 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_setting".
@@ -20,6 +20,10 @@
  * @property integer $auto_report_cat_id
  * @property string $modified_date
  * @property integer $modified_id
+ *
+ * The followings are the available model relations:
+ * @property ReportCategory $category
+ * @property Users $modified
  */
 
 class ReportSetting extends OActiveRecord
@@ -68,7 +72,8 @@ class ReportSetting extends OActiveRecord
 			// array('modified_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id, modified_search', 'safe', 'on'=>'search'),
+			array('id, license, permission, meta_keyword, meta_description, auto_report_cat_id, modified_date, modified_id,
+				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -123,8 +128,8 @@ class ReportSetting extends OActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
@@ -133,7 +138,7 @@ class ReportSetting extends OActiveRecord
 		$criteria->compare('t.permission', $this->permission);
 		$criteria->compare('t.meta_keyword', strtolower($this->meta_keyword), true);
 		$criteria->compare('t.meta_description', strtolower($this->meta_description), true);
-		$criteria->compare('t.auto_report_cat_id', $this->auto_report_cat_id);
+		$criteria->compare('t.auto_report_cat_id', Yii::app()->getRequest()->getParam('category') ? Yii::app()->getRequest()->getParam('category') : $this->auto_report_cat_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
@@ -185,13 +190,15 @@ class ReportSetting extends OActiveRecord
 				'name' => 'meta_description',
 				'value' => '$data->meta_description',
 			);
-			$this->templateColumns['auto_report_cat_id'] = array(
-				'name' => 'auto_report_cat_id',
-				'value' => '$data->auto_report_cat_id ? $data->category->title->message : \'-\'',
-			);
+			if(!Yii::app()->getRequest()->getParam('category')) {
+				$this->templateColumns['auto_report_cat_id'] = array(
+					'name' => 'auto_report_cat_id',
+					'value' => '$data->category->title->message ? $data->category->title->message : \'-\'',
+				);
+			}
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

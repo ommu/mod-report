@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 00:31 WIB
+ * @modified date 13 July 2018, 10:58 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_category".
@@ -13,26 +13,31 @@
  * The followings are the available columns in table 'ommu_report_category':
  * @property integer $cat_id
  * @property integer $publish
- * @property string $name
- * @property string $desc
+ * @property integer $name
+ * @property integer $desc
  * @property string $creation_date
- * @property string $creation_id
+ * @property integer $creation_id
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  * @property string $updated_date
  * @property string $slug
  *
  * The followings are the available model relations:
+ * @property ViewReportCategory $view
+ * @property ReportSetting[] $settings
  * @property Reports[] $reports
+ * @property SourceMessage $title
+ * @property SourceMessage $description
  * @property Users $creation
  * @property Users $modified
  */
+
 class ReportCategory extends OActiveRecord
 {
 	use UtilityTrait;
 	use GridViewTrait;
 
-	public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
+	public $gridForbiddenColumn = array();
 	public $name_i;
 	public $desc_i;
 
@@ -87,11 +92,12 @@ class ReportCategory extends OActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name_i, desc_i', 'required'),
-			array('publish', 'numerical', 'integerOnly'=>true),
+			array('publish, name, desc, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('', 'safe'),
-			array('name_i', 'length', 'max'=>32),
+			array('name_i', 'length', 'max'=>64),
 			array('desc_i', 'length', 'max'=>128),
+			// array('creation_date, modified_date, updated_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id, updated_date, slug,
@@ -159,27 +165,25 @@ class ReportCategory extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'title' => array(
-				'alias'=>'title',
-				'select'=>'message',
+				'alias' => 'title',
+				'select' => 'message',
 			),
 			'description' => array(
-				'alias'=>'description',
-				'select'=>'message',
+				'alias' => 'description',
+				'select' => 'message',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
@@ -194,8 +198,8 @@ class ReportCategory extends OActiveRecord
 			$criteria->addInCondition('t.publish', array(0,1));
 			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('name', $this->name);
-		$criteria->compare('desc', $this->desc);
+		$criteria->compare('t.name', $this->name);
+		$criteria->compare('t.desc', $this->desc);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
@@ -213,14 +217,14 @@ class ReportCategory extends OActiveRecord
 		$criteria->compare('view.report_all', strtolower($this->report_all_search), true);
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
-		
+
 		if(!Yii::app()->getRequest()->getParam('ReportCategory_sort'))
 			$criteria->order = 't.cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -253,7 +257,7 @@ class ReportCategory extends OActiveRecord
 			);
 			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
-				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->creation_date) : \'-\'',
+				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->creation_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -291,7 +295,7 @@ class ReportCategory extends OActiveRecord
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -305,7 +309,7 @@ class ReportCategory extends OActiveRecord
 			}
 			$this->templateColumns['updated_date'] = array(
 				'name' => 'updated_date',
-				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->updated_date) : \'-\'',
+				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->updated_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -318,7 +322,7 @@ class ReportCategory extends OActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cat_id)), $data->publish)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cat_id)), $data->publish, \'Enable,Disable\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -331,7 +335,7 @@ class ReportCategory extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -339,10 +343,10 @@ class ReportCategory extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -351,9 +355,7 @@ class ReportCategory extends OActiveRecord
 	}
 
 	/**
-	 * getCategory
-	 * 0 = unpublish
-	 * 1 = publish
+	 * function getCategory
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
@@ -381,10 +383,11 @@ class ReportCategory extends OActiveRecord
 	 */
 	protected function afterFind()
 	{
+		parent::afterFind();
 		$this->name_i = $this->title->message;
 		$this->desc_i = $this->description->message;
-		
-		parent::afterFind();
+
+		return true;
 	}
 
 	/**
@@ -400,7 +403,7 @@ class ReportCategory extends OActiveRecord
 		}
 		return true;
 	}
-	
+
 	/**
 	 * before save attributes
 	 */
@@ -410,7 +413,7 @@ class ReportCategory extends OActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 		$action = strtolower(Yii::app()->controller->action->id);
 
-		$location = $module.' '.$controller;
+		$location = $this->urlTitle($module.' '.$controller);
 		
 		if(parent::beforeSave()) {
 			if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
@@ -421,7 +424,7 @@ class ReportCategory extends OActiveRecord
 					$this->name = $name->id;
 
 				$this->slug = $this->urlTitle($this->name_i);
-				
+
 			} else {
 				$name = SourceMessage::model()->findByPk($this->name);
 				$name->message = $this->name_i;
@@ -431,17 +434,17 @@ class ReportCategory extends OActiveRecord
 			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
 				$desc=new SourceMessage;
 				$desc->message = $this->desc_i;
-				$desc->location = $location.'_desc';
+				$desc->location = $location.'_description';
 				if($desc->save())
 					$this->desc = $desc->id;
-				
+
 			} else {
 				$desc = SourceMessage::model()->findByPk($this->desc);
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
+
 		}
 		return true;
 	}
-
 }

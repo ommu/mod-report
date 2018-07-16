@@ -5,16 +5,16 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 00:29 WIB
+ * @modified date 13 July 2018, 10:45 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_reports".
  *
  * The followings are the available columns in table 'ommu_reports':
- * @property string $report_id
+ * @property integer $report_id
  * @property integer $status
  * @property integer $cat_id
- * @property string $user_id
+ * @property integer $user_id
  * @property string $report_url
  * @property string $report_body
  * @property string $report_message
@@ -22,14 +22,17 @@
  * @property string $report_date
  * @property string $report_ip
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property ReportComment[] $comments
+ * @property ReportComment[] $commentAll
  * @property ReportHistory[] $histories
  * @property ReportStatus[] $statuses
  * @property ReportUser[] $users
+ * @property ReportUser[] $userAll
+ * @property ViewReports $view
  * @property ReportCategory $category
  * @property Users $user
  * @property Users $modified
@@ -40,6 +43,10 @@ class Reports extends OActiveRecord
 	use GridViewTrait;
 
 	public $gridForbiddenColumn = array('report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search');
+	public $comment_i;
+	public $history_i;
+	public $status_i;
+	public $user_i;
 
 	// Variable Search
 	public $reporter_search;
@@ -98,11 +105,13 @@ class Reports extends OActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'view' => array(self::BELONGS_TO, 'ViewReports', 'report_id'),
-			'comments' => array(self::HAS_MANY, 'ReportComment', 'report_id'),
+			'comments' => array(self::HAS_MANY, 'ReportComment', 'report_id', 'on'=>'comments.publish=1'),
+			'commentAll' => array(self::HAS_MANY, 'ReportComment', 'report_id'),
 			'histories' => array(self::HAS_MANY, 'ReportHistory', 'report_id'),
 			'statuses' => array(self::HAS_MANY, 'ReportStatus', 'report_id'),
-			'users' => array(self::HAS_MANY, 'ReportUser', 'report_id'),
+			'users' => array(self::HAS_MANY, 'ReportUser', 'report_id', 'on'=>'users.publish=1'),
+			'userAll' => array(self::HAS_MANY, 'ReportUser', 'report_id'),
+			'view' => array(self::BELONGS_TO, 'ViewReports', 'report_id'),
 			'category' => array(self::BELONGS_TO, 'ReportCategory', 'cat_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
@@ -153,19 +162,17 @@ class Reports extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname'
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
@@ -186,7 +193,7 @@ class Reports extends OActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
 
-		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);
+		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);			//user.displayname
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 		$criteria->compare('view.history_all', $this->status_search);
 		$criteria->compare('view.comments', $this->comment_search);
@@ -198,7 +205,7 @@ class Reports extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -226,34 +233,28 @@ class Reports extends OActiveRecord
 					'name' => 'cat_id',
 					'value' => '$data->category->title->message ? $data->category->title->message : \'-\'',
 					'filter'=> ReportCategory::getCategory(),
-					'type' => 'raw',
 				);
 			}
-			$this->templateColumns['report_url'] = array(
-				'name' => 'report_url',
-				'value' => '$data->report_url',
-			);
-			$this->templateColumns['report_body'] = array(
-				'name' => 'report_body',
-				'value' => '$data->report_body',
-			);
 			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->templateColumns['reporter_search'] = array(
 					'name' => 'reporter_search',
 					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
+			$this->templateColumns['report_url'] = array(
+				'name' => 'report_url',
+				'value' => '$data->report_url',
+				'type' => 'raw',
+			);
+			$this->templateColumns['report_body'] = array(
+				'name' => 'report_body',
+				'value' => '$data->report_body',
+				'type' => 'raw',
+			);
 			$this->templateColumns['report_message'] = array(
 				'name' => 'report_message',
 				'value' => '$data->report_message',
-			);
-			$this->templateColumns['report_date'] = array(
-				'name' => 'report_date',
-				'value' => '!in_array($data->report_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->report_date) : \'-\'',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => $this->filterDatepicker($this, 'report_date'),
+				'type' => 'raw',
 			);
 			$this->templateColumns['reports'] = array(
 				'name' => 'reports',
@@ -262,6 +263,14 @@ class Reports extends OActiveRecord
 					'class' => 'center',
 				),
 				'type' => 'raw',
+			);
+			$this->templateColumns['report_date'] = array(
+				'name' => 'report_date',
+				'value' => '!in_array($data->report_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->report_date, \'medium\', false) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterDatepicker($this, 'report_date'),
 			);
 			$this->templateColumns['status_search'] = array(
 				'name' => 'status_search',
@@ -293,7 +302,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -307,7 +316,7 @@ class Reports extends OActiveRecord
 			}
 			$this->templateColumns['updated_date'] = array(
 				'name' => 'updated_date',
-				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->updated_date) : \'-\'',
+				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->updated_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -315,7 +324,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'resolve\', array(\'id\'=>$data->report_id)), $data->status, Yii::t(\'phrase\', \'Resolved,Unresolved\'))',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\', array(\'id\'=>$data->report_id)), $data->status, \'Resolved,Unresolved\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -327,7 +336,7 @@ class Reports extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -335,10 +344,10 @@ class Reports extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -385,10 +394,8 @@ class Reports extends OActiveRecord
 				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			else
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
-
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
 	}
-
 }
