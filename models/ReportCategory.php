@@ -37,6 +37,7 @@ class ReportCategory extends OActiveRecord
 	use UtilityTrait;
 	use GridViewTrait;
 
+	//public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
 	public $gridForbiddenColumn = array();
 	public $name_i;
 	public $desc_i;

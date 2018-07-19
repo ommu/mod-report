@@ -6,21 +6,22 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 13:14 WIB
- * @modified date 18 January 2018, 13:01 WIB
+ * @modified date 16 July 2018, 14:11 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "_reports".
  *
  * The followings are the available columns in table '_reports':
- * @property string $report_id
+ * @property integer $report_id
  * @property string $history_resolved
  * @property string $history_unresolved
- * @property string $history_all
+ * @property integer $history_all
  * @property string $comments
- * @property string $comment_all
+ * @property integer $comment_all
  * @property string $users
- * @property string $user_all
+ * @property integer $user_all
  */
+
 class ViewReports extends OActiveRecord
 {
 	public $gridForbiddenColumn = array();
@@ -61,9 +62,10 @@ class ViewReports extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('report_id, history_all, comment_all, user_all', 'numerical', 'integerOnly'=>true),
 			array('report_id', 'length', 'max'=>11),
-			array('history_resolved, history_unresolved, comments, users', 'length', 'max'=>23),
 			array('history_all, comment_all, user_all', 'length', 'max'=>21),
+			array('history_resolved, history_unresolved, comments, users', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('report_id, history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
@@ -115,7 +117,6 @@ class ViewReports extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('t.report_id', $this->report_id);
 		$criteria->compare('t.history_resolved', $this->history_resolved);
 		$criteria->compare('t.history_unresolved', $this->history_unresolved);
@@ -131,7 +132,7 @@ class ViewReports extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -191,7 +192,7 @@ class ViewReports extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -199,15 +200,14 @@ class ViewReports extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }
