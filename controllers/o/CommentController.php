@@ -97,7 +97,7 @@ class CommentController extends Controller
 	public function actionManage($report=null, $user=null) 
 	{
 		$model=new ReportComment('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('ReportComment')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('ReportComment');
 		}

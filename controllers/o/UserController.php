@@ -95,7 +95,7 @@ class UserController extends Controller
 	public function actionManage($report=null, $user=null) 
 	{
 		$model=new ReportUser('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('ReportUser')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('ReportUser');
 		}

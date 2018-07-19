@@ -96,10 +96,10 @@ class CategoryController extends Controller
 	public function actionManage() 
 	{
 		$model=new ReportCategory('search');
-		$model->unsetAttributes();  // clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportCategory')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('ReportCategory');
-		}
+		$model->unsetAttributes();	// clear any default values
+		$ReportCategory = Yii::app()->getRequest()->getParam('ReportCategory');
+		if($ReportCategory)
+			$model->attributes=$ReportCategory;
 		
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 

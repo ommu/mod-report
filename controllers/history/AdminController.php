@@ -92,7 +92,7 @@ class AdminController extends Controller
 	public function actionManage($report=null, $user=null) 
 	{
 		$model=new ReportHistory('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('ReportHistory')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('ReportHistory');
 		}
