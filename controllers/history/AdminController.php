@@ -70,7 +70,7 @@ class AdminController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('index','manage','delete'),
 				'users'=>array('@'),
-				'expression'=>'in_array($user->level, array(1,2))',
+				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

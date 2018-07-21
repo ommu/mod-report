@@ -12,7 +12,7 @@
  *	Add
  *	Edit
  *	View
- *	RunAction
+ *	Runaction
  *	Delete
  *	Publish
  *
@@ -75,7 +75,7 @@ class CommentController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('index','manage','add','edit','view','runaction','delete','publish'),
 				'users'=>array('@'),
-				'expression'=>'in_array($user->level, array(1,2))',
+				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -248,7 +248,7 @@ class CommentController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionRunAction() {
+	public function actionRunaction() {
 		$id       = $_POST['trash_id'];
 		$criteria = null;
 		$actions  = Yii::app()->getRequest()->getParam('action');
