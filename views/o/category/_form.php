@@ -8,7 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 21 July 2018, 16:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -18,18 +18,20 @@
 	'id'=>'report-category-form',
 	'enableAjaxValidation'=>true,
 	/*
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+		'on_post' => '',
+	),
 	'enableClientValidation'=>true,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
-	),
-	'htmlOptions' => array(
-		'enctype' => 'multipart/form-data',
 	),
 	*/
 )); ?>
 
 <div class="dialog-content">
 	<fieldset>
+
 		<?php //begin.Messages ?>
 		<div id="ajax-message">
 			<?php echo $form->errorSummary($model); ?>
@@ -39,7 +41,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model, 'name_i', array('maxlength'=>32, 'class'=>'form-control')); ?>
+				<?php echo $form->textField($model, 'name_i', array('maxlength'=>64, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'name_i'); ?>
 			</div>
 		</div>

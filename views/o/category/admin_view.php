@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 August 2017, 20:42 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 21 July 2018, 16:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -18,6 +18,13 @@
 		$model->title->message,
 	);
 ?>
+
+<?php //begin.Messages ?>
+<div id="ajax-message">
+<?php if(Yii::app()->user->hasFlash('success'))
+	echo $this->flashMessage(Yii::app()->user->getFlash('success'), 'success');?>
+</div>
+<?php //begin.Messages ?>
 
 <div class="dialog-content">
 <?php $this->widget('zii.widgets.CDetailView', array(
@@ -29,15 +36,15 @@
 		),
 		array(
 			'name'=>'publish',
-			'value'=>$model->publish == '1' ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+			'value'=>$this->quickAction(Yii::app()->controller->createUrl('publish', array('id'=>$model->cat_id)), $model->publish, 'Enable,Disable'),
 			'type'=>'raw',
 		),
 		array(
-			'name'=>'name',
+			'name'=>'name_i',
 			'value'=>$model->name ? $model->title->message : '-',
 		),
 		array(
-			'name'=>'desc',
+			'name'=>'desc_i',
 			'value'=>$model->desc ? $model->description->message : '-',
 		),
 		array(
@@ -45,16 +52,16 @@
 			'value'=>!in_array($model->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? $this->dateFormat($model->creation_date) : '-',
 		),
 		array(
-			'name'=>'creation_id',
-			'value'=>$model->creation_id ? $model->creation->displayname : '-',
+			'name'=>'creation_search',
+			'value'=>$model->creation->displayname ? $model->creation->displayname : '-',
 		),
 		array(
 			'name'=>'modified_date',
 			'value'=>!in_array($model->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? $this->dateFormat($model->modified_date) : '-',
 		),
 		array(
-			'name'=>'modified_id',
-			'value'=>$model->modified_id ? $model->modified->displayname : '-',
+			'name'=>'modified_search',
+			'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
 		),
 		array(
 			'name'=>'updated_date',

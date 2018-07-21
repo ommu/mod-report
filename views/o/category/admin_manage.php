@@ -7,7 +7,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 21 July 2018, 16:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -53,7 +53,7 @@
 <div id="partial-report-category">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
-	<?php 
+	<?php
 	if(Yii::app()->user->hasFlash('error'))
 		echo $this->flashMessage(Yii::app()->user->getFlash('error'), 'error');
 	if(Yii::app()->user->hasFlash('success'))
@@ -90,7 +90,7 @@
 						'options' => array(
 							'class' => 'delete',
 						),
-						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))'),
 				),
 				'template' => '{view}|{update}|{delete}',
 			));

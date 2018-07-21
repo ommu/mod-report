@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 13 July 2018, 10:58 WIB
+ * @modified date 20 July 2018, 02:17 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_category".
@@ -26,6 +26,8 @@
  * @property ViewReportCategory $view
  * @property ReportSetting[] $settings
  * @property Reports[] $reports
+ * @property Reports[] $reportResolved
+ * @property Reports[] $reportAll
  * @property SourceMessage $title
  * @property SourceMessage $description
  * @property Users $creation
@@ -37,15 +39,14 @@ class ReportCategory extends OActiveRecord
 	use UtilityTrait;
 	use GridViewTrait;
 
-	//public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('creation_date','creation_search','modified_date','modified_search','updated_date','slug');
 	public $name_i;
 	public $desc_i;
+	public $report_i;
+	public $report_resolved_i;
+	public $report_all_i;
 
 	// Variable Search
-	public $report_search;
-	public $report_resolved_search;
-	public $report_all_search;
 	public $creation_search;
 	public $modified_search;
 
@@ -95,14 +96,13 @@ class ReportCategory extends OActiveRecord
 			array('name_i, desc_i', 'required'),
 			array('publish, name, desc, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
-			array('', 'safe'),
 			array('name_i', 'length', 'max'=>64),
 			array('desc_i', 'length', 'max'=>128),
 			// array('creation_date, modified_date, updated_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, creation_date, creation_id, modified_date, modified_id, updated_date, slug,
-				name_i, desc_i, report_search, report_resolved_search, report_all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+				name_i, desc_i, report_i, report_resolved_i, report_all_i, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,7 +115,9 @@ class ReportCategory extends OActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewReportCategory', 'cat_id'),
-			'reports' => array(self::HAS_MANY, 'Reports', 'cat_id'),
+			'reports' => array(self::HAS_MANY, 'Reports', 'cat_id', 'on'=>'reports.status=0'),
+			'reportResolved' => array(self::HAS_MANY, 'Reports', 'cat_id', 'on'=>'reportResolved.status=1'),
+			'reportAll' => array(self::HAS_MANY, 'Reports', 'cat_id'),
 			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
 			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
@@ -141,9 +143,9 @@ class ReportCategory extends OActiveRecord
 			'slug' => Yii::t('attribute', 'Slug'),
 			'name_i' => Yii::t('attribute', 'Category'),
 			'desc_i' => Yii::t('attribute', 'Description'),
-			'report_search' => Yii::t('attribute', 'Report'),
-			'report_resolved_search' => Yii::t('attribute', 'Resolved'),
-			'report_all_search' => Yii::t('attribute', 'All'),
+			'report_i' => Yii::t('attribute', 'Reports'),
+			'report_resolved_i' => Yii::t('attribute', 'Report Resolved'),
+			'report_all_i' => Yii::t('attribute', 'Report All'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -213,9 +215,6 @@ class ReportCategory extends OActiveRecord
 
 		$criteria->compare('title.message', strtolower($this->name_i), true);
 		$criteria->compare('description.message', strtolower($this->desc_i), true);
-		$criteria->compare('view.reports', strtolower($this->report_search), true);
-		$criteria->compare('view.report_resolved', strtolower($this->report_resolved_search), true);
-		$criteria->compare('view.report_all', strtolower($this->report_all_search), true);
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
@@ -270,30 +269,6 @@ class ReportCategory extends OActiveRecord
 					'value' => '$data->creation->displayname ? $data->creation->displayname : \'-\'',
 				);
 			}
-			$this->templateColumns['report_search'] = array(
-				'name' => 'report_search',
-				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id,\'status\'=>0)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->templateColumns['report_resolved_search'] = array(
-				'name' => 'report_resolved_search',
-				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id,\'status\'=>1)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->templateColumns['report_all_search'] = array(
-				'name' => 'report_all_search',
-				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
 				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
@@ -319,6 +294,33 @@ class ReportCategory extends OActiveRecord
 			$this->templateColumns['slug'] = array(
 				'name' => 'slug',
 				'value' => '$data->slug',
+			);
+			$this->templateColumns['report_i'] = array(
+				'name' => 'report_i',
+				'value' => 'CHtml::link($data->report_i ? $data->report_i : 0, Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'category\'=>$data->cat_id, \'status\'=>0)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => false,
+				'type' => 'raw',
+			);
+			$this->templateColumns['report_resolved_i'] = array(
+				'name' => 'report_resolved_i',
+				'value' => 'CHtml::link($data->report_resolved_i ? $data->report_resolved_i : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id, \'status\'=>1)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => false,
+				'type' => 'raw',
+			);
+			$this->templateColumns['report_all_i'] = array(
+				'name' => 'report_all_i',
+				'value' => 'CHtml::link($data->report_all_i ? $data->report_all_i : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => false,
+				'type' => 'raw',
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
@@ -387,6 +389,9 @@ class ReportCategory extends OActiveRecord
 		parent::afterFind();
 		$this->name_i = $this->title->message;
 		$this->desc_i = $this->description->message;
+		$this->report_i = count($this->reports);
+		$this->report_resolved_i = count($this->reportResolved);
+		$this->report_all_i = count($this->reportAll);
 
 		return true;
 	}

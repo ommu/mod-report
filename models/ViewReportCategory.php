@@ -6,6 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 13:01 WIB
+ * @modified date 20 July 2018, 02:17 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "_report_category".
@@ -14,8 +15,9 @@
  * @property integer $cat_id
  * @property string $reports
  * @property string $report_resolved
- * @property string $report_all
+ * @property integer $report_all
  */
+
 class ViewReportCategory extends OActiveRecord
 {
 	public $gridForbiddenColumn = array();
@@ -56,9 +58,9 @@ class ViewReportCategory extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('reports, report_resolved', 'length', 'max'=>23),
+			array('cat_id, report_all', 'numerical', 'integerOnly'=>true),
 			array('report_all', 'length', 'max'=>21),
+			array('reports, report_resolved', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, reports, report_resolved, report_all', 'safe', 'on'=>'search'),
@@ -106,7 +108,6 @@ class ViewReportCategory extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('t.cat_id', $this->cat_id);
 		$criteria->compare('t.reports', $this->reports);
 		$criteria->compare('t.report_resolved', $this->report_resolved);
@@ -118,7 +119,7 @@ class ViewReportCategory extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -162,7 +163,7 @@ class ViewReportCategory extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -170,15 +171,14 @@ class ViewReportCategory extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }
