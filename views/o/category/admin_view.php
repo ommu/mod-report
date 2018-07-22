@@ -24,7 +24,7 @@
 <?php if(Yii::app()->user->hasFlash('success'))
 	echo $this->flashMessage(Yii::app()->user->getFlash('success'), 'success');?>
 </div>
-<?php //begin.Messages ?>
+<?php //end.Messages ?>
 
 <div class="dialog-content">
 <?php $this->widget('zii.widgets.CDetailView', array(
