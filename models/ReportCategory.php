@@ -132,7 +132,7 @@ class ReportCategory extends OActiveRecord
 	{
 		return array(
 			'cat_id' => Yii::t('attribute', 'Category'),
-			'publish' => Yii::t('attribute', 'Publish'),
+			'publish' => Yii::t('attribute', 'Enable'),
 			'name' => Yii::t('attribute', 'Category'),
 			'desc' => Yii::t('attribute', 'Description'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
