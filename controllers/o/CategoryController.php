@@ -103,7 +103,7 @@ class CategoryController extends Controller
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
-		$this->pageTitle = Yii::t('phrase', 'Categories');
+		$this->pageTitle = Yii::t('phrase', 'Report Categories');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage', array(

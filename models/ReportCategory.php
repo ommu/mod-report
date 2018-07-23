@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 20 July 2018, 02:17 WIB
+ * @modified date 23 July 2018, 10:20 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_category".
@@ -95,6 +95,7 @@ class ReportCategory extends OActiveRecord
 		return array(
 			array('name_i, desc_i', 'required'),
 			array('publish, name, desc, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('publish', 'safe'),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('name_i', 'length', 'max'=>64),
 			array('desc_i', 'length', 'max'=>128),
@@ -217,6 +218,9 @@ class ReportCategory extends OActiveRecord
 		$criteria->compare('description.message', strtolower($this->desc_i), true);
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+		$criteria->compare('view.reports', $this->report_i);
+		$criteria->compare('view.report_resolved', $this->report_resolved_i);
+		$criteria->compare('view.report_all', $this->report_all_i);
 
 		if(!Yii::app()->getRequest()->getParam('ReportCategory_sort'))
 			$criteria->order = 't.cat_id DESC';
@@ -297,29 +301,26 @@ class ReportCategory extends OActiveRecord
 			);
 			$this->templateColumns['report_i'] = array(
 				'name' => 'report_i',
-				'value' => 'CHtml::link($data->report_i ? $data->report_i : 0, Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'category\'=>$data->cat_id, \'status\'=>0)))',
+				'value' => 'CHtml::link($data->view->reports ? $data->view->reports : 0, Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'category\'=>$data->cat_id, \'status\'=>0)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['report_resolved_i'] = array(
 				'name' => 'report_resolved_i',
-				'value' => 'CHtml::link($data->report_resolved_i ? $data->report_resolved_i : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id, \'status\'=>1)))',
+				'value' => 'CHtml::link($data->view->report_resolved ? $data->view->report_resolved : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id, \'status\'=>1)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['report_all_i'] = array(
 				'name' => 'report_all_i',
-				'value' => 'CHtml::link($data->report_all_i ? $data->report_all_i : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id)))',
+				'value' => 'CHtml::link($data->view->report_all ? $data->view->report_all : 0, Yii::app()->controller->createUrl("o/admin/manage", array(\'category\'=>$data->cat_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => false,
 				'type' => 'raw',
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {
@@ -389,9 +390,6 @@ class ReportCategory extends OActiveRecord
 		parent::afterFind();
 		$this->name_i = $this->title->message;
 		$this->desc_i = $this->description->message;
-		$this->report_i = count($this->reports);
-		$this->report_resolved_i = count($this->reportResolved);
-		$this->report_all_i = count($this->reportAll);
 
 		return true;
 	}
