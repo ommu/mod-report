@@ -9,11 +9,10 @@
  * TOC :
  *	Index
  *	Manage
- *	Add
  *	Edit
  *	View
- *	Runaction
  *	Delete
+ *	Runaction
  *	Publish
  *
  *	LoadModel
@@ -23,7 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 23 July 2018, 12:51 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -73,7 +72,7 @@ class CommentController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','edit','view','runaction','delete','publish'),
+				'actions'=>array('index','manage','edit','view','delete','runaction','publish'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -82,7 +81,7 @@ class CommentController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -98,9 +97,9 @@ class CommentController extends Controller
 	{
 		$model=new ReportComment('search');
 		$model->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportComment')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('ReportComment');
-		}
+		$ReportComment = Yii::app()->getRequest()->getParam('ReportComment');
+		if($ReportComment)
+			$model->attributes=$ReportComment;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
@@ -120,56 +119,6 @@ class CommentController extends Controller
 		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
-		));
-	}
-	
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionAdd() 
-	{
-		$model=new ReportComment;
-
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		if(isset($_POST['ReportComment'])) {
-			$model->attributes=$_POST['ReportComment'];
-
-			$jsonError = CActiveForm::validate($model);
-			if(strlen($jsonError) > 2) {
-				echo $jsonError;
-
-			} else {
-				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-					if($model->save()) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-report-comment',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report comment success created.').'</strong></div>',
-						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report comment success created.'));
-						$this->redirect(array('manage'));
-						*/
-					} else
-						print_r($model->getErrors());
-				}
-			}
-			Yii::app()->end();
-		}
-		
-		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-		$this->dialogWidth = 600;
-
-		$this->pageTitle = Yii::t('phrase', 'Create Comment');
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_add', array(
-			'model'=>$model,
 		));
 	}
 
@@ -201,29 +150,25 @@ class CommentController extends Controller
 							'id' => 'partial-report-comment',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report comment success updated.').'</strong></div>',
 						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report comment success updated.'));
-						$this->redirect(array('manage'));
-						*/
 					} else
 						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
 		}
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Update Comment: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Update Comment: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit', array(
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -231,53 +176,17 @@ class CommentController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Detail Comment: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Detail Comment: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view', array(
 			'model'=>$model,
 		));
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionRunaction() {
-		$id       = $_POST['trash_id'];
-		$criteria = null;
-		$actions  = Yii::app()->getRequest()->getParam('action');
-
-		if(count($id) > 0) {
-			$criteria = new CDbCriteria;
-			$criteria->addInCondition('comment_id', $id);
-
-			if($actions == 'publish') {
-				ReportComment::model()->updateAll(array(
-					'publish' => 1,
-				),$criteria);
-			} elseif($actions == 'unpublish') {
-				ReportComment::model()->updateAll(array(
-					'publish' => 0,
-				),$criteria);
-			} elseif($actions == 'trash') {
-				ReportComment::model()->updateAll(array(
-					'publish' => 2,
-				),$criteria);
-			} elseif($actions == 'delete') {
-				ReportComment::model()->deleteAll($criteria);
-			}
-		}
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!Yii::app()->getRequest()->getParam('ajax')) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
-		}
 	}
 
 	/**
@@ -301,10 +210,6 @@ class CommentController extends Controller
 					'id' => 'partial-report-comment',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report comment success deleted.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report comment success deleted.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -313,27 +218,61 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Comment: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete Comment: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionRunaction() 
+	{
+		$id       = $_POST['trash_id'];
+		$criteria = null;
+		$actions  = Yii::app()->getRequest()->getParam('action');
+
+		if(count($id) > 0) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('comment_id', $id);
+
+			if($actions == 'publish') {
+				ReportComment::model()->updateAll(array(
+					'publish' => 1,
+				), $criteria);
+			} elseif($actions == 'unpublish') {
+				ReportComment::model()->updateAll(array(
+					'publish' => 0,
+				), $criteria);
+			} elseif($actions == 'trash') {
+				ReportComment::model()->updateAll(array(
+					'publish' => 2,
+				), $criteria);
+			} elseif($actions == 'delete') {
+				ReportComment::model()->deleteAll($criteria);
+			}
+		}
+
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!Yii::app()->getRequest()->getParam('ajax'))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
+	}
+
+	/**
+	 * Publish a particular model.
+	 * If publish is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionPublish($id) 
 	{
 		$model=$this->loadModel($id);
-		
 		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
 		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			//change value active or publish
+			// we only allow publish via POST request
 			$model->publish = $replace;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -344,10 +283,6 @@ class CommentController extends Controller
 					'id' => 'partial-report-comment',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report comment success updated.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report comment success updated.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -356,7 +291,7 @@ class CommentController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', '{title} Comment: {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', '{title} Comment: {report_id}', array('{title}'=>$title, '{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_publish', array(
@@ -364,7 +299,7 @@ class CommentController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -389,4 +324,5 @@ class CommentController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

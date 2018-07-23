@@ -9,7 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 23 July 2018, 12:51 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -19,18 +19,20 @@
 	'id'=>'report-comment-form',
 	'enableAjaxValidation'=>true,
 	/*
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+		'on_post' => '',
+	),
 	'enableClientValidation'=>true,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
-	),
-	'htmlOptions' => array(
-		'enctype' => 'multipart/form-data',
 	),
 	*/
 )); ?>
 
 <div class="dialog-content">
 	<fieldset>
+
 		<?php //begin.Messages ?>
 		<div id="ajax-message">
 			<?php echo $form->errorSummary($model); ?>
@@ -40,35 +42,23 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'report_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model, 'report_id', array('maxlength'=>11, 'class'=>'form-control')); ?>
+				<?php echo $form->textField($model, 'report_id', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'report_id'); ?>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<?php echo $form->labelEx($model, 'user_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model, 'user_id', array('class'=>'form-control')); ?>
+				<?php echo $form->error($model, 'user_id'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'comment_text', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php //echo $form->textArea($model, 'comment_text', array('rows'=>6, 'cols'=>50, 'class'=>'form-control'));
-				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
-					'model'=>$model,
-					'attribute'=>'comment_text',
-					'options'=>array(
-						'buttons'=>array(
-							'html', 'formatting', '|', 
-							'bold', 'italic', 'deleted', '|',
-							'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-							'link', '|',
-						),
-					),
-					'plugins' => array(
-						'fontcolor' => array('js' => array('fontcolor.js')),
-						'table' => array('js' => array('table.js')),
-						'fullscreen' => array('js' => array('fullscreen.js')),
-					),
-					'htmlOptions'=>array(
-						'class' => 'form-control',
-					),
-				)); ?>
+				<?php echo $form->textArea($model, 'comment_text', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'comment_text'); ?>
 			</div>
 		</div>

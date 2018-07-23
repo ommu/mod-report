@@ -37,7 +37,6 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_date'); ?>
-			
 			<?php echo $this->filterDatepicker($model, 'creation_date', false); ?>
 		</li>
 

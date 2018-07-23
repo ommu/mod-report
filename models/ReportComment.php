@@ -6,20 +6,20 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
- * @modified date 18 January 2018, 00:31 WIB
+ * @modified date 23 July 2018, 10:13 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_comment".
  *
  * The followings are the available columns in table 'ommu_report_comment':
- * @property string $comment_id
+ * @property integer $comment_id
  * @property integer $publish
- * @property string $report_id
- * @property string $user_id
+ * @property integer $report_id
+ * @property integer $user_id
  * @property string $comment_text
  * @property string $creation_date
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  * @property string $updated_date
  *
  * The followings are the available model relations:
@@ -27,6 +27,7 @@
  * @property Users $user
  * @property Users $modified
  */
+
 class ReportComment extends OActiveRecord
 {
 	use GridViewTrait;
@@ -67,10 +68,11 @@ class ReportComment extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, user_id, comment_text', 'required'),
-			array('publish', 'numerical', 'integerOnly'=>true),
+			array('report_id, comment_text', 'required'),
+			array('publish, report_id, user_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('publish, user_id', 'safe'),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
-			array('', 'safe'),
+			// array('creation_date, modified_date, updated_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('comment_id, publish, report_id, user_id, comment_text, creation_date, modified_date, modified_id, updated_date,
@@ -131,20 +133,18 @@ class ReportComment extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'report' => array(
-				'alias'=>'report',
-				'select'=>'cat_id, report_url, report_body'
+				'alias' => 'report',
+				'select' => 'cat_id, report_url, report_body',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname'
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
@@ -170,9 +170,9 @@ class ReportComment extends OActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
 
-		$criteria->compare('report.cat_id', $this->category_search);
-		$criteria->compare('report.report_body', strtolower($this->report_search), true);
-		$criteria->compare('user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('report.cat_id', $this->category_search);			//report.category.title.message
+		$criteria->compare('report.report_body', strtolower($this->report_search), true);			//report.report_body
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);			//user.displayname
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('ReportComment_sort'))
@@ -181,7 +181,7 @@ class ReportComment extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -208,7 +208,7 @@ class ReportComment extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->report->category->title->message',
-					'filter'=> ReportCategory::getCategory(),
+					'filter' => ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['report_search'] = array(
@@ -260,6 +260,7 @@ class ReportComment extends OActiveRecord
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->comment_id)), $data->publish)',
+					//'value' => '$data->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -272,7 +273,7 @@ class ReportComment extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -280,10 +281,10 @@ class ReportComment extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -298,11 +299,10 @@ class ReportComment extends OActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->user_id = Yii::app()->user->id;
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			else
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 		}
 		return true;
 	}
-
 }

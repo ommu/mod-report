@@ -9,13 +9,14 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 23 July 2018, 12:51 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 	$this->breadcrumbs=array(
 		'Report Comments'=>array('manage'),
+		$model->report->report_body=>array('view','id'=>$model->comment_id),
 		'Delete',
 	);
 ?>
@@ -23,7 +24,6 @@
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'report-comment-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
 	<div class="dialog-content">

@@ -9,7 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:01 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 23 July 2018, 12:46 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -37,7 +37,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_ip'); ?>
-			<?php echo $form->textField($model, 'report_ip', array('class'=>'form-control')); ?>
+			<?php echo $form->textField($model, 'report_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">
