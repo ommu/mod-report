@@ -10,8 +10,8 @@
  *	Index
  *	Manage
  *	View
- *	Runaction
  *	Delete
+ *	Runaction
  *	Publish
  *
  *	LoadModel
@@ -21,7 +21,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:26 WIB
- * @modified date 18 January 2018, 13:39 WIB
+ * @modified date 23 July 2018, 11:01 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','view','runaction','delete','publish'),
+				'actions'=>array('index','manage','view','delete','runaction','publish'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -80,7 +80,7 @@ class UserController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -96,9 +96,9 @@ class UserController extends Controller
 	{
 		$model=new ReportUser('search');
 		$model->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportUser')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('ReportUser');
-		}
+		$ReportUser = Yii::app()->getRequest()->getParam('ReportUser');
+		if($ReportUser)
+			$model->attributes=$ReportUser;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
@@ -120,7 +120,7 @@ class UserController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -128,53 +128,17 @@ class UserController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Detail User: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Detail User: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view', array(
 			'model'=>$model,
 		));
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionRunaction() {
-		$id       = $_POST['trash_id'];
-		$criteria = null;
-		$actions  = Yii::app()->getRequest()->getParam('action');
-
-		if(count($id) > 0) {
-			$criteria = new CDbCriteria;
-			$criteria->addInCondition('id', $id);
-
-			if($actions == 'publish') {
-				ReportUser::model()->updateAll(array(
-					'publish' => 1,
-				),$criteria);
-			} elseif($actions == 'unpublish') {
-				ReportUser::model()->updateAll(array(
-					'publish' => 0,
-				),$criteria);
-			} elseif($actions == 'trash') {
-				ReportUser::model()->updateAll(array(
-					'publish' => 2,
-				),$criteria);
-			} elseif($actions == 'delete') {
-				ReportUser::model()->deleteAll($criteria);
-			}
-		}
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!Yii::app()->getRequest()->getParam('ajax')) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
-		}
 	}
 
 	/**
@@ -198,10 +162,6 @@ class UserController extends Controller
 					'id' => 'partial-report-user',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report user success deleted.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report user success deleted.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -210,27 +170,61 @@ class UserController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete User: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete User: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionRunaction() 
+	{
+		$id       = $_POST['trash_id'];
+		$criteria = null;
+		$actions  = Yii::app()->getRequest()->getParam('action');
+
+		if(count($id) > 0) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('id', $id);
+
+			if($actions == 'publish') {
+				ReportUser::model()->updateAll(array(
+					'publish' => 1,
+				), $criteria);
+			} elseif($actions == 'unpublish') {
+				ReportUser::model()->updateAll(array(
+					'publish' => 0,
+				), $criteria);
+			} elseif($actions == 'trash') {
+				ReportUser::model()->updateAll(array(
+					'publish' => 2,
+				), $criteria);
+			} elseif($actions == 'delete') {
+				ReportUser::model()->deleteAll($criteria);
+			}
+		}
+
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!Yii::app()->getRequest()->getParam('ajax'))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
+	}
+
+	/**
+	 * Publish a particular model.
+	 * If publish is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionPublish($id) 
 	{
 		$model=$this->loadModel($id);
-		
 		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
 		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			//change value active or publish
+			// we only allow publish via POST request
 			$model->publish = $replace;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -241,10 +235,6 @@ class UserController extends Controller
 					'id' => 'partial-report-user',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report user success updated.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report user success updated.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -253,7 +243,7 @@ class UserController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', '{title} User: Report {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', '{title} User: {report_id}', array('{title}'=>$title, '{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_publish', array(
@@ -261,7 +251,7 @@ class UserController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -286,4 +276,5 @@ class UserController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }
