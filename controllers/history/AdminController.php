@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	View
  *	Delete
  *
  *	LoadModel
@@ -18,7 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:01 WIB
- * @modified date 18 January 2018, 13:37 WIB
+ * @modified date 23 July 2018, 12:46 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -68,7 +69,7 @@ class AdminController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','delete'),
+				'actions'=>array('index','manage','view','delete'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -77,7 +78,7 @@ class AdminController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -93,9 +94,9 @@ class AdminController extends Controller
 	{
 		$model=new ReportHistory('search');
 		$model->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportHistory')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('ReportHistory');
-		}
+		$ReportHistory = Yii::app()->getRequest()->getParam('ReportHistory');
+		if($ReportHistory)
+			$model->attributes=$ReportHistory;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
@@ -119,6 +120,26 @@ class AdminController extends Controller
 	}
 
 	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Detail History: {report_id}', array('{report_id}'=>$model->report->report_body));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view', array(
+			'model'=>$model,
+		));
+	}
+
+	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
@@ -136,10 +157,6 @@ class AdminController extends Controller
 					'id' => 'partial-report-history',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report history success deleted.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report history success deleted.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -148,7 +165,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete History: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete History: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
@@ -178,4 +195,5 @@ class AdminController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

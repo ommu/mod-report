@@ -6,15 +6,15 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 13:47 WIB
- * @modified date 18 January 2018, 00:31 WIB
+ * @modified date 23 July 2018, 10:13 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_history".
  *
  * The followings are the available columns in table 'ommu_report_history':
- * @property string $id
- * @property string $report_id
- * @property string $user_id
+ * @property integer $id
+ * @property integer $report_id
+ * @property integer $user_id
  * @property string $report_date
  * @property string $report_ip
  *
@@ -22,6 +22,7 @@
  * @property Reports $report
  * @property Users $user
  */
+
 class ReportHistory extends OActiveRecord
 {
 	use GridViewTrait;
@@ -61,12 +62,14 @@ class ReportHistory extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, user_id, report_date, report_ip', 'required'),
+			array('report_id, report_date, report_ip', 'required'),
+			array('report_id, user_id', 'numerical', 'integerOnly'=>true),
+			array('user_id', 'safe'),
 			array('report_id, user_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_id, user_id, report_date, report_ip, 
+			array('id, report_id, user_id, report_date, report_ip,
 				category_search, report_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -118,19 +121,17 @@ class ReportHistory extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'report' => array(
-				'alias'=>'report',
-				'select'=>'cat_id, report_url, report_body'
+				'alias' => 'report',
+				'select' => 'cat_id, report_url, report_body',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname'
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 		);
-		
+
 		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
@@ -138,9 +139,9 @@ class ReportHistory extends OActiveRecord
 			$criteria->compare('date(t.report_date)', date('Y-m-d', strtotime($this->report_date)));
 		$criteria->compare('t.report_ip', strtolower($this->report_ip), true);
 
-		$criteria->compare('report.cat_id', $this->category_search);
-		$criteria->compare('report.report_body', strtolower($this->report_search), true);
-		$criteria->compare('user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('report.cat_id', $this->category_search);			//report.category.title.message
+		$criteria->compare('report.report_body', strtolower($this->report_search), true);			//report.report_body
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);			//user.displayname
 
 		if(!Yii::app()->getRequest()->getParam('ReportHistory_sort'))
 			$criteria->order = 't.id DESC';
@@ -148,7 +149,7 @@ class ReportHistory extends OActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -175,7 +176,7 @@ class ReportHistory extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->report->category->title->message',
-					'filter'=> ReportCategory::getCategory(),
+					'filter' => ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['report_search'] = array(
@@ -206,7 +207,7 @@ class ReportHistory extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -214,10 +215,10 @@ class ReportHistory extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -225,4 +226,16 @@ class ReportHistory extends OActiveRecord
 		}
 	}
 
+	/**
+	 * before validate attributes
+	 */
+	protected function beforeValidate() 
+	{
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord)
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+			$this->report_ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return true;
+	}
 }

@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @modified date 18 January 2018, 13:01 WIB
- * @modified date 20 July 2018, 02:17 WIB
+ * @modified date 23 July 2018, 10:20 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "_report_category".
@@ -59,6 +59,7 @@ class ViewReportCategory extends OActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, report_all', 'numerical', 'integerOnly'=>true),
+			array('cat_id', 'safe'),
 			array('report_all', 'length', 'max'=>21),
 			array('reports, report_resolved', 'length', 'max'=>23),
 			// The following rule is used by search().
@@ -85,9 +86,9 @@ class ViewReportCategory extends OActiveRecord
 	{
 		return array(
 			'cat_id' => Yii::t('attribute', 'Category'),
-			'reports' => Yii::t('attribute', 'Report'),
-			'report_resolved' => Yii::t('attribute', 'Resolved'),
-			'report_all' => Yii::t('attribute', 'All'),
+			'reports' => Yii::t('attribute', 'Reports'),
+			'report_resolved' => Yii::t('attribute', 'Report Resolved'),
+			'report_all' => Yii::t('attribute', 'Report All'),
 		);
 	}
 
