@@ -6,27 +6,28 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:24 WIB
- * @modified date 18 January 2018, 00:32 WIB
+ * @modified date 23 July 2018, 10:17 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_status".
  *
  * The followings are the available columns in table 'ommu_report_status':
- * @property string $history_id
+ * @property integer $id
  * @property integer $status
- * @property string $report_id
- * @property string $user_id
+ * @property integer $report_id
+ * @property integer $user_id
  * @property string $report_message
  * @property string $updated_date
  * @property string $updated_ip
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  *
  * The followings are the available model relations:
  * @property Reports $report
  * @property Users $user
  * @property Users $modified
  */
+
 class ReportStatus extends OActiveRecord
 {
 	use GridViewTrait;
@@ -36,7 +37,7 @@ class ReportStatus extends OActiveRecord
 	// Variable Search
 	public $category_search;
 	public $report_search;
-	public $reporter_search;
+	public $user_search;
 	public $modified_search;
 
 	/**
@@ -67,15 +68,16 @@ class ReportStatus extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('status, report_id, user_id, report_message', 'required'),
-			array('status', 'numerical', 'integerOnly'=>true),
+			array('status, report_id, report_message, updated_ip', 'required'),
+			array('status, report_id, user_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('user_id', 'safe'),
 			array('report_id, user_id, modified_id', 'length', 'max'=>11),
 			array('updated_ip', 'length', 'max'=>20),
-			array('updated_ip', 'safe'),
+			// array('updated_date, modified_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('history_id, status, report_id, user_id, report_message, updated_date, updated_ip, modified_date, modified_id,
-				category_search, report_search, reporter_search, modified_search', 'safe', 'on'=>'search'),
+			array('id, status, report_id, user_id, report_message, updated_date, updated_ip, modified_date, modified_id,
+				category_search, report_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,10 +101,10 @@ class ReportStatus extends OActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'history_id' => Yii::t('attribute', 'History'),
-			'status' => Yii::t('attribute', 'Status'),
+			'id' => Yii::t('attribute', 'ID'),
+			'status' => Yii::t('attribute', 'Resolved'),
 			'report_id' => Yii::t('attribute', 'Report'),
-			'user_id' => Yii::t('attribute', 'Reporter'),
+			'user_id' => Yii::t('attribute', 'User'),
 			'report_message' => Yii::t('attribute', 'Report Message'),
 			'updated_date' => Yii::t('attribute', 'Report Date'),
 			'updated_ip' => Yii::t('attribute', 'Report Ip'),
@@ -110,7 +112,7 @@ class ReportStatus extends OActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'category_search' => Yii::t('attribute', 'Category'),
 			'report_search' => Yii::t('attribute', 'Report'),
-			'reporter_search' => Yii::t('attribute', 'Reporter'),
+			'user_search' => Yii::t('attribute', 'User'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
@@ -132,24 +134,22 @@ class ReportStatus extends OActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		// Custom Search
 		$criteria->with = array(
 			'report' => array(
-				'alias'=>'report',
-				'select'=>'cat_id, report_url, report_body'
+				'alias' => 'report',
+				'select' => 'cat_id, report_url, report_body'
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname'
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
-		$criteria->compare('t.history_id', $this->history_id);
+		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.status', Yii::app()->getRequest()->getParam('status') ? Yii::app()->getRequest()->getParam('status') : $this->status);
 		$criteria->compare('t.report_id', Yii::app()->getRequest()->getParam('report') ? Yii::app()->getRequest()->getParam('report') : $this->report_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
@@ -161,18 +161,18 @@ class ReportStatus extends OActiveRecord
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 
-		$criteria->compare('report.cat_id', $this->category_search);
-		$criteria->compare('report.report_body', strtolower($this->report_search), true);
-		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);
+		$criteria->compare('report.cat_id', $this->category_search);			//report.category.title.message
+		$criteria->compare('report.report_body', strtolower($this->report_search), true);			//report.report_body
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);			//user.displayname
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('ReportStatus_sort'))
-			$criteria->order = 't.history_id DESC';
+			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
 	}
@@ -199,7 +199,7 @@ class ReportStatus extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->report->category->title->message',
-					'filter'=> ReportCategory::getCategory(),
+					'filter' => ReportCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['report_search'] = array(
@@ -208,14 +208,15 @@ class ReportStatus extends OActiveRecord
 				);
 			}
 			if(!Yii::app()->getRequest()->getParam('user')) {
-				$this->templateColumns['reporter_search'] = array(
-					'name' => 'reporter_search',
+				$this->templateColumns['user_search'] = array(
+					'name' => 'user_search',
 					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
 			$this->templateColumns['report_message'] = array(
 				'name' => 'report_message',
 				'value' => '$data->report_message',
+				'type' => 'raw',
 			);
 			$this->templateColumns['updated_date'] = array(
 				'name' => 'updated_date',
@@ -245,6 +246,7 @@ class ReportStatus extends OActiveRecord
 			}
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
+				//'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\', array(\'id\'=>$data->id)), $data->status, \'Resolved,Unresolved\')',
 				'value' => '$data->status == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
@@ -257,7 +259,7 @@ class ReportStatus extends OActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -265,10 +267,10 @@ class ReportStatus extends OActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -282,10 +284,12 @@ class ReportStatus extends OActiveRecord
 	protected function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if(!$this->isNewRecord)
+			if($this->isNewRecord)
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+			else
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
 	}
-
 }

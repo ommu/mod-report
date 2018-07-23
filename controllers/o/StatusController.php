@@ -19,7 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 10:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ class StatusController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -94,9 +94,9 @@ class StatusController extends Controller
 	{
 		$model=new ReportStatus('search');
 		$model->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportStatus')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('ReportStatus');
-		}
+		$ReportStatus = Yii::app()->getRequest()->getParam('ReportStatus');
+		if($ReportStatus)
+			$model->attributes=$ReportStatus;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
@@ -118,7 +118,7 @@ class StatusController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -126,12 +126,12 @@ class StatusController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'Detail Status: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Detail Status: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view', array(
@@ -157,10 +157,6 @@ class StatusController extends Controller
 					'id' => 'partial-report-status',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report status success deleted.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report status success deleted.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -169,7 +165,7 @@ class StatusController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Status: Report {report_body}', array('{report_body}'=>$model->report->report_body));
+		$this->pageTitle = Yii::t('phrase', 'Delete Status: {report_id}', array('{report_id}'=>$model->report->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
@@ -199,4 +195,5 @@ class StatusController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

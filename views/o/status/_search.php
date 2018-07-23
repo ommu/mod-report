@@ -9,7 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 11:58 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -26,8 +26,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('reporter_search'); ?>
-			<?php echo $form->textField($model, 'reporter_search', array('class'=>'form-control')); ?>
+			<?php echo $model->getAttributeLabel('user_search'); ?>
+			<?php echo $form->textField($model, 'user_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -42,7 +42,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('updated_ip'); ?>
-			<?php echo $form->textField($model, 'updated_ip', array('class'=>'form-control')); ?>
+			<?php echo $form->textField($model, 'updated_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -57,7 +57,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('status'); ?>
-			<?php echo $form->dropDownList($model, 'status', array('0'=>Yii::t('phrase', 'Unresolved'), '1'=>Yii::t('phrase', 'Resolved')), array('class'=>'form-control')); ?>
+			<?php echo $form->dropDownList($model, 'status', array('1'=>Yii::t('phrase', 'Resolved'), '0'=>Yii::t('phrase', 'Unresolved')), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">
