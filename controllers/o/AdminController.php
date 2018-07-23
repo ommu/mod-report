@@ -13,7 +13,7 @@
  *	Edit
  *	View
  *	Delete
- *	Resolve
+ *	Status
  *
  *	LoadModel
  *	performAjaxValidation
@@ -21,7 +21,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 14:39 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class AdminController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','edit','view','delete','resolve'),
+				'actions'=>array('index','manage','add','edit','view','delete','status'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -80,7 +80,7 @@ class AdminController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -96,9 +96,9 @@ class AdminController extends Controller
 	{
 		$model=new Reports('search');
 		$model->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('Reports')) {
-			$model->attributes=Yii::app()->getRequest()->getParam('Reports');
-		}
+		$Reports = Yii::app()->getRequest()->getParam('Reports');
+		if($Reports)
+			$model->attributes=$Reports;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
@@ -116,7 +116,7 @@ class AdminController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -134,7 +134,7 @@ class AdminController extends Controller
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
-				
+
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
@@ -144,17 +144,13 @@ class AdminController extends Controller
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success created.').'</strong></div>',
 						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success created.'));
-						$this->redirect(array('manage'));
-						*/
 					} else
 						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
 		}
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
@@ -181,11 +177,13 @@ class AdminController extends Controller
 
 		if(isset($_POST['Reports'])) {
 			$model->attributes=$_POST['Reports'];
+			if($model->status != $model->old_status_i)
+				$model->scenario = 'resolveForm';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
-				
+
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
@@ -195,17 +193,13 @@ class AdminController extends Controller
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
 						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success updated.'));
-						$this->redirect(array('manage'));
-						*/
 					} else
 						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
 		}
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
@@ -225,7 +219,7 @@ class AdminController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
@@ -256,10 +250,6 @@ class AdminController extends Controller
 					'id' => 'partial-reports',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success deleted.').'</strong></div>',
 				));
-				/*
-				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success deleted.'));
-				$this->redirect(array('manage'));
-				*/
 			}
 			Yii::app()->end();
 		}
@@ -275,14 +265,13 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Status a particular model.
+	 * If status is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionResolve($id) 
+	public function actionStatus($id) 
 	{
 		$model=$this->loadModel($id);
-		
 		$title = $model->status == 1 ? Yii::t('phrase', 'Unresolved') : Yii::t('phrase', 'Resolved');
 		$replace = $model->status == 1 ? 0 : 1;
 
@@ -294,6 +283,7 @@ class AdminController extends Controller
 			$model->scenario = 'resolveForm';
 
 			$model->status = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -301,17 +291,13 @@ class AdminController extends Controller
 				
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-					if($model->save()) {
+					if($model->update()) {
 						echo CJSON::encode(array(
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-reports',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report success updated.').'</strong></div>',
 						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report success updated.'));
-						$this->redirect(array('manage'));
-						*/
 					} else
 						print_r($model->getErrors());
 				}
@@ -326,12 +312,12 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', '{title} Report: {report_body}', array('{title}'=>$title, '{report_body}'=>$model->report_body));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_resolve', array(
+		$this->render('admin_status', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -356,4 +342,5 @@ class AdminController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

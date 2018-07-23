@@ -8,7 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 14:39 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -21,32 +21,33 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('cat_id'); ?>
-			<?php echo $form->textField($model, 'cat_id', array('class'=>'form-control')); ?>
+			<?php $category = ReportCategory::getCategory();
+			echo $form->dropDownList($model, 'cat_id', $category, array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('reporter_search'); ?>
-			<?php echo $form->textField($model, 'reporter_search', array('class'=>'form-control')); ?>
+			<?php echo $model->getAttributeLabel('user_search'); ?>
+			<?php echo $form->textField($model, 'user_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_url'); ?>
-			<?php echo $form->textField($model, 'report_url'); ?>
+			<?php echo $form->textField($model, 'report_url', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_body'); ?>
-			<?php echo $form->textField($model, 'report_body'); ?>
+			<?php echo $form->textField($model, 'report_body', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_message'); ?>
-			<?php echo $form->textField($model, 'report_message'); ?>
+			<?php echo $form->textField($model, 'report_message', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('reports'); ?>
-			<?php echo $form->textField($model, 'reports', array('class'=>'form-control')); ?>
+			<?php echo $form->textField($model, 'reports', array('maxlength'=>11, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -56,7 +57,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('report_ip'); ?>
-			<?php echo $form->textField($model, 'report_ip', array('class'=>'form-control')); ?>
+			<?php echo $form->textField($model, 'report_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
@@ -76,7 +77,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('status'); ?>
-			<?php echo $form->dropDownList($model, 'status', array('0'=>Yii::t('phrase', 'Unresolved'), '1'=>Yii::t('phrase', 'Resolved')), array('class'=>'form-control')); ?>
+			<?php echo $form->dropDownList($model, 'status', array('1'=>Yii::t('phrase', 'Resolved'), '0'=>Yii::t('phrase', 'Unresolved')), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">

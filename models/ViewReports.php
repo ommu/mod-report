@@ -6,16 +6,17 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 13:14 WIB
- * @modified date 16 July 2018, 14:11 WIB
+ * @modified date 23 July 2018, 09:00 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "_reports".
  *
  * The followings are the available columns in table '_reports':
  * @property integer $report_id
- * @property string $history_resolved
- * @property string $history_unresolved
- * @property integer $history_all
+ * @property integer $histories
+ * @property string $resolved
+ * @property string $unresolved
+ * @property integer $statuses
  * @property string $comments
  * @property integer $comment_all
  * @property string $users
@@ -62,13 +63,13 @@ class ViewReports extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, history_all, comment_all, user_all', 'numerical', 'integerOnly'=>true),
+			array('report_id, histories, statuses, comment_all, user_all', 'numerical', 'integerOnly'=>true),
 			array('report_id', 'length', 'max'=>11),
-			array('history_all, comment_all, user_all', 'length', 'max'=>21),
-			array('history_resolved, history_unresolved, comments, users', 'length', 'max'=>23),
+			array('histories, statuses, comment_all, user_all', 'length', 'max'=>21),
+			array('resolved, unresolved, comments, users', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('report_id, history_resolved, history_unresolved, history_all, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
+			array('report_id, histories, resolved, unresolved, statuses, comments, comment_all, users, user_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -90,9 +91,10 @@ class ViewReports extends OActiveRecord
 	{
 		return array(
 			'report_id' => Yii::t('attribute', 'Report'),
-			'history_resolved' => Yii::t('attribute', 'History Resolved'),
-			'history_unresolved' => Yii::t('attribute', 'History Unresolved'),
-			'history_all' => Yii::t('attribute', 'History All'),
+			'histories' => Yii::t('attribute', 'Histories'),
+			'resolved' => Yii::t('attribute', 'Resolved'),
+			'unresolved' => Yii::t('attribute', 'Unresolved'),
+			'statuses' => Yii::t('attribute', 'Statuses'),
 			'comments' => Yii::t('attribute', 'Comments'),
 			'comment_all' => Yii::t('attribute', 'Comment All'),
 			'users' => Yii::t('attribute', 'Users'),
@@ -118,9 +120,10 @@ class ViewReports extends OActiveRecord
 
 		$criteria=new CDbCriteria;
 		$criteria->compare('t.report_id', $this->report_id);
-		$criteria->compare('t.history_resolved', $this->history_resolved);
-		$criteria->compare('t.history_unresolved', $this->history_unresolved);
-		$criteria->compare('t.history_all', $this->history_all);
+		$criteria->compare('t.histories', $this->histories);
+		$criteria->compare('t.resolved', $this->resolved);
+		$criteria->compare('t.unresolved', $this->unresolved);
+		$criteria->compare('t.statuses', $this->statuses);
 		$criteria->compare('t.comments', $this->comments);
 		$criteria->compare('t.comment_all', $this->comment_all);
 		$criteria->compare('t.users', $this->users);
@@ -159,17 +162,21 @@ class ViewReports extends OActiveRecord
 				'name' => 'report_id',
 				'value' => '$data->report_id',
 			);
-			$this->templateColumns['history_resolved'] = array(
-				'name' => 'history_resolved',
-				'value' => '$data->history_resolved',
+			$this->templateColumns['histories'] = array(
+				'name' => 'histories',
+				'value' => '$data->histories',
 			);
-			$this->templateColumns['history_unresolved'] = array(
-				'name' => 'history_unresolved',
-				'value' => '$data->history_unresolved',
+			$this->templateColumns['resolved'] = array(
+				'name' => 'resolved',
+				'value' => '$data->resolved',
 			);
-			$this->templateColumns['history_all'] = array(
-				'name' => 'history_all',
-				'value' => '$data->history_all',
+			$this->templateColumns['unresolved'] = array(
+				'name' => 'unresolved',
+				'value' => '$data->unresolved',
+			);
+			$this->templateColumns['statuses'] = array(
+				'name' => 'statuses',
+				'value' => '$data->statuses',
 			);
 			$this->templateColumns['comments'] = array(
 				'name' => 'comments',

@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Reports'=>array('manage'),
-		$model->report_id=>array('view','id'=>$model->report_id),
+		$model->report_body=>array('view','id'=>$model->report_id),
 		'Update',
 	);
 ?>

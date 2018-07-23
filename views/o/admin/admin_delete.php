@@ -8,13 +8,14 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 14:39 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 	$this->breadcrumbs=array(
 		'Reports'=>array('manage'),
+		$model->report_body=>array('view','id'=>$model->report_id),
 		'Delete',
 	);
 ?>
@@ -22,7 +23,6 @@
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'reports-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
 	<div class="dialog-content">

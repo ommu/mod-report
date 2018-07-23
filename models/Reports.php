@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 13 July 2018, 10:45 WIB
+ * @modified date 23 July 2018, 09:50 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_reports".
@@ -42,18 +42,16 @@ class Reports extends OActiveRecord
 {
 	use GridViewTrait;
 
-	public $gridForbiddenColumn = array('report_url','report_message','report_ip','modified_date','modified_search','updated_date','status_search','comment_search','user_search');
+	public $gridForbiddenColumn = array('report_url','report_message','report_ip','modified_date','modified_search','updated_date','comment_i','status_i','user_i');
+	public $old_status_i;
 	public $comment_i;
 	public $history_i;
 	public $status_i;
 	public $user_i;
 
 	// Variable Search
-	public $reporter_search;
-	public $modified_search;
-	public $status_search;
-	public $comment_search;
 	public $user_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -83,17 +81,18 @@ class Reports extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('cat_id, report_url, report_body', 'required'),
+			array('report_url, report_body', 'required'),
 			array('report_message', 'required', 'on'=>'resolveForm'),
-			array('status, cat_id, reports, user_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('status, cat_id, user_id, reports, modified_id, old_status_i', 'numerical', 'integerOnly'=>true),
+			array('status, cat_id, user_id, reports, report_message, report_ip, old_status_i', 'safe'),
 			array('cat_id', 'length', 'max'=>5),
 			array('user_id, modified_id', 'length', 'max'=>11),
 			array('report_ip', 'length', 'max'=>20),
-			array('user_id, reports, report_message, report_ip', 'safe'),
+			// array('report_date, modified_date, updated_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('report_id, status, cat_id, user_id, report_url, report_body, report_message, reports, report_date, report_ip, modified_date, modified_id, updated_date,
-				reporter_search, modified_search, status_search, comment_search, user_search', 'safe', 'on'=>'search'),
+				comment_i, history_i, status_i, user_i, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -125,7 +124,7 @@ class Reports extends OActiveRecord
 	{
 		return array(
 			'report_id' => Yii::t('attribute', 'Report'),
-			'status' => Yii::t('attribute', 'Status'),
+			'status' => Yii::t('attribute', 'Resolved'),
 			'cat_id' => Yii::t('attribute', 'Category'),
 			'user_id' => Yii::t('attribute', 'User'),
 			'report_url' => Yii::t('attribute', 'Report URL'),
@@ -137,11 +136,13 @@ class Reports extends OActiveRecord
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
-			'reporter_search' => Yii::t('attribute', 'Reporter'),
+			'old_status_i' => Yii::t('attribute', 'Old Status'),
+			'comment_i' => Yii::t('attribute', 'Comments'),
+			'history_i' => Yii::t('attribute', 'Histories'),
+			'status_i' => Yii::t('attribute', 'Statuses'),
+			'user_i' => Yii::t('attribute', 'Users'),
+			'user_search' => Yii::t('attribute', 'User'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
-			'status_search' => Yii::t('attribute', 'Status'),
-			'comment_search' => Yii::t('attribute', 'Comments'),
-			'user_search' => Yii::t('attribute', 'Users'),
 		);
 	}
 
@@ -177,7 +178,7 @@ class Reports extends OActiveRecord
 		);
 
 		$criteria->compare('t.report_id', $this->report_id);
-		$criteria->compare('t.status', $this->status);
+		$criteria->compare('t.status', Yii::app()->getRequest()->getParam('status') ? Yii::app()->getRequest()->getParam('status') : $this->status);
 		$criteria->compare('t.cat_id', Yii::app()->getRequest()->getParam('category') ? Yii::app()->getRequest()->getParam('category') : $this->cat_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.report_url', strtolower($this->report_url), true);
@@ -193,11 +194,12 @@ class Reports extends OActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
 
-		$criteria->compare('user.displayname', strtolower($this->reporter_search), true);			//user.displayname
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);			//user.displayname
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
-		$criteria->compare('view.history_all', $this->status_search);
-		$criteria->compare('view.comments', $this->comment_search);
-		$criteria->compare('view.users', $this->user_search);
+		$criteria->compare('view.comments', $this->comment_i);
+		$criteria->compare('view.histories', $this->history_i);
+		$criteria->compare('view.statuses', $this->status_i);
+		$criteria->compare('view.users', $this->user_i);
 
 		if(!Yii::app()->getRequest()->getParam('Reports_sort'))
 			$criteria->order = 't.report_id DESC';
@@ -232,36 +234,26 @@ class Reports extends OActiveRecord
 				$this->templateColumns['cat_id'] = array(
 					'name' => 'cat_id',
 					'value' => '$data->category->title->message ? $data->category->title->message : \'-\'',
-					'filter'=> ReportCategory::getCategory(),
+					'filter' => ReportCategory::getCategory(),
 				);
 			}
 			if(!Yii::app()->getRequest()->getParam('user')) {
-				$this->templateColumns['reporter_search'] = array(
-					'name' => 'reporter_search',
+				$this->templateColumns['user_search'] = array(
+					'name' => 'user_search',
 					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
 			$this->templateColumns['report_url'] = array(
 				'name' => 'report_url',
 				'value' => '$data->report_url',
-				'type' => 'raw',
 			);
 			$this->templateColumns['report_body'] = array(
 				'name' => 'report_body',
 				'value' => '$data->report_body',
-				'type' => 'raw',
 			);
 			$this->templateColumns['report_message'] = array(
 				'name' => 'report_message',
 				'value' => '$data->report_message',
-				'type' => 'raw',
-			);
-			$this->templateColumns['reports'] = array(
-				'name' => 'reports',
-				'value' => 'CHtml::link($data->reports ? $data->reports : 0, Yii::app()->controller->createurl("history/admin/manage", array(\'report\'=>$data->report_id,\'status\'=>0)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
 				'type' => 'raw',
 			);
 			$this->templateColumns['report_date'] = array(
@@ -271,30 +263,6 @@ class Reports extends OActiveRecord
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'report_date'),
-			);
-			$this->templateColumns['status_search'] = array(
-				'name' => 'status_search',
-				'value' => 'CHtml::link($data->view->history_all ? $data->view->history_all : 0, Yii::app()->controller->createurl("o/status/manage", array(\'report\'=>$data->report_id)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->templateColumns['comment_search'] = array(
-				'name' => 'comment_search',
-				'value' => 'CHtml::link($data->view->comments ? $data->view->comments : 0, Yii::app()->controller->createurl("o/comment/manage", array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->templateColumns['user_search'] = array(
-				'name' => 'user_search',
-				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, Yii::app()->controller->createurl("o/user/manage", array(\'report\'=>$data->report_id,\'type\'=>\'publish\')))',		
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
 			);
 			$this->templateColumns['report_ip'] = array(
 				'name' => 'report_ip',
@@ -321,6 +289,38 @@ class Reports extends OActiveRecord
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'updated_date'),
+			);
+			$this->templateColumns['reports'] = array(
+				'name' => 'reports',
+				'value' => 'CHtml::link($data->reports, Yii::app()->controller->createurl(\'history/admin/manage\', array(\'report\'=>$data->report_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['comment_i'] = array(
+				'name' => 'comment_i',
+				'value' => 'CHtml::link($data->view->comments ? $data->view->comments : 0, Yii::app()->controller->createUrl(\'o/comment/manage\', array(\'report\'=>$data->report_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['status_i'] = array(
+				'name' => 'status_i',
+				'value' => 'CHtml::link($data->view->statuses ? $data->view->statuses : 0, Yii::app()->controller->createUrl(\'o/status/manage\', array(\'report\'=>$data->report_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['user_i'] = array(
+				'name' => 'user_i',
+				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, Yii::app()->controller->createUrl(\'o/user/manage\', array(\'report\'=>$data->report_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
 			);
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
@@ -382,6 +382,17 @@ class Reports extends OActiveRecord
 			$report->report_body = $report_body;
 			$report->save();
 		}
+	}
+
+	/**
+	 * This is invoked when a record is populated with data from a find() call.
+	 */
+	protected function afterFind()
+	{
+		parent::afterFind();
+		$this->old_status_i = $this->status;
+
+		return true;
 	}
 
 	/**
