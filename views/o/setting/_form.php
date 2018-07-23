@@ -9,25 +9,40 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:41 WIB
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 14:08 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
+
+	$cs = Yii::app()->getClientScript();
+$js=<<<EOP
+	$('#ReportSetting_auto_report_i').on('change', function() {
+		var id = $(this).prop('checked');
+		if(id == true) {
+			$('div#auto-report-category').slideDown();
+		} else {
+			$('div#auto-report-category').slideUp();
+		}
+	});
+EOP;
+	$cs->registerScript('auto-report', $js, CClientScript::POS_END);
 ?>
 
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'report-setting-form',
 	'enableAjaxValidation'=>true,
 	/*
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+		'on_post' => '',
+	),
 	'enableClientValidation'=>true,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
-	'htmlOptions' => array(
-		'enctype' => 'multipart/form-data',
-	),
 	*/
 )); ?>
+
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 		<?php echo $form->errorSummary($model); ?>
@@ -54,7 +69,7 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
 				<?php 
@@ -84,15 +99,24 @@
 			</div>
 		</div>
 
-		<div class="form-group row">
+		<div class="form-group row publish">
+			<?php echo $form->labelEx($model, 'auto_report_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model, 'auto_report_i', array('class'=>'form-control')); ?>
+				<?php echo $form->labelEx($model, 'auto_report_i'); ?>
+				<?php echo $form->error($model, 'auto_report_i'); ?>
+			</div>
+		</div>
+
+		<div class="form-group row <?php echo $model->auto_report_cat_id ? '' : 'hide'?>" id="auto-report-category">
 			<?php echo $form->labelEx($model, 'auto_report_cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
-				$category = ReportCategory::getCategory('1');
+				$category = ReportCategory::getCategory(1);
 				if($category != null)
 					echo $form->dropDownList($model, 'auto_report_cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 				else
-					echo $form->dropDownList($model, 'auto_report_cat_id', array('prompt'=>Yii::t('phrase', 'No Parent')), array('class'=>'form-control'));?>
+					echo $form->dropDownList($model, 'auto_report_cat_id', array('prompt'=>''), array('class'=>'form-control'));?>
 				<?php echo $form->error($model, 'auto_report_cat_id'); ?>
 			</div>
 		</div>

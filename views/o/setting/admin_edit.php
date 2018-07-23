@@ -9,14 +9,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:41 WIB
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 14:11 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 	$this->breadcrumbs=array(
-		'Report Settings'=>array('manage'),
-		$model->id=>array('view','id'=>$model->id),
+		'Report Settings'=>array('index'),
 		'Update',
 	);
 ?>
@@ -47,21 +46,21 @@
 						'options' => array(
 							'class' => 'view',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/view", array(\'id\'=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'o/category/view\', array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
 						'label' => Yii::t('phrase', 'Update Report Category'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'update',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/edit", array(\'id\'=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'o/category/edit\', array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
 						'label' => Yii::t('phrase', 'Delete Report Category'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'delete',
 						),
-						'url' => 'Yii::app()->controller->createUrl("o/category/delete", array(\'id\'=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'o/category/delete\', array(\'id\'=>$data->primaryKey))'),
 				),
 				'template' => '{view}|{update}|{delete}',
 			));

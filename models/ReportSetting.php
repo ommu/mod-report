@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:15 WIB
- * @modified date 13 July 2018, 10:16 WIB
+ * @modified date 22 July 2018, 19:47 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_setting".
@@ -194,6 +194,7 @@ class ReportSetting extends OActiveRecord
 				$this->templateColumns['auto_report_cat_id'] = array(
 					'name' => 'auto_report_cat_id',
 					'value' => '$data->category->title->message ? $data->category->title->message : \'-\'',
+					'filter' => ReportCategory::getCategory(),
 				);
 			}
 			$this->templateColumns['modified_date'] = array(

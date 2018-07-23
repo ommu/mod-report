@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Edit
+ *	Delete
  *	Manual
  *
  *	LoadModel
@@ -17,7 +18,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
- * @modified date 18 January 2018, 13:38 WIB
+ * @modified date 23 July 2018, 13:20 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -42,7 +43,6 @@ class SettingController extends Controller
 				$arrThemes = $this->currentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
-				print_r($arrThemes);
 			}
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
@@ -68,7 +68,7 @@ class SettingController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('edit'),
+				'actions'=>array('edit','delete'),
 				'users'=>array('@'),
 				'expression'=>'Yii::app()->user->level == 1',
 			),
@@ -82,7 +82,7 @@ class SettingController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -103,12 +103,12 @@ class SettingController extends Controller
 
 		$category=new ReportCategory('search');
 		$category->unsetAttributes();	// clear any default values
-		if(Yii::app()->getRequest()->getParam('ReportCategory')) {
-			$category->attributes=Yii::app()->getRequest()->getParam('ReportCategory');
-		}
+		$ReportCategory = Yii::app()->getRequest()->getParam('ReportCategory');
+		if($ReportCategory)
+			$category->attributes=$ReportCategory;
 
 		$columns = $category->getGridColumn($this->gridColumnTemp());
-		
+
 		$model = ReportSetting::model()->findByPk(1);
 		if($model == null)
 			$model=new ReportSetting;
@@ -121,19 +121,26 @@ class SettingController extends Controller
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
-				echo $jsonError;
+				$errors = $model->getErrors();
+				$summary['msg'] = "<div class='errorSummary'><strong>".Yii::t('phrase', 'Please fix the following input errors:')."</strong>";
+				$summary['msg'] .= "<ul>";
+				foreach($errors as $key => $value) {
+					$summary['msg'] .= "<li>{$value[0]}</li>";
+				}
+				$summary['msg'] .= "</ul></div>";
+
+				$message = json_decode($jsonError, true);
+				$merge = array_merge_recursive($summary, $message);
+				$encode = json_encode($merge);
+				echo $encode;
 
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report settings success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report setting success updated.').'</strong></div>',
 						));
-						/*
-						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Report setting success updated.'));
-						$this->redirect(array('manage'));
-						*/
 					} else
 						print_r($model->getErrors());
 				}
@@ -141,7 +148,7 @@ class SettingController extends Controller
 			Yii::app()->end();
 		}
 
-		$this->pageTitle = Yii::t('phrase', 'Settings');
+		$this->pageTitle = Yii::t('phrase', 'Report Settings');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit', array(
@@ -150,7 +157,39 @@ class SettingController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('edit'),
+					'id' => 'partial-report-setting',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Report setting success deleted.').'</strong></div>',
+				));
+			}
+			Yii::app()->end();
+		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('edit');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Setting');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
+	}
+
 	/**
 	 * Lists all models.
 	 */
@@ -194,4 +233,5 @@ class SettingController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }
