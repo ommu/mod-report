@@ -20,7 +20,7 @@
 	);
 ?>
 
-<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'reports-form',
 	'enableAjaxValidation'=>true,
 )); ?>
