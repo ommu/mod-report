@@ -27,8 +27,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'cat_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php if(ReportCategory::getCategory(1) != null) {
 					echo $form->dropDownList($model,'cat_id', ReportCategory::getCategory(1), array('class'=>'form-control'));
 				} else {
@@ -39,8 +39,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				$model->url = Yii::app()->getRequest()->getParam('url');
 				echo $form->textField($model,'url', array('maxlength'=>255, 'class'=>'form-control')); ?>
@@ -49,8 +49,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'body', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'body', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'body', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'body'); ?>
 			</div>
