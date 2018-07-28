@@ -41,7 +41,7 @@
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'report_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
+			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php echo $form->textField($model, 'report_id', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'report_id'); ?>
 			</div>
@@ -49,7 +49,7 @@
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'user_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
+			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php echo $form->textField($model, 'user_id', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'user_id'); ?>
 			</div>
@@ -57,7 +57,7 @@
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'comment_text', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
+			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model, 'comment_text', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'comment_text'); ?>
 			</div>
@@ -65,7 +65,7 @@
 
 		<div class="form-group row publish">
 			<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
+			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model, 'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'publish'); ?>
 				<?php echo $form->error($model, 'publish'); ?>

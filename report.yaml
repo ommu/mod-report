@@ -25,45 +25,36 @@ content_menu	:
 	- urlTitle: Manual Book
 		urlRules: {report, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}
-        
+
 # controller o/category
 	- urlTitle: Add Category
-		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {report, o/category, manage, siteType: "0,1", userLevel: "1"}
 		urlPath: {url: add, attr: -, icon: -}
-        
-# controller history/admin
-	- urlTitle: Back to Reports
-		urlRules: {report, history/admin, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: View Report Histories Data
-		urlRules: {report, history/admin, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: history/admin/manage, attr: -, icon: -}
-        
-# controller o/comment
-	- urlTitle: Back to Reports
-		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: View Report Comments Data
-		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/comment/manage, attr: -, icon: -}
-        
+
 # controller o/status
 	- urlTitle: Back to Reports
 		urlRules: {report, o/status, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: View Report Status Data
-		urlRules: {report, o/status, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/status/manage, attr: -, icon: -}
-        
+
 # controller o/user
 	- urlTitle: Back to Reports
 		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-	- urlTitle: View Report Users Data
-		urlRules: {report, o/user, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/user/manage, attr: -, icon: -}
-        
+
+# controller o/comment
+	- urlTitle: Back to Reports
+		urlRules: {report, o/comment, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}
+
 # controller o/setting
+	- urlTitle: Add Category
+		urlRules: {report, o/setting, edit, siteType: "0,1", userLevel: "1"}
+		urlPath: {url: o/category/add, attr: -, icon: -}
 	- urlTitle: Report Manual
 		urlRules: {report, o/setting, edit, siteType: "0,1", userLevel: "1"}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}
+
+# controller history/admin
+	- urlTitle: Back to Reports
+		urlRules: {report, history/admin, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}
