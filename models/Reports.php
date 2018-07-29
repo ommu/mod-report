@@ -360,15 +360,18 @@ class Reports extends OActiveRecord
 	 */
 	public static function insertReport($report_url, $report_body)
 	{
-		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
-
 		$setting = ReportSetting::model()->findByPk(1, array(
 			'select' => 'auto_report_cat_id',
 		));
+
+		if(!$setting->auto_report_cat_id)
+			return false;
+
+		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+
 		$criteria=new CDbCriteria;
 		$criteria->select = 'report_id, cat_id, report_url, reports';
-		if($setting != null)
-			$criteria->compare('cat_id', $setting->auto_report_cat_id);
+		$criteria->compare('cat_id', $setting->auto_report_cat_id);
 		$criteria->compare('report_url', $report_url);
 		$findReport = self::model()->find($criteria);
 		
