@@ -68,7 +68,7 @@
 			$columnData   = $columns;
 			array_push($columnData, array(
 				'header' => Yii::t('phrase', 'Options'),
-				'class'=>'CButtonColumn',
+				'class' => 'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
 						'label' => Yii::t('phrase', 'Detail Report Category'),
