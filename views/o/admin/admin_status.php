@@ -35,8 +35,8 @@
 		<?php //begin.Messages ?>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->status == 1 ? Yii::t('phrase', 'Are you sure you want to unresolved this item?') : Yii::t('phrase', 'Are you sure you want to resolved this item?')?></label>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-4 col-md-4 col-sm-12"><?php echo $model->status == 1 ? Yii::t('phrase', 'Are you sure you want to unresolved this item?') : Yii::t('phrase', 'Are you sure you want to resolved this item?')?></label>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php //echo $form->textArea($model,'report_message', array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
 				if(!$model->getErrors())
 					$model->report_message = '';

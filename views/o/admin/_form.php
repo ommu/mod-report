@@ -97,9 +97,6 @@
 					'plugins' => array(
 						'fontcolor' => array('js' => array('fontcolor.js')),
 						'fullscreen' => array('js' => array('fullscreen.js')),
-						'table' => array('js' => array('table.js')),
-						'imagemanager' => array('js' => array('imagemanager.js')),
-						'filemanager' => array('js' => array('filemanager.js')),
 					),
 					'htmlOptions'=>array(
 						'class' => 'form-control',
