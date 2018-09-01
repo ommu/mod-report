@@ -39,8 +39,8 @@
 		<?php //begin.Messages ?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'cat_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'cat_id', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php $category = ReportCategory::getCategory(1);
 				if($category != null)
 					echo $form->dropDownList($model, 'cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
@@ -51,8 +51,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'report_url', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'report_url', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php //$model->report_url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 				echo $form->textField($model, 'report_url', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'report_url'); ?>
@@ -60,8 +60,8 @@
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'report_body', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'report_body', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php echo $form->textArea($model, 'report_body', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model, 'report_body'); ?>
 			</div>
@@ -69,8 +69,8 @@
 
 		<?php if(!$model->isNewRecord) {?>
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model, 'status', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'status', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php echo $form->checkBox($model, 'status', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'status'); ?>
 				<?php echo $form->error($model, 'status'); ?>
@@ -78,8 +78,8 @@
 		</div>
 
 		<div class="form-group row" id="report-message">
-			<?php echo $form->labelEx($model, 'report_message', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-9 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'report_message', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-8 col-sm-12">
 				<?php //echo $form->textArea($model,'report_message', array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
 				if(!$model->getErrors())
 					$model->report_message = '';
