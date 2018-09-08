@@ -85,7 +85,7 @@
 					$model->report_message = '';
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
-					'attribute'=>report_message,
+					'attribute'=>'report_message',
 					// Redactor options
 					'options'=>array(
 						//'lang'=>'fi',
