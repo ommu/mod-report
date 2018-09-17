@@ -246,7 +246,6 @@ class ReportStatus extends OActiveRecord
 			}
 			$this->templateColumns['status'] = array(
 				'name' => 'status',
-				//'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\', array(\'id\'=>$data->id)), $data->status, \'Resolved,Unresolved\')',
 				'value' => '$data->status == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',

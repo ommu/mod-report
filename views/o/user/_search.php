@@ -21,6 +21,11 @@
 )); ?>
 	<ul>
 		<li>
+			<?php echo $model->getAttributeLabel('category_search'); ?>
+			<?php echo $form->dropDownList($model, 'category_search', ReportCategory::getCategory(), array('prompt'=>'', 'class'=>'form-control')); ?>
+		</li>
+
+		<li>
 			<?php echo $model->getAttributeLabel('report_search'); ?>
 			<?php echo $form->textField($model, 'report_search', array('class'=>'form-control')); ?>
 		</li>

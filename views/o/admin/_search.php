@@ -8,7 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 23 July 2018, 14:39 WIB
+ * @modified date 16 September 2018, 23:59 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -21,8 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('cat_id'); ?>
-			<?php $category = ReportCategory::getCategory();
-			echo $form->dropDownList($model, 'cat_id', $category, array('prompt'=>'', 'class'=>'form-control')); ?>
+			<?php echo $form->dropDownList($model, 'cat_id', ReportCategory::getCategory(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>

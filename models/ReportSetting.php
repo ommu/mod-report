@@ -67,6 +67,7 @@ class ReportSetting extends OActiveRecord
 			array('license, meta_keyword, meta_description', 'required'),
 			array('permission, auto_report_cat_id, modified_id, auto_report_i', 'numerical', 'integerOnly'=>true),
 			array('auto_report_cat_id, auto_report_i', 'safe'),
+			array('auto_report_cat_id', 'length', 'max'=>5),
 			array('modified_id', 'length', 'max'=>11),
 			array('license', 'length', 'max'=>32),
 			// array('modified_date', 'trigger'),

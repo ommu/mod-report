@@ -326,7 +326,7 @@ class ReportCategory extends OActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->cat_id)), $data->publish, \'Enable,Disable\')',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'o/category/publish\', array(\'id\'=>$data->cat_id)), $data->publish, \'Enable,Disable\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),

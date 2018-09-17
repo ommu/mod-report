@@ -370,7 +370,7 @@ class Reports extends OActiveRecord
 		$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 		$criteria=new CDbCriteria;
-		$criteria->select = 'report_id, cat_id, report_url, reports';
+		$criteria->select = 'report_id, reports';
 		$criteria->compare('cat_id', $setting->auto_report_cat_id);
 		$criteria->compare('report_url', $report_url);
 		$findReport = self::model()->find($criteria);
@@ -380,7 +380,7 @@ class Reports extends OActiveRecord
 		
 		else {
 			$report=new Reports;
-			$report->cat_id = $setting ? $setting->auto_report_cat_id : '1';
+			$report->cat_id = $setting->auto_report_cat_id;
 			$report->report_url = $report_url;
 			$report->report_body = $report_body;
 			$report->save();

@@ -8,7 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 21 July 2018, 16:37 WIB
+ * @modified date 16 September 2018, 23:55 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -26,7 +26,7 @@
 )); ?>
 
 	<div class="dialog-content">
-		<?php echo $model->publish == 1 ? Yii::t('phrase', 'Are you sure you want to unpublish this item?') : Yii::t('phrase', 'Are you sure you want to publish this item?')?>
+		<?php echo $model->publish == 1 ? Yii::t('phrase', 'Are you sure you want to disable this item?') : Yii::t('phrase', 'Are you sure you want to enable this item?')?>
 	</div>
 	<div class="dialog-submit">
 		<?php echo CHtml::submitButton($title, array('onclick' => 'setEnableSave()')); ?>
