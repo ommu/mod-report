@@ -301,7 +301,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['comment_i'] = array(
 				'name' => 'comment_i',
-				'value' => 'CHtml::link($data->view->comments ? $data->view->comments : 0, Yii::app()->controller->createUrl(\'o/comment/manage\', array(\'report\'=>$data->report_id)))',
+				'value' => 'CHtml::link($data->comment_i ? $data->comment_i : 0, Yii::app()->controller->createUrl(\'o/comment/manage\', array(\'report\'=>$data->report_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -310,7 +310,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['status_i'] = array(
 				'name' => 'status_i',
-				'value' => 'CHtml::link($data->view->statuses ? $data->view->statuses : 0, Yii::app()->controller->createUrl(\'o/status/manage\', array(\'report\'=>$data->report_id)))',
+				'value' => 'CHtml::link($data->status_i ? $data->status_i : 0, Yii::app()->controller->createUrl(\'o/status/manage\', array(\'report\'=>$data->report_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -319,7 +319,7 @@ class Reports extends OActiveRecord
 			);
 			$this->templateColumns['user_i'] = array(
 				'name' => 'user_i',
-				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, Yii::app()->controller->createUrl(\'o/user/manage\', array(\'report\'=>$data->report_id)))',
+				'value' => 'CHtml::link($data->user_i ? $data->user_i : 0, Yii::app()->controller->createUrl(\'o/user/manage\', array(\'report\'=>$data->report_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
