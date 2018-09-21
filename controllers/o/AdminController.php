@@ -21,7 +21,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 23 July 2018, 14:39 WIB
+ * @modified date 16 September 2018, 23:58 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ class AdminController extends Controller
 		$pageTitle = Yii::t('phrase', 'Abuse Reports');
 		if($category != null) {
 			$data = ReportCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Reports: Category $category_name', array ('$category_name'=>$data->title->message));
+			$pageTitle = Yii::t('phrase', 'Reports: Category {category_name}', array ('{category_name}'=>$data->title->message));
 		}
 		
 		$this->pageTitle = $pageTitle;
@@ -267,7 +267,7 @@ class AdminController extends Controller
 	/**
 	 * Status a particular model.
 	 * If status is successful, the browser will be redirected to the 'manage' page.
-	 * @param integer $id the ID of the model to be deleted
+	 * @param integer $id the ID of the model to be status
 	 */
 	public function actionStatus($id) 
 	{

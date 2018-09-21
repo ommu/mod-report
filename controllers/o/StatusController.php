@@ -103,11 +103,11 @@ class StatusController extends Controller
 		$pageTitle = Yii::t('phrase', 'Report Status');
 		if($report != null) {
 			$data = Reports::model()->findByPk($report);
-			$pageTitle = Yii::t('phrase', 'Status: Report $report_body', array ('$report_body'=>$data->report_body));
+			$pageTitle = Yii::t('phrase', 'Status: Report {report_body}', array ('{report_body}'=>$data->report_body));
 		}
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'Status: User $user_displayname', array ('$user_displayname'=>$data->displayname));
+			$pageTitle = Yii::t('phrase', 'Status: User {user_displayname}', array ('{user_displayname}'=>$data->displayname));
 		}
 		
 		$this->pageTitle = $pageTitle;

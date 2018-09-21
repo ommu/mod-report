@@ -22,7 +22,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 21 July 2018, 18:55 WIB
+ * @modified date 16 September 2018, 23:55 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ class CategoryController extends Controller
 	/**
 	 * Publish a particular model.
 	 * If publish is successful, the browser will be redirected to the 'manage' page.
-	 * @param integer $id the ID of the model to be deleted
+	 * @param integer $id the ID of the model to be publish
 	 */
 	public function actionPublish($id) 
 	{

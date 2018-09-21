@@ -8,7 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 23 July 2018, 14:39 WIB
+ * @modified date 16 September 2018, 23:58 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -53,8 +53,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'report_url', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-8 col-sm-12">
-				<?php //$model->report_url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-				echo $form->textField($model, 'report_url', array('class'=>'form-control')); ?>
+				<?php echo $form->textArea($model, 'report_url', array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'report_url'); ?>
 			</div>
 		</div>
