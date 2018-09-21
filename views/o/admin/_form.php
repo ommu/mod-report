@@ -79,15 +79,12 @@
 		<div class="form-group row" id="report-message">
 			<?php echo $form->labelEx($model, 'report_message', array('class'=>'col-form-label col-lg-4 col-md-4 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-8 col-sm-12">
-				<?php //echo $form->textArea($model,'report_message', array('rows'=>6, 'cols'=>50, 'class'=>'span-11 smaller'));
-				if(!$model->getErrors())
+				<?php if(!$model->getErrors())
 					$model->report_message = '';
 				$this->widget('yiiext.imperavi-redactor-widget.ImperaviRedactorWidget', array(
 					'model'=>$model,
 					'attribute'=>'report_message',
-					// Redactor options
 					'options'=>array(
-						//'lang'=>'fi',
 						'buttons'=>array(
 							'html', '|', 
 							'bold', 'italic', 'deleted', '|',
@@ -99,9 +96,9 @@
 					),
 					'htmlOptions'=>array(
 						'class' => 'form-control',
-					 ),
-				));?>
-				<?php echo $form->error($model,'report_message'); ?>
+					),
+				)); ?>
+				<?php echo $form->error($model, 'report_message'); ?>
 			</div>
 		</div>
 		<?php }?>
