@@ -37,7 +37,6 @@
 		array(
 			'name'=>'status',
 			'value'=>$model->status ? Yii::t('phrase', 'Resolved') : Yii::t('phrase', 'Unresolved'),
-			'type'=>'raw',
 		),
 		array(
 			'name'=>'report_search',
