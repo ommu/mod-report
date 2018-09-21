@@ -390,6 +390,9 @@ class ReportCategory extends OActiveRecord
 		parent::afterFind();
 		$this->name_i = $this->title->message;
 		$this->desc_i = $this->description->message;
+		$this->report_i = $this->view->reports;
+		$this->report_resolved_i = $this->view->report_resolved;
+		$this->report_all_i = $this->view->report_all;
 
 		return true;
 	}

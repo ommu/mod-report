@@ -9,11 +9,11 @@ author:
   email: putra@sudaryanto.id
   homepage: https://sudaryanto.id
 
-db_table_name	: 
+db_table_name	:
  - ommu_report_category
  - ommu_reports
  
-db_sql_filename	: 
+db_sql_filename	:
 
 plugin_menu		:
 	- urlTitle: Abuse Reports

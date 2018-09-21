@@ -394,6 +394,10 @@ class Reports extends OActiveRecord
 	{
 		parent::afterFind();
 		$this->old_status_i = $this->status;
+		$this->comment_i = $this->view->comments;
+		$this->history_i = $this->view->histories;
+		$this->status_i = $this->view->statuses;
+		$this->user_i = $this->view->users;
 
 		return true;
 	}
