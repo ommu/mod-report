@@ -305,6 +305,7 @@ class ReportCategory extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['report_resolved_i'] = array(
@@ -313,6 +314,7 @@ class ReportCategory extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['report_all_i'] = array(
@@ -321,6 +323,7 @@ class ReportCategory extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {

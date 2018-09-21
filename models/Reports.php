@@ -296,6 +296,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['comment_i'] = array(
@@ -304,6 +305,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['status_i'] = array(
@@ -312,6 +314,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['user_i'] = array(
@@ -320,6 +323,7 @@ class Reports extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => false,
 				'type' => 'raw',
 			);
 			$this->templateColumns['status'] = array(
