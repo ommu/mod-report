@@ -27,32 +27,7 @@
 <?php //end.Messages ?>
 
 <div class="dialog-content">
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		array(
-			'name'=>'id',
-			'value'=>$model->id,
-		),
-		array(
-			'name'=>'report_search',
-			'value'=>$model->report->report_url || $model->report->report_date ? $this->renderPartial('_view_report', array('model'=>$model), true, false) : '-',
-			'type'=>'raw',
-		),
-		array(
-			'name'=>'user_search',
-			'value'=>$model->user->displayname ? $model->user->displayname : '-',
-		),
-		array(
-			'name'=>'report_date',
-			'value'=>!in_array($model->report_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? $this->dateFormat($model->report_date) : '-',
-		),
-		array(
-			'name'=>'report_ip',
-			'value'=>$model->report_ip ? $model->report_ip : '-',
-		),
-	),
-)); ?>
+	<?php echo $this->renderPartial('_detail', array('model'=>$model)); ?>
 </div>
 <div class="dialog-submit">
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
