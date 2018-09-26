@@ -14,7 +14,8 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Histories'=>array('manage'),
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'History')=>array('manage'),
 		$model->report->report_body,
 	);
 ?>

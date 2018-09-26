@@ -13,8 +13,8 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Settings'=>array('manage'),
-		'Manual Book',
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Manual'),
 	);
 ?>
 

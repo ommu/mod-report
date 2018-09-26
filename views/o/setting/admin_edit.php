@@ -15,8 +15,8 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Settings'=>array('index'),
-		'Update',
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Setting'),
 	);
 ?>
 

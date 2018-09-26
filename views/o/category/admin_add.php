@@ -14,8 +14,9 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Categories'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Category')=>array('manage'),
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

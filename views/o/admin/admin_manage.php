@@ -13,8 +13,8 @@
  */
 
 	$this->breadcrumbs=array(
-		'Reports'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Report')=>array('manage'),
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

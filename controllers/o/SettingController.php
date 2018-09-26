@@ -201,11 +201,11 @@ class SettingController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/manage');
 		$this->dialogWidth = 400;
 		
-		$this->pageTitle = Yii::t('phrase', 'Report Manual Book');
+		$this->pageTitle = Yii::t('phrase', 'Report Manual');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manual', array(
-			'manual_path'=>$manual_path,			
+			'manual_path'=>$manual_path,
 		));
 	}
 

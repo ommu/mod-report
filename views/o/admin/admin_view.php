@@ -14,7 +14,7 @@
  */
 
 	$this->breadcrumbs=array(
-		'Reports'=>array('manage'),
+		Yii::t('phrase', 'Report')=>array('manage'),
 		$model->report_body,
 	);
 ?>

@@ -15,8 +15,9 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Settings'=>array('index'),
-		'Delete',
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Setting')=>array('edit'),
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 

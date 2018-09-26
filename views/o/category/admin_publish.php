@@ -14,9 +14,10 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Categories'=>array('manage'),
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Category')=>array('manage'),
 		$model->title->message=>array('view','id'=>$model->cat_id),
-		'Publish',
+		Yii::t('phrase', 'Publish'),
 	);
 ?>
 

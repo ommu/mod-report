@@ -13,8 +13,9 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Categories'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Category')=>array('manage'),
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

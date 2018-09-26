@@ -15,9 +15,10 @@
  */
 
 	$this->breadcrumbs=array(
-		'Report Comments'=>array('manage'),
+		Yii::t('phrase', 'Report')=>array('o/admin/manage'),
+		Yii::t('phrase', 'Comment')=>array('manage'),
 		$model->report->report_body=>array('view','id'=>$model->comment_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 
