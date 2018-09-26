@@ -148,7 +148,7 @@ class SettingController extends Controller
 			Yii::app()->end();
 		}
 
-		$this->pageTitle = Yii::t('phrase', 'Report Settings');
+		$this->pageTitle = Yii::t('phrase', 'Report Setting');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit', array(
