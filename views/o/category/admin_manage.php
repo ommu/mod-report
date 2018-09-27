@@ -76,7 +76,7 @@
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'view',
-							'title' => Yii::t('phrase', 'Detail Report Category'),
+							'title' => Yii::t('phrase', 'Detail Category'),
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'view\', array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
@@ -84,7 +84,7 @@
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'update',
-							'title' => Yii::t('phrase', 'Update Report Category'),
+							'title' => Yii::t('phrase', 'Update Category'),
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\', array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
@@ -92,7 +92,7 @@
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'delete',
-							'title' => Yii::t('phrase', 'Delete Report Category'),
+							'title' => Yii::t('phrase', 'Delete Category'),
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))'),
 				),
