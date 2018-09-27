@@ -22,7 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 23 July 2018, 12:51 WIB
+ * @modified date 26 September 2018, 23:33 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -110,9 +110,9 @@ class CommentController extends Controller
 		}
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'Comments: User {user_displayname}', array ('{user_displayname}'=>$data->displayname));
+			$pageTitle = Yii::t('phrase', 'Comments: User {displayname}', array ('{displayname}'=>$data->displayname));
 		}
-		
+
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -263,7 +263,7 @@ class CommentController extends Controller
 	/**
 	 * Publish a particular model.
 	 * If publish is successful, the browser will be redirected to the 'manage' page.
-	 * @param integer $id the ID of the model to be deleted
+	 * @param integer $id the ID of the model to be publish
 	 */
 	public function actionPublish($id) 
 	{

@@ -19,7 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 22 February 2017, 12:25 WIB
- * @modified date 23 July 2018, 10:38 WIB
+ * @modified date 27 September 2018, 09:01 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -100,16 +100,16 @@ class StatusController extends Controller
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
-		$pageTitle = Yii::t('phrase', 'Report Status');
+		$pageTitle = Yii::t('phrase', 'Report Statuses');
 		if($report != null) {
 			$data = Reports::model()->findByPk($report);
-			$pageTitle = Yii::t('phrase', 'Status: Report {report_body}', array ('{report_body}'=>$data->report_body));
+			$pageTitle = Yii::t('phrase', 'Statuses: Report {report_body}', array ('{report_body}'=>$data->report_body));
 		}
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'Status: User {user_displayname}', array ('{user_displayname}'=>$data->displayname));
+			$pageTitle = Yii::t('phrase', 'Statuses: User {displayname}', array ('{displayname}'=>$data->displayname));
 		}
-		
+
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';

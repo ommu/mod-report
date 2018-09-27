@@ -21,7 +21,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
- * @modified date 16 September 2018, 23:58 WIB
+ * @modified date 26 September 2018, 23:34 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ class AdminController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage($category=null) 
+	public function actionManage($category=null, $user=null) 
 	{
 		$model=new Reports('search');
 		$model->unsetAttributes();	// clear any default values
@@ -105,9 +105,13 @@ class AdminController extends Controller
 		$pageTitle = Yii::t('phrase', 'Abuse Reports');
 		if($category != null) {
 			$data = ReportCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Reports: Category {category_name}', array ('{category_name}'=>$data->title->message));
+			$pageTitle = Yii::t('phrase', 'Reports: Category {name}', array ('{name}'=>$data->title->message));
 		}
-		
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'Reports: User {displayname}', array ('{displayname}'=>$data->displayname));
+		}
+
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = Yii::t('phrase', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->pageMeta = '';

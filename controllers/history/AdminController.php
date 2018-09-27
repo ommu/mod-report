@@ -19,7 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 14:01 WIB
- * @modified date 23 July 2018, 12:46 WIB
+ * @modified date 27 September 2018, 11:28 WIB
  * @link https://github.com/ommu/mod-report
  *
  *----------------------------------------------------------------------------------------------------------
@@ -107,9 +107,9 @@ class AdminController extends Controller
 		}
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'Histories: User {user_displayname}', array ('{user_displayname}'=>$data->displayname));
+			$pageTitle = Yii::t('phrase', 'Histories: User {displayname}', array ('{displayname}'=>$data->displayname));
 		}
-		
+
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
