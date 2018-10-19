@@ -8,10 +8,10 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
  * @modified date 25 April 2018, 17:15 WIB
- * @link http://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-report
  *
  */
 
@@ -40,8 +40,7 @@ $redactorOptions = [
 
 <?php //echo $form->errorSummary($model);?>
 
-<?php 
-$cat_id = ReportCategory::getCategory(1);
+<?php $cat_id = ReportCategory::getCategory(1);
 echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->dropDownList($cat_id, ['prompt'=>''])
 	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
