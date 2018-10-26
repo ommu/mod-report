@@ -47,7 +47,7 @@ use ommu\report\models\view\Reports as ReportsView;
 
 class Reports extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date'];
 

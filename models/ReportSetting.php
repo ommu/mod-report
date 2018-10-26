@@ -35,7 +35,7 @@ use ommu\users\models\Users;
 
 class ReportSetting extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = [];
 	public $auto_report_i;

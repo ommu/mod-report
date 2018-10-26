@@ -38,7 +38,7 @@ use ommu\users\models\Users;
 
 class ReportComment extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = [];
 

@@ -45,7 +45,6 @@ use ommu\report\models\view\ReportCategory as ReportCategoryView;
 class ReportCategory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = ['desc_i','modified_date','modified_search','updated_date','slug'];
 	public $name_i;

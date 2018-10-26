@@ -37,7 +37,7 @@ use ommu\users\models\Users;
 
 class ReportUser extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date'];
 
