@@ -156,7 +156,7 @@ class ReportSetting extends \app\components\ActiveRecord
 			'attribute' => 'permission',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->permission ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->permission);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
