@@ -37,7 +37,7 @@ use ommu\report\models\search\ReportUser as ReportUserSearch;
 class UserController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

@@ -39,7 +39,7 @@ use ommu\report\models\search\ReportCategory as ReportCategorySearch;
 class CategoryController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

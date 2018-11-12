@@ -38,7 +38,7 @@ use ommu\report\models\search\Reports as ReportsSearch;
 class AdminController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

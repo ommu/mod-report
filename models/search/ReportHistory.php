@@ -23,7 +23,7 @@ use ommu\report\models\ReportHistory as ReportHistoryModel;
 class ReportHistory extends ReportHistoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class ReportHistory extends ReportHistoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

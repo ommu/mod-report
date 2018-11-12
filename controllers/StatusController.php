@@ -35,7 +35,7 @@ use ommu\report\models\search\ReportStatus as ReportStatusSearch;
 class StatusController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

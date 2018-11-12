@@ -23,7 +23,7 @@ use ommu\report\models\ReportCategory as ReportCategoryModel;
 class ReportCategory extends ReportCategoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class ReportCategory extends ReportCategoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

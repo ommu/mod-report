@@ -23,7 +23,7 @@ use ommu\report\models\Reports as ReportsModel;
 class Reports extends ReportsModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class Reports extends ReportsModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

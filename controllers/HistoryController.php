@@ -35,7 +35,7 @@ use ommu\report\models\search\ReportHistory as ReportHistorySearch;
 class HistoryController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{
