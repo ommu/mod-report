@@ -18,8 +18,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\report\models\ReportComment as ReportCommentModel;
-//use ommu\report\models\Reports;
-//use ommu\users\models\Users;
 
 class ReportComment extends ReportCommentModel
 {
