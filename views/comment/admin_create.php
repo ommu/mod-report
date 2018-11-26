@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\MenuContent;
+use app\components\menu\MenuContent;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Comments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

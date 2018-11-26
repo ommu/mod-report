@@ -15,7 +15,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\MenuContent;
+use app\components\menu\MenuContent;
 use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Comments'), 'url' => ['index']];
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->comment_id]), 'icon' => 'eye'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->comment_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->comment_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
 
