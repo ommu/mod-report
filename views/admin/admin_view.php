@@ -62,12 +62,12 @@ $this->params['menu']['content'] = [
 		'reports',
 		[
 			'attribute' => 'report_date',
-			'value' => !in_array($model->report_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->report_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
 		],
 		'report_ip',
 		[
 			'attribute' => 'modified_date',
-			'value' => !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
 			'attribute' => 'modified_search',
@@ -75,7 +75,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'updated_date',
-			'value' => !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		],
 	],
 ]) ?>
