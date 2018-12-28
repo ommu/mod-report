@@ -6,7 +6,7 @@
  * @var $model ommu\report\models\Reports
  * @var $form yii\widgets\ActiveForm
  *
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @link https://github.com/ommu/mod-report
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @created date 19 September 2017, 22:58 WIB

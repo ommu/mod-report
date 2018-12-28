@@ -4,10 +4,10 @@
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 23:27 WIB
  * @modified date 18 April 2018, 22:16 WIB
- * @link https://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_status".
  *
