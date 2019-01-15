@@ -213,8 +213,10 @@ class ReportSetting extends \app\components\ActiveRecord
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			if(!$this->isNewRecord) {
+				if($this->modified_id == null)
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			}
 
 			if($this->auto_report_i && !$this->auto_report_cat_id)
 				$this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('auto_report_cat_id')]));
