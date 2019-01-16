@@ -2,7 +2,7 @@
 /**
  * Report Categories (report-category)
  * @var $this yii\web\View
- * @var $this ommu\report\controllers\CategoryController
+ * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -22,8 +22,8 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['setting/index']), 'icon' => 'gears'],
-	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['create']), 'icon' => 'plus-square'],
+	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'gears'],
+	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['create']), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -52,7 +52,7 @@ array_push($columnData, [
 		},
 		'update' => function ($url, $model, $key) {
 			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Category')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Category'), 'class'=>'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
 			$url = Url::to(['delete', 'id'=>$model->primaryKey]);

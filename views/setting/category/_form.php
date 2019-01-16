@@ -2,7 +2,7 @@
 /**
  * Report Categories (report-category)
  * @var $this yii\web\View
- * @var $this ommu\report\controllers\CategoryController
+ * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
  * @var $form yii\widgets\ActiveForm
  *

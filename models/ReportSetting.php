@@ -172,6 +172,22 @@ class ReportSetting extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * function getPermission
+	 */
+	public static function getPermission($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, the public can view "module name" unless they are made private.'),
+			0 => Yii::t('app', 'No, the public cannot view "module name".'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
 	 * get Module License
 	 */
 	public static function getLicense($source='1234567890', $length=16, $char=4)

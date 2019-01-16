@@ -1,10 +1,10 @@
 <?php
 /**
- * SettingController
+ * AdminController
  * @var $this yii\web\View
  * @var $model ommu\report\models\ReportSetting
  *
- * SettingController implements the CRUD actions for ReportSetting model.
+ * AdminController implements the CRUD actions for ReportSetting model.
  * Reference start
  * TOC :
  *	Index
@@ -22,18 +22,17 @@
  *
  */
  
-namespace ommu\report\controllers;
+namespace ommu\report\controllers\setting;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportSetting;
 use ommu\report\models\search\ReportSetting as ReportSettingSearch;
 use ommu\report\models\search\ReportCategory as ReportCategorySearch;
 
-class SettingController extends Controller
+class AdminController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -59,19 +58,21 @@ class SettingController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['update']);
-	}
-
-	/**
-	 * Updates an existing ReportSetting model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionUpdate()
-	{
 		$this->layout = 'admin_default';
-		
+
+		$model = ReportSetting::findOne(1);
+		if($model === null) 
+			$model = new ReportSetting();
+
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
+				return $this->redirect(['index']);
+			}
+		}
+
 		$searchModel = new ReportCategorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -84,7 +85,26 @@ class SettingController extends Controller
 			}
 		}
 		$columns = $searchModel->getGridColumn($cols);
-		
+
+		$this->view->title = Yii::t('app', 'Report Settings');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_index', [
+			'model' => $model,
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+			'columns' => $columns,
+		]);
+	}
+
+	/**
+	 * Updates an existing ReportSetting model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionUpdate()
+	{
 		$model = ReportSetting::findOne(1);
 		if($model === null) 
 			$model = new ReportSetting();
@@ -95,7 +115,6 @@ class SettingController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
 				return $this->redirect(['update']);
-				//return $this->redirect(['view', 'id' => $model->id]);
 			}
 		}
 
@@ -103,9 +122,6 @@ class SettingController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
-			'searchModel' => $searchModel,
-			'dataProvider' => $dataProvider,
-			'columns' => $columns,
 			'model' => $model,
 		]);
 	}
@@ -135,7 +151,7 @@ class SettingController extends Controller
 	{
 		if(($model = ReportSetting::findOne($id)) !== null) 
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

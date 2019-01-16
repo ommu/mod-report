@@ -26,7 +26,7 @@
  *
  */
  
-namespace ommu\report\controllers;
+namespace ommu\report\controllers\setting;
 
 use Yii;
 use yii\filters\VerbFilter;
@@ -107,7 +107,7 @@ class CategoryController extends Controller
 		$this->view->title = Yii::t('app', 'Create Category');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -134,7 +134,7 @@ class CategoryController extends Controller
 		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Report Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}

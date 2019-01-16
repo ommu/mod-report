@@ -2,7 +2,7 @@
 /**
  * Report Settings (report-setting)
  * @var $this yii\web\View
- * @var $this ommu\report\controllers\SettingController
+ * @var $this ommu\report\controllers\setting\AdminController
  * @var $model ommu\report\models\ReportSetting
  * @var $form yii\widgets\ActiveForm
  *
