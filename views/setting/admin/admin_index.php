@@ -143,7 +143,7 @@ echo GridView::widget([
 			],
 			[
 				'attribute' => 'auto_report_cat_id',
-				'value' => isset($model->autoReportCat) ? $model->autoReportCat->title->message : '-',
+				'value' => isset($model->category) ? $model->category->title->message : '-',
 			],
 			[
 				'attribute' => 'modified_date',

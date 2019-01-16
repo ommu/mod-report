@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:49 WIB
- * @modified date 25 April 2018, 15:36 WIB
+ * @modified date 16 January 2019, 11:11 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -28,8 +28,8 @@ class ReportSetting extends ReportSettingModel
 	public function rules()
 	{
 		return [
-			[['permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
-			[['id', 'license', 'meta_keyword', 'meta_description', 'modified_date',
+			[['id', 'permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
+			[['license', 'meta_description', 'meta_keyword', 'modified_date', 
 				'modified_search'], 'safe'],
 		];
 	}
@@ -57,21 +57,31 @@ class ReportSetting extends ReportSettingModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = ReportSettingModel::find()->alias('t');
 		$query->joinWith([
+			'category.title category', 
 			'modified modified'
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['auto_report_cat_id'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
@@ -93,14 +103,14 @@ class ReportSetting extends ReportSettingModel
 		$query->andFilterWhere([
 			't.id' => $this->id,
 			't.permission' => $this->permission,
-			't.auto_report_cat_id' => $this->auto_report_cat_id,
+			't.auto_report_cat_id' => isset($params['category']) ? $params['category'] : $this->auto_report_cat_id,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 		]);
 
 		$query->andFilterWhere(['like', 't.license', $this->license])
-			->andFilterWhere(['like', 't.meta_keyword', $this->meta_keyword])
 			->andFilterWhere(['like', 't.meta_description', $this->meta_description])
+			->andFilterWhere(['like', 't.meta_keyword', $this->meta_keyword])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;

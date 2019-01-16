@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportSetting
  *
  * AdminController implements the CRUD actions for ReportSetting model.
@@ -15,9 +15,9 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:49 WIB
- * @modified date 25 April 2018, 15:36 WIB
+ * @modified date 16 January 2019, 11:10 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -115,6 +115,10 @@ class AdminController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
 				return $this->redirect(['update']);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
@@ -149,7 +153,7 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportSetting::findOne($id)) !== null) 
+		if(($model = ReportSetting::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
