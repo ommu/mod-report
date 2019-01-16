@@ -44,7 +44,7 @@ $redactorOptions = [
 	->label($model->getAttributeLabel('user_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?> -->
 
 <?php echo $form->field($model, 'comment_text', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textarea(['rows'=>2,'rows'=>6])
+	->textarea(['rows'=>2, 'rows'=>6])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('comment_text'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
