@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Settings (report-setting)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\AdminController
  * @var $model ommu\report\models\ReportSetting
  * @var $form yii\widgets\ActiveForm
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\menu\MenuContent;
 use app\components\menu\MenuOption;

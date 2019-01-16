@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:56 WIB
- * @modified date 18 April 2018, 22:14 WIB
+ * @modified date 16 January 2019, 16:26 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_category".
@@ -24,6 +24,7 @@
  * @property string $slug
  *
  * The followings are the available model relations:
+ * @property ReportSetting[] $settings
  * @property Reports[] $reports
  * @property SourceMessage $title
  * @property SourceMessage $description
@@ -50,7 +51,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	public $name_i;
 	public $desc_i;
 
-	// Variable Search
+	// Search Variable
 	public $report_search;
 	public $report_resolved_search;
 	public $report_all_search;
@@ -88,7 +89,6 @@ class ReportCategory extends \app\components\ActiveRecord
 			[['name_i', 'desc_i'], 'required'],
 			[['publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
 			[['name_i', 'desc_i', 'slug'], 'string'],
-			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 		];
@@ -118,6 +118,14 @@ class ReportCategory extends \app\components\ActiveRecord
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getSettings()
+	{
+		return $this->hasMany(ReportSetting::className(), ['auto_report_cat_id' => 'cat_id']);
 	}
 
 	/**
@@ -169,9 +177,18 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\ReportCategory the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\ReportCategory(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -183,13 +200,13 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->title) ? $model->title->message : '-';
+				return $model->name_i;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->description) ? $model->description->message : '-';
+				return $model->desc_i;
 			},
 		];
 		$this->templateColumns['creation_date'] = [
@@ -271,7 +288,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
-					return $this->quickAction($url, $model->publish);
+					return $this->quickAction($url, $model->publish, 'Enable,Disable');
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
@@ -302,31 +319,26 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
-		$model = self::find()->alias('t')
-			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		$model = self::find()->alias('t');
+		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($publish != null)
 			$model->andWhere(['t.publish' => $publish]);
 
 		$model = $model->orderBy('title.message ASC')->all();
 
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->cat_id] = $val->title->message;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
+		if($array == true)
+			return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+
+		return $model;
 	}
 
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
+		parent::afterFind();
+
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 	}
@@ -334,7 +346,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -360,14 +372,15 @@ class ReportCategory extends \app\components\ActiveRecord
 		$location = $this->urlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
-
 			if($insert || (!$insert && !$this->name)) {
 				$name = new SourceMessage();
 				$name->location = $location.'_title';
 				$name->message = $this->name_i;
 				if($name->save())
 					$this->name = $name->id;
-				
+
+				$this->slug = $this->urlTitle($this->name_i);
+
 			} else {
 				$name = SourceMessage::findOne($this->name);
 				$name->message = $this->name_i;
@@ -380,13 +393,13 @@ class ReportCategory extends \app\components\ActiveRecord
 				$desc->message = $this->desc_i;
 				if($desc->save())
 					$this->desc = $desc->id;
-				
+
 			} else {
 				$desc = SourceMessage::findOne($this->desc);
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
-			// Create action
+
 		}
 		return true;
 	}

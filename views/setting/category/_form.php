@@ -1,16 +1,16 @@
 <?php
 /**
  * Report Categories (report-category)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -18,6 +18,8 @@
 use yii\helpers\Html;
 use app\components\ActiveForm;
 ?>
+
+<div class="report-category-form">
 
 <?php $form = ActiveForm::begin([
 	'enableClientValidation' => true,
@@ -28,11 +30,11 @@ use app\components\ActiveForm;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'name_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['maxlength' => true])
+	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('name_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'desc_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textarea(['rows'=>2,'rows'=>6,'maxlength' => true])
+	->textarea(['rows'=>2, 'rows'=>6, 'maxlength'=>true])
 	->label($model->getAttributeLabel('desc_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'publish', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
@@ -41,9 +43,11 @@ use app\components\ActiveForm;
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
 
 <?php ActiveForm::end(); ?>
+
+</div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Categories (report-category)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
  *
@@ -9,24 +9,25 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Categories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Categories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->title->message;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->cat_id]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'pencil'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->cat_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->cat_id]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'pencil'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->cat_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
+
+<div class="report-category-view">
 
 <?php echo DetailView::widget([
 	'model' => $model,
@@ -34,17 +35,19 @@ $this->params['menu']['content'] = [
 		'class'=>'table table-striped detail-view',
 	],
 	'attributes' => [
+		'cat_id',
 		[
 			'attribute' => 'publish',
-			'value' => $model->publish == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => $this->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
+			'format' => 'raw',
 		],
 		[
 			'attribute' => 'name_i',
-			'value' => isset($model->title) ? $model->title->message : '-',
+			'value' => $model->name_i,
 		],
 		[
 			'attribute' => 'desc_i',
-			'value' => isset($model->description) ? $model->description->message : '-',
+			'value' => $model->desc_i,
 		],
 		[
 			'attribute' => 'creation_date',
@@ -72,3 +75,5 @@ $this->params['menu']['content'] = [
 		],
 	],
 ]) ?>
+
+</div>

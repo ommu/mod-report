@@ -1,18 +1,19 @@
 <?php
 /**
  * CategoryController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportCategory
  *
  * CategoryController implements the CRUD actions for ReportCategory model.
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	Create
  *	Update
  *	View
  *	Delete
- *	Runaction
+ *	RunAction
  *	Publish
  *
  *	findModel
@@ -21,7 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:52 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -30,7 +31,6 @@ namespace ommu\report\controllers\setting;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportCategory;
@@ -58,10 +58,18 @@ class CategoryController extends Controller
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
 	 * Lists all ReportCategory models.
 	 * @return mixed
 	 */
-	public function actionIndex()
+	public function actionManage()
 	{
 		$searchModel = new ReportCategorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -76,10 +84,10 @@ class CategoryController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Report Categories');
+		$this->view->title = Yii::t('app', 'Categories');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
@@ -99,9 +107,13 @@ class CategoryController extends Controller
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->cat_id]);
-			} 
+				return $this->redirect(['manage']);
+				//return $this->redirect(['view', 'id'=>$model->cat_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create Category');
@@ -126,12 +138,15 @@ class CategoryController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success updated.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->cat_id]);
+				return $this->redirect(['manage']);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Report Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
@@ -148,7 +163,7 @@ class CategoryController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Report Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -167,10 +182,9 @@ class CategoryController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success deleted.'));
-			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->cat_id]);
+			return $this->redirect(['manage']);
 		}
 	}
 
@@ -186,9 +200,9 @@ class CategoryController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success updated.'));
-			return $this->redirect(['index']);
+			return $this->redirect(['manage']);
 		}
 	}
 
@@ -201,9 +215,9 @@ class CategoryController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportCategory::findOne($id)) !== null) 
+		if(($model = ReportCategory::findOne($id)) !== null)
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

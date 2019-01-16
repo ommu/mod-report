@@ -1,16 +1,16 @@
 <?php
 /**
  * Report Categories (report-category)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\search\ReportCategory
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -33,7 +33,7 @@ $js = <<<JS
 		});
 	});
 JS;
-	$this->registerJs($js, \yii\web\View::POS_READY);
+	$this->registerJs($js, \app\components\View::POS_READY);
 ?>
 
 <div class="grid-form">

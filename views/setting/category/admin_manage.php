@@ -1,22 +1,23 @@
 <?php
 /**
  * Report Categories (report-category)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
+ * @var $searchModel ommu\report\models\search\ReportCategory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -31,6 +32,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
+<div class="report-category-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
@@ -74,3 +76,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>
