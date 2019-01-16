@@ -1,7 +1,7 @@
 <?php
 /**
  * StatusController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportStatus
  *
  * StatusController implements the CRUD actions for ReportStatus model.

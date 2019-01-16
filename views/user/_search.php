@@ -1,10 +1,10 @@
 <?php
 /**
  * Report Users (report-user)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\UserController
  * @var $model ommu\report\models\search\ReportUser
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

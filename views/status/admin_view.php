@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Statuses (report-status)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\StatusController
  * @var $model ommu\report\models\ReportStatus
  *
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->history_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->history_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
 

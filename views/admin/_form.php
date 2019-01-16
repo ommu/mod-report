@@ -1,10 +1,10 @@
 <?php
 /**
  * Reports (reports)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\AdminController
  * @var $model ommu\report\models\Reports
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -62,7 +62,7 @@ echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

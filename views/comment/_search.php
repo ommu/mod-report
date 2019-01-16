@@ -1,10 +1,10 @@
 <?php
 /**
  * Report Comments (report-comment)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\CommentController
  * @var $model ommu\report\models\search\ReportComment
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\Reports
  *
  * AdminController implements the CRUD actions for Reports model.

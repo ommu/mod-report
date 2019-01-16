@@ -1,10 +1,10 @@
 <?php
 /**
  * Reports (reports)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\AdminController
  * @var $model ommu\report\models\Reports
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @link https://github.com/ommu/mod-report
@@ -27,14 +27,14 @@ $redactorOptions = [
 ];
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->report_id, 'url' => ['view', 'id' => $model->report_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->report_id, 'url' => ['view', 'id'=>$model->report_id]];
 $this->params['breadcrumbs'][] = $title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->report_id]), 'icon' => 'pencil'],
-	['label' => Yii::t('app', 'View'), 'url' => Url::to(['view', 'id' => $model->report_id]), 'icon' => 'eye'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->report_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->report_id]), 'icon' => 'pencil'],
+	['label' => Yii::t('app', 'View'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->report_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
 
@@ -55,7 +55,7 @@ echo $form->field($model, 'report_message', ['template' => '{label}<div class="c
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

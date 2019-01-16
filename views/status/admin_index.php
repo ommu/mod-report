@@ -1,7 +1,7 @@
 <?php
 /**
  * Report Statuses (report-status)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\StatusController
  * @var $model ommu\report\models\ReportStatus
  *
@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

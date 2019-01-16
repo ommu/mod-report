@@ -1,7 +1,7 @@
 <?php
 /**
  * HistoryController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportHistory
  *
  * HistoryController implements the CRUD actions for ReportHistory model.

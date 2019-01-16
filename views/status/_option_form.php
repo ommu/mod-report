@@ -1,10 +1,10 @@
 <?php
 /**
  * Report Statuses (report-status)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\report\controllers\StatusController
  * @var $model ommu\report\models\search\ReportStatus
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -33,7 +33,7 @@ $js = <<<JS
 		});
 	});
 JS;
-	$this->registerJs($js, \yii\web\View::POS_READY);
+	$this->registerJs($js, \app\components\View::POS_READY);
 ?>
 
 <div class="grid-form">

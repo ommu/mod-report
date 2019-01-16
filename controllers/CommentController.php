@@ -1,7 +1,7 @@
 <?php
 /**
  * CommentController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportComment
  *
  * CommentController implements the CRUD actions for ReportComment model.

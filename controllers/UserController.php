@@ -1,7 +1,7 @@
 <?php
 /**
  * UserController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\report\models\ReportUser
  *
  * UserController implements the CRUD actions for ReportUser model.
