@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB
- * @modified date 25 April 2018, 16:36 WIB
+ * @modified date 16 January 2019, 16:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -57,6 +57,7 @@ class ReportCategory extends ReportCategoryModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -71,9 +72,13 @@ class ReportCategory extends ReportCategoryModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['name_i'] = [

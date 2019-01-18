@@ -4,12 +4,13 @@
  * @var $this app\components\View
  * @var $this ommu\report\controllers\AdminController
  * @var $model ommu\report\models\Reports
+ * @var $searchModel ommu\report\models\search\Reports
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -30,6 +31,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
+<div class="reports-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
@@ -73,3 +75,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>

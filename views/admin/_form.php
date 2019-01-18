@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -28,6 +28,8 @@ $redactorOptions = [
 ];
 ?>
 
+<div class="reports-form">
+
 <?php $form = ActiveForm::begin([
 	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
@@ -36,9 +38,9 @@ $redactorOptions = [
 
 <?php //echo $form->errorSummary($model);?>
 
-<?php $cat_id = ReportCategory::getCategory(1);
+<?php $category = ReportCategory::getCategory(1);
 echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->dropDownList($cat_id, ['prompt'=>''])
+	->dropDownList($category, ['prompt'=>''])
 	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'report_url', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
@@ -68,3 +70,5 @@ echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 
 </div>
 
 <?php ActiveForm::end(); ?>
+
+</div>

@@ -10,23 +10,29 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\report\models\ReportCategory;
 ?>
 
-<div class="search-form">
+<div class="reports-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
-		<?php echo $form->field($model, 'status')->checkbox();?>
 
-		<?php echo $form->field($model, 'category_search');?>
+		<?php $category = ReportCategory::getCategory();
+		echo $form->field($model, 'cat_id')
+			->dropDownList($category, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'reporter_search');?>
 
@@ -51,9 +57,14 @@ use app\components\ActiveForm;
 		<?php echo $form->field($model, 'updated_date')
 			->input('date');?>
 
+		<?php echo $form->field($model, 'status')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

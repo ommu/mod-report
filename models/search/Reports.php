@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 15:57 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -30,7 +30,7 @@ class Reports extends ReportsModel
 		return [
 			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
-				'category_search', 'reporter_search', 'modified_search', 'user_search'], 'safe'],
+				'reporter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +57,7 @@ class Reports extends ReportsModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -70,16 +71,16 @@ class Reports extends ReportsModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['cat_id'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
-		];
-		$attributes['category_search'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -90,10 +91,6 @@ class Reports extends ReportsModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
-		];
-		$attributes['user_search'] = [
-			'asc' => ['view.users' => SORT_ASC],
-			'desc' => ['view.users' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -125,7 +122,6 @@ class Reports extends ReportsModel
 			->andFilterWhere(['like', 't.report_body', $this->report_body])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
-			->andFilterWhere(['like', 'category.message', $this->category_search])
 			->andFilterWhere(['like', 'user.displayname', $this->reporter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 

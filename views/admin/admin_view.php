@@ -9,17 +9,17 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $model->report_body;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
@@ -28,18 +28,22 @@ $this->params['menu']['content'] = [
 ];
 ?>
 
+<div class="reports-view">
+
 <?php echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
 	'attributes' => [
+		'report_id',
 		[
 			'attribute' => 'status',
-			'value' => $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'),
+			'value' => $this->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Resolved,Unresolved'),
+			'format' => 'raw',
 		],
 		[
-			'attribute' => 'category_search',
+			'attribute' => 'cat_id',
 			'value' => isset($model->category) ? $model->category->title->message : '-',
 		],
 		[
@@ -77,5 +81,27 @@ $this->params['menu']['content'] = [
 			'attribute' => 'updated_date',
 			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		],
+		[
+			'attribute' => 'comments',
+			'value' => Html::a($model->comments, ['comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'histories',
+			'value' => Html::a($model->histories, ['history/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]),
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'statuses',
+			'value' => Html::a($model->statuses, ['status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]),
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'users',
+			'value' => Html::a($model->users, ['user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
+			'format' => 'html',
+		],
 	],
 ]) ?>
+
+</div>

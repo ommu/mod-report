@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	Create
  *	Update
  *	View
@@ -20,7 +21,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:58 WIB
- * @modified date 25 April 2018, 17:15 WIB
+ * @modified date 17 January 2019, 11:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -29,7 +30,6 @@ namespace ommu\report\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\Reports;
@@ -56,10 +56,18 @@ class AdminController extends Controller
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
 	 * Lists all Reports models.
 	 * @return mixed
 	 */
-	public function actionIndex()
+	public function actionManage()
 	{
 		$searchModel = new ReportsSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -77,7 +85,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Reports');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
@@ -98,9 +106,13 @@ class AdminController extends Controller
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->report_id]);
-			} 
+				return $this->redirect(['manage']);
+				//return $this->redirect(['view', 'id'=>$model->report_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create Report');
@@ -127,12 +139,15 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->report_id]);
+				return $this->redirect(['manage']);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {report-body} category {cat-id}', ['model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {report-body}', ['model-class' => 'Report', 'report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -150,7 +165,7 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body} category {cat-id}', ['model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report', 'report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -169,7 +184,7 @@ class AdminController extends Controller
 		$this->findModel($id)->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report success deleted.'));
-		return $this->redirect(['index']);
+		return $this->redirect(['manage']);
 	}
 
 	/**
@@ -192,12 +207,11 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->report_id]);
+				return $this->redirect(['manage']);
 			}
 		}
 
-		$this->view->title = Yii::t('app', '{title} {model-class}: {report-body} category {cat-id}', ['title' => $title, 'model-class' => 'Report', 'report-body' => $model->report_body, 'cat-id' => $model->category->title->message]);
+		$this->view->title = Yii::t('app', '{title} {model-class}: {report-body}', ['title' => $title, 'model-class' => 'Report', 'report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_status', [
@@ -215,9 +229,9 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Reports::findOne($id)) !== null) 
+		if(($model = Reports::findOne($id)) !== null)
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

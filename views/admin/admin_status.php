@@ -32,9 +32,7 @@ $this->params['breadcrumbs'][] = $title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->report_id]), 'icon' => 'pencil'],
-	['label' => Yii::t('app', 'View'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->report_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye'],
 ];
 ?>
 

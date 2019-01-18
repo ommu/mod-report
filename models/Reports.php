@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 22:55 WIB
- * @modified date 18 April 2018, 22:17 WIB
+ * @modified date 17 January 2019, 11:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_reports".
@@ -51,11 +51,9 @@ class Reports extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date'];
 
-	// Variable Search
-	public $category_search;
+	// Search Variable
 	public $reporter_search;
 	public $modified_search;
-	public $user_search;
 
 	const SCENARIO_REPORT = 'reportForm';
 	const SCENARIO_RESOLVED = 'resolveForm';
@@ -77,14 +75,15 @@ class Reports extends \app\components\ActiveRecord
 			[['cat_id', 'report_url', 'report_body', 'report_message'], 'required'],
 			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['report_url', 'report_body', 'report_message'], 'string'],
-			[['report_date', 'report_ip', 'modified_date', 'updated_date'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
 	}
 
-	// get scenarios
+	/**
+	 * {@inheritdoc}
+	 */
 	public function scenarios()
 	{
 		return [
@@ -112,43 +111,69 @@ class Reports extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'category_search' => Yii::t('app', 'Category'),
+			'comments' => Yii::t('app', 'Comments'),
+			'histories' => Yii::t('app', 'Histories'),
+			'statuses' => Yii::t('app', 'Statuses'),
+			'users' => Yii::t('app', 'Users'),
 			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
-			'user_search' => Yii::t('app', 'Users'),
 		];
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getComments()
+	public function getComments($count=true, $publish=1)
 	{
-		return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id']);
+		if($count == true) {
+			$model = ReportComment::find();
+			$model->where(['publish' => $publish]);
+			return $model->count();
+		}
+
+		return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
+			->andOnCondition([sprintf('%s.publish', ReportComment::tableName()) => $publish]);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories()
+	public function getHistories($count=true)
 	{
+		if($count == true) {
+			$model = ReportHistory::find();
+			return $model->count();
+		}
+
 		return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getStatuses()
+	public function getStatuses($count=true)
 	{
+		if($count == true) {
+			$model = ReportStatus::find();
+			return $model->count();
+		}
+
 		return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUsers()
+	public function getUsers($count=true, $publish=1)
 	{
-		return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id']);
+		if($count == true) {
+			$model = ReportUser::find();
+			$model->where(['publish' => $publish]);
+			return $model->count();
+		}
+
+		return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
+			->andOnCondition([sprintf('%s.publish', ReportUser::tableName()) => $publish]);
 	}
 
 	/**
@@ -184,9 +209,18 @@ class Reports extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\Reports the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\Reports(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -198,9 +232,17 @@ class Reports extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('category')) {
 			$this->templateColumns['cat_id'] = [
 				'attribute' => 'cat_id',
-				'filter' => ReportCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->category) ? $model->category->title->message : '-';
+				},
+				'filter' => ReportCategory::getCategory(),
+			];
+		}
+		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['reporter_search'] = [
+				'attribute' => 'reporter_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
 				},
 			];
 		}
@@ -215,6 +257,7 @@ class Reports extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return $model->report_body;
 			},
+			'format' => 'html',
 		];
 		$this->templateColumns['report_message'] = [
 			'attribute' => 'report_message',
@@ -230,14 +273,6 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'report_date'),
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporter_search'] = [
-				'attribute' => 'reporter_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-		}
 		$this->templateColumns['report_ip'] = [
 			'attribute' => 'report_ip',
 			'value' => function($model, $key, $index, $column) {
@@ -274,24 +309,51 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($model->reports, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
-		$this->templateColumns['user_search'] = [
-			'attribute' => 'user_search',
+		$this->templateColumns['comments'] = [
+			'attribute' => 'comments',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['user/index', 'report'=>$model->primaryKey, 'publish'=>1]);
-				return Html::a($model->view->users, $url);
+				return Html::a($model->comments, ['comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
+		];
+		$this->templateColumns['histories'] = [
+			'attribute' => 'histories',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				return Html::a($model->histories, ['history/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'html',
+		];
+		$this->templateColumns['statuses'] = [
+			'attribute' => 'statuses',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				return Html::a($model->statuses, ['status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'html',
+		];
+		$this->templateColumns['users'] = [
+			'attribute' => 'users',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				return Html::a($model->users, ['user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'html',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['status', 'id'=>$model->primaryKey]);
-				return Html::a($model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'), $url);
+				$status = $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
+				$title = $model->status != 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
+				return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -331,7 +393,7 @@ class Reports extends \app\components\ActiveRecord
 
 		if($auto_report_cat_id) {
 			$findReport = self::find()
-				->select(['report_id','cat_id','report_url','reports'])
+				->select(['report_id','report_url','reports'])
 				->where(['cat_id' => $auto_report_cat_id])
 				->andWhere(['report_url' => $report_url])
 				->one();
@@ -341,7 +403,7 @@ class Reports extends \app\components\ActiveRecord
 	
 			else {
 				$report = new Reports();
-				$report->scenario = 'reportForm';
+				$report->scenario = Reports::SCENARIO_REPORT;
 				$report->cat_id = $auto_report_cat_id;
 				$report->report_url = $report_url;
 				$report->report_body = $report_body;
@@ -353,7 +415,7 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -363,7 +425,6 @@ class Reports extends \app\components\ActiveRecord
 				if($this->modified_id == null)
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
-
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
