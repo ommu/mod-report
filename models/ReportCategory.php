@@ -24,7 +24,6 @@
  * @property string $slug
  *
  * The followings are the available model relations:
- * @property ReportSetting[] $settings
  * @property Reports[] $reports
  * @property SourceMessage $title
  * @property SourceMessage $description
@@ -41,7 +40,6 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\Users;
-use ommu\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {
@@ -52,9 +50,6 @@ class ReportCategory extends \app\components\ActiveRecord
 	public $desc_i;
 
 	// Search Variable
-	public $report_search;
-	public $report_resolved_search;
-	public $report_all_search;
 	public $creation_search;
 	public $modified_search;
 
@@ -112,9 +107,9 @@ class ReportCategory extends \app\components\ActiveRecord
 			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Category'),
 			'desc_i' => Yii::t('app', 'Description'),
-			'report_search' => Yii::t('app', 'Report'),
-			'report_resolved_search' => Yii::t('app', 'Resolved'),
-			'report_all_search' => Yii::t('app', 'All'),
+			'reports' => Yii::t('app', 'Reports'),
+			'resolved' => Yii::t('app', 'Resolved'),
+			'unresolved' => Yii::t('app', 'Unresolved'),
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -123,17 +118,34 @@ class ReportCategory extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getSettings()
+	public function getReports($count=true, $status=null)
 	{
-		return $this->hasMany(ReportSetting::className(), ['auto_report_cat_id' => 'cat_id']);
+		if($count == true) {
+			$model = Reports::find()
+				->where(['cat_id' => $this->cat_id]);
+			if($status !== null)
+				$model->andWhere(['status' => $status]);
+			return $model->count();
+		}
+
+		return $this->hasMany(Reports::className(), ['cat_id' => 'cat_id'])
+			->andOnCondition([sprintf('%s.status', Reports::tableName()) => $status]);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getReports()
+	public function getResolved($count=true)
 	{
-		return $this->hasMany(Reports::className(), ['cat_id' => 'cat_id']);
+		return $this->getReports($count, 1);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUnresolved($count=true)
+	{
+		return $this->getReports($count, 0);
 	}
 
 	/**
@@ -166,14 +178,6 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(ReportCategoryView::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**
@@ -252,35 +256,32 @@ class ReportCategory extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		$this->templateColumns['report_search'] = [
-			'attribute' => 'report_search',
+		$this->templateColumns['unresolved'] = [
+			'attribute' => 'unresolved',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'status' => 0]);
-				return Html::a($model->view->reports, $url);
+				return Html::a($model->unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$model->unresolved])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
-		$this->templateColumns['report_resolved_search'] = [
-			'attribute' => 'report_resolved_search',
+		$this->templateColumns['resolved'] = [
+			'attribute' => 'resolved',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'status' => 1]);
-				return Html::a($model->view->report_resolved, $url);
+				return Html::a($model->resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$model->resolved])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
-		$this->templateColumns['report_all_search'] = [
-			'attribute' => 'report_all_search',
+		$this->templateColumns['reports'] = [
+			'attribute' => 'reports',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey]);
-				return Html::a($model->view->report_all, $url);
+				return Html::a($model->reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [

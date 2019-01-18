@@ -30,7 +30,7 @@ class ReportCategory extends ReportCategoryModel
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
 			[['creation_date', 'modified_date', 'updated_date', 'slug', 'name_i', 'desc_i',
-				'report_search', 'report_resolved_search', 'report_all_search', 'creation_search', 'modified_search'], 'safe'],
+				'creation_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -64,7 +64,6 @@ class ReportCategory extends ReportCategoryModel
 	{
 		$query = ReportCategoryModel::find()->alias('t');
 		$query->joinWith([
-			'view view', 
 			'title title', 
 			'description description', 
 			'creation creation', 
@@ -88,18 +87,6 @@ class ReportCategory extends ReportCategoryModel
 		$attributes['desc_i'] = [
 			'asc' => ['description.message' => SORT_ASC],
 			'desc' => ['description.message' => SORT_DESC],
-		];
-		$attributes['report_search'] = [
-			'asc' => ['view.reports' => SORT_ASC],
-			'desc' => ['view.reports' => SORT_DESC],
-		];
-		$attributes['report_resolved_search'] = [
-			'asc' => ['view.report_resolved' => SORT_ASC],
-			'desc' => ['view.report_resolved' => SORT_DESC],
-		];
-		$attributes['report_all_search'] = [
-			'asc' => ['view.report_all' => SORT_ASC],
-			'desc' => ['view.report_all' => SORT_DESC],
 		];
 		$attributes['creation_search'] = [
 			'asc' => ['creation.displayname' => SORT_ASC],

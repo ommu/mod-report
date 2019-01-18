@@ -15,6 +15,7 @@
  */
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Categories'), 'url' => ['index']];
@@ -72,6 +73,21 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'slug',
 			'value' => $model->slug ? $model->slug : '-',
+		],
+		[
+			'attribute' => 'unresolved',
+			'value' => Html::a($model->unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$model->unresolved])]),
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'resolved',
+			'value' => Html::a($model->resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$model->resolved])]),
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'reports',
+			'value' => Html::a($model->reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]),
+			'format' => 'html',
 		],
 	],
 ]) ?>

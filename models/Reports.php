@@ -49,7 +49,7 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date'];
+	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date','comments','histories','statuses','users'];
 
 	// Search Variable
 	public $reporter_search;
@@ -126,8 +126,10 @@ class Reports extends \app\components\ActiveRecord
 	public function getComments($count=true, $publish=1)
 	{
 		if($count == true) {
-			$model = ReportComment::find();
-			$model->where(['publish' => $publish]);
+			$model = ReportComment::find()
+				->where(['report_id' => $this->report_id]);
+			if($publish !== null)
+				$model->andWhere(['publish' => $publish]);
 			return $model->count();
 		}
 
@@ -141,7 +143,8 @@ class Reports extends \app\components\ActiveRecord
 	public function getHistories($count=true)
 	{
 		if($count == true) {
-			$model = ReportHistory::find();
+			$model = ReportHistory::find()
+				->where(['report_id' => $this->report_id]);
 			return $model->count();
 		}
 
@@ -154,7 +157,8 @@ class Reports extends \app\components\ActiveRecord
 	public function getStatuses($count=true)
 	{
 		if($count == true) {
-			$model = ReportStatus::find();
+			$model = ReportStatus::find()
+				->where(['report_id' => $this->report_id]);
 			return $model->count();
 		}
 
@@ -167,8 +171,10 @@ class Reports extends \app\components\ActiveRecord
 	public function getUsers($count=true, $publish=1)
 	{
 		if($count == true) {
-			$model = ReportUser::find();
-			$model->where(['publish' => $publish]);
+			$model = ReportUser::find()
+				->where(['report_id' => $this->report_id]);
+			if($publish !== null)
+				$model->andWhere(['publish' => $publish]);
 			return $model->count();
 		}
 
@@ -305,7 +311,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'reports',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->reports])]);
+				return Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
