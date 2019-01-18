@@ -1,15 +1,15 @@
 <?php
 /**
- * Report Histories (report-history)
+ * Report Users (report-user)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\HistoryController
- * @var $model ommu\report\models\ReportHistory
+ * @var $this ommu\report\controllers\history\UserController
+ * @var $model ommu\report\models\ReportUser
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 22 September 2017, 13:57 WIB
- * @modified date 26 April 2018, 06:34 WIB
+ * @created date 22 September 2017, 13:56 WIB
+ * @modified date 26 April 2018, 11:12 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -48,16 +48,16 @@ array_push($columnData, [
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
 			$url = Url::to(['view', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Report History')]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Report User')]);
 		},
 		'update' => function ($url, $model, $key) {
 			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Report History')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Report User')]);
 		},
 		'delete' => function ($url, $model, $key) {
 			$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-				'title' => Yii::t('app', 'Delete Report History'),
+				'title' => Yii::t('app', 'Delete Report User'),
 				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 				'data-method'  => 'post',
 			]);

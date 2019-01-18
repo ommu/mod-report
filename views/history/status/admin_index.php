@@ -2,7 +2,7 @@
 /**
  * Report Statuses (report-status)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\StatusController
+ * @var $this ommu\report\controllers\history\StatusController
  * @var $model ommu\report\models\ReportStatus
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

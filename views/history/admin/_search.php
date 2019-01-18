@@ -1,15 +1,16 @@
 <?php
 /**
- * Report Comments (report-comment)
+ * Report Histories (report-history)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\CommentController
- * @var $model ommu\report\models\search\ReportComment
+ * @var $this ommu\report\controllers\history\AdminController
+ * @var $model ommu\report\models\search\ReportHistory
  * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 22 September 2017, 13:54 WIB
+ * @created date 22 September 2017, 13:57 WIB
+ * @modified date 26 April 2018, 06:34 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -23,23 +24,14 @@ use app\components\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'comment_id') ?>
+		<?php echo $form->field($model, 'report_search');?>
 
-		<?= $form->field($model, 'publish') ?>
+		<?php echo $form->field($model, 'reporter_search');?>
 
-		<?= $form->field($model, 'report_id') ?>
+		<?php echo $form->field($model, 'report_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'user_id') ?>
-
-		<?= $form->field($model, 'comment_text') ?>
-
-		<?= $form->field($model, 'creation_date') ?>
-
-		<?= $form->field($model, 'modified_date') ?>
-
-		<?= $form->field($model, 'modified_id') ?>
-
-		<?= $form->field($model, 'updated_date') ?>
+		<?php echo $form->field($model, 'report_ip');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

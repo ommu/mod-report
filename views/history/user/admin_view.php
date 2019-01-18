@@ -1,15 +1,15 @@
 <?php
 /**
- * Report Histories (report-history)
+ * Report Users (report-user)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\HistoryController
- * @var $model ommu\report\models\ReportHistory
+ * @var $this ommu\report\controllers\history\UserController
+ * @var $model ommu\report\models\ReportUser
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 22 September 2017, 13:57 WIB
- * @modified date 26 April 2018, 06:34 WIB
+ * @created date 22 September 2017, 13:56 WIB
+ * @modified date 26 April 2018, 11:12 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -18,7 +18,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Histories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
@@ -34,6 +34,10 @@ $this->params['menu']['content'] = [
 	],
 	'attributes' => [
 		[
+			'attribute' => 'publish',
+			'value' => $model->publish == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+		],
+		[
 			'attribute' => 'category_search',
 			'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
 		],
@@ -42,13 +46,24 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->report) ? $model->report->report_body : '-',
 		],
 		[
-			'attribute' => 'reporter_search',
+			'attribute' => 'user_search',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
-			'attribute' => 'report_date',
-			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
+			'attribute' => 'creation_date',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
-		'report_ip',
+		[
+			'attribute' => 'modified_date',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		],
+		[
+			'attribute' => 'modified_search',
+			'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		],
+		[
+			'attribute' => 'updated_date',
+			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+		],
 	],
 ]) ?>

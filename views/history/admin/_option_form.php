@@ -1,16 +1,16 @@
 <?php
 /**
- * Report Statuses (report-status)
+ * Report Histories (report-history)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\StatusController
- * @var $model ommu\report\models\search\ReportStatus
+ * @var $this ommu\report\controllers\history\AdminController
+ * @var $model ommu\report\models\search\ReportHistory
  * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 22 September 2017, 16:03 WIB
- * @modified date 26 April 2018, 09:31 WIB
+ * @created date 22 September 2017, 13:57 WIB
+ * @modified date 26 April 2018, 06:34 WIB
  * @link https://github.com/ommu/mod-report
  *
  */

@@ -2,7 +2,7 @@
 /**
  * Report Comments (report-comment)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\CommentController
+ * @var $this ommu\report\controllers\history\CommentController
  * @var $model ommu\report\models\ReportComment
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

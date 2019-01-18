@@ -2,7 +2,7 @@
 /**
  * Report Users (report-user)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\UserController
+ * @var $this ommu\report\controllers\history\UserController
  * @var $model ommu\report\models\search\ReportUser
  * @var $form app\components\ActiveForm
  *

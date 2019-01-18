@@ -25,13 +25,12 @@
  *
  */
  
-namespace ommu\report\controllers;
+namespace ommu\report\controllers\history;
 
 use Yii;
 use ommu\report\models\ReportComment;
 use ommu\report\models\search\ReportComment as ReportCommentSearch;
 use app\components\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 
@@ -195,7 +194,7 @@ class CommentController extends Controller
 	{
 		if (($model = ReportComment::findOne($id)) !== null) 
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

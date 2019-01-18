@@ -1,40 +1,37 @@
 <?php
 /**
- * UserController
+ * AdminController
  * @var $this app\components\View
- * @var $model ommu\report\models\ReportUser
+ * @var $model ommu\report\models\ReportHistory
  *
- * UserController implements the CRUD actions for ReportUser model.
+ * AdminController implements the CRUD actions for ReportHistory model.
  * Reference start
  * TOC :
  *	Index
  *	View
  *	Delete
- *	Runaction
- *	Publish
  *
  *	findModel
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 22 September 2017, 13:56 WIB
- * @modified date 26 April 2018, 11:12 WIB
+ * @created date 22 September 2017, 13:57 WIB
+ * @modified date 26 April 2018, 06:34 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
  
-namespace ommu\report\controllers;
+namespace ommu\report\controllers\history;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\report\models\ReportUser;
-use ommu\report\models\search\ReportUser as ReportUserSearch;
+use ommu\report\models\ReportHistory;
+use ommu\report\models\search\ReportHistory as ReportHistorySearch;
 
-class UserController extends Controller
+class AdminController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -49,19 +46,18 @@ class UserController extends Controller
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
-					'publish' => ['POST'],
 				],
 			],
 		];
 	}
 
 	/**
-	 * Lists all ReportUser models.
+	 * Lists all ReportHistory models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new ReportUserSearch();
+		$searchModel = new ReportHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -74,7 +70,7 @@ class UserController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Report Users');
+		$this->view->title = Yii::t('app', 'Report Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -85,7 +81,7 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Displays a single ReportUser model.
+	 * Displays a single ReportHistory model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -93,7 +89,7 @@ class UserController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report User', 'report-body' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report History', 'report-body' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -102,53 +98,31 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Deletes an existing ReportUser model.
+	 * Deletes an existing ReportHistory model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
 	 */
 	public function actionDelete($id)
 	{
-		$model = $this->findModel($id);
-		$model->publish = 2;
-
-		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->id]);
-		}
+		$this->findModel($id)->delete();
+		
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Report history success deleted.'));
+		return $this->redirect(['index']);
 	}
 
 	/**
-	 * actionPublish an existing ReportUser model.
-	 * If publish is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionPublish($id)
-	{
-		$model = $this->findModel($id);
-		$replace = $model->publish == 1 ? 0 : 1;
-		$model->publish = $replace;
-
-		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success updated.'));
-			return $this->redirect(['index']);
-		}
-	}
-
-	/**
-	 * Finds the ReportUser model based on its primary key value.
+	 * Finds the ReportHistory model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return ReportUser the loaded model
+	 * @return ReportHistory the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportUser::findOne($id)) !== null) 
+		if(($model = ReportHistory::findOne($id)) !== null) 
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }
