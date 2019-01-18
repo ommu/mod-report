@@ -63,7 +63,6 @@ $this->params['menu']['content'] = [
 			'value' => $model->report_message ? $model->report_message : '-',
 			'format' => 'html',
 		],
-		'reports',
 		[
 			'attribute' => 'report_date',
 			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
@@ -82,23 +81,23 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		],
 		[
-			'attribute' => 'comments',
-			'value' => Html::a($model->comments, ['comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
+			'attribute' => 'reports',
+			'value' => Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]),
 			'format' => 'html',
 		],
 		[
-			'attribute' => 'histories',
-			'value' => Html::a($model->histories, ['history/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]),
+			'attribute' => 'comments',
+			'value' => Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'statuses',
-			'value' => Html::a($model->statuses, ['status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]),
+			'value' => Html::a($model->statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]),
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'users',
-			'value' => Html::a($model->users, ['user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
+			'value' => Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
 			'format' => 'html',
 		],
 	],

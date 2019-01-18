@@ -305,8 +305,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'reports',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['history/index', 'report'=>$model->primaryKey]);
-				return Html::a($model->reports, $url);
+				return Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->reports])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -315,16 +314,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'comments',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->comments, ['comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]);
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
-		];
-		$this->templateColumns['histories'] = [
-			'attribute' => 'histories',
-			'filter' => false,
-			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->histories, ['history/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
+				return Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -333,7 +323,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'statuses',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->statuses, ['status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]);
+				return Html::a($model->statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -342,7 +332,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'users',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->users, ['user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]);
+				return Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',

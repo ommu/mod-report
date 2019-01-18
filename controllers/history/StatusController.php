@@ -52,10 +52,18 @@ class StatusController extends Controller
 	}
 
 	/**
-	 * Lists all ReportStatus models.
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
+	 * Lists all Reports models.
+	 * @return mixed
+	 */
+	public function actionManage()
 	{
 		$searchModel = new ReportStatusSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -73,7 +81,7 @@ class StatusController extends Controller
 		$this->view->title = Yii::t('app', 'Report Statuses');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,

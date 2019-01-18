@@ -55,10 +55,18 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Lists all ReportUser models.
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
+	 * Lists all Reports models.
+	 * @return mixed
+	 */
+	public function actionManage()
 	{
 		$searchModel = new ReportUserSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -76,7 +84,7 @@ class UserController extends Controller
 		$this->view->title = Yii::t('app', 'Report Users');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,

@@ -52,10 +52,18 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Lists all ReportHistory models.
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
+	 * Lists all Reports models.
+	 * @return mixed
+	 */
+	public function actionManage()
 	{
 		$searchModel = new ReportHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -73,7 +81,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Report Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,

@@ -56,10 +56,18 @@ class CommentController extends Controller
 	}
 
 	/**
-	 * Lists all ReportComment models.
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function actionIndex()
+	{
+		return $this->redirect(['manage']);
+	}
+
+	/**
+	 * Lists all Reports models.
+	 * @return mixed
+	 */
+	public function actionManage()
 	{
 		$searchModel = new ReportCommentSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -77,7 +85,7 @@ class CommentController extends Controller
 		$this->view->title = Yii::t('app', 'Report Comments');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns'	  => $columns,
