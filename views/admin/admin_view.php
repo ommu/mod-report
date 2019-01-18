@@ -87,7 +87,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'comments',
-			'value' => Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
+			'value' => Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
 			'format' => 'html',
 		],
 		[
@@ -97,7 +97,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'users',
-			'value' => Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
+			'value' => Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
 			'format' => 'html',
 		],
 	],
