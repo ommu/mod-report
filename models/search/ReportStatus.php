@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:03 WIB
- * @modified date 26 April 2018, 09:31 WIB
+ * @modified date 18 January 2019, 15:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -28,9 +28,9 @@ class ReportStatus extends ReportStatusModel
 	public function rules()
 	{
 		return [
-			[['history_id', 'status', 'report_id', 'user_id', 'modified_id'], 'integer'],
+			[['id', 'status', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['report_message', 'updated_date', 'updated_ip', 'modified_date',
-				'category_search', 'report_search', 'reporter_search', 'modified_search'], 'safe'],
+				'cat_id', 'report_search', 'reporter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +57,7 @@ class ReportStatus extends ReportStatusModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -70,12 +71,16 @@ class ReportStatus extends ReportStatusModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
+		$attributes['cat_id'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -93,7 +98,7 @@ class ReportStatus extends ReportStatusModel
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
-			'defaultOrder' => ['history_id' => SORT_DESC],
+			'defaultOrder' => ['id' => SORT_DESC],
 		]);
 
 		$this->load($params);
@@ -106,14 +111,14 @@ class ReportStatus extends ReportStatusModel
 
 		// grid filtering conditions
 		$query->andFilterWhere([
-			't.history_id' => $this->history_id,
+			't.id' => $this->id,
 			't.status' => $this->status,
 			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 		]);
 
 		$query->andFilterWhere(['like', 't.report_message', $this->report_message])

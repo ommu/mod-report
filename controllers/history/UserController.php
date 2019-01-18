@@ -8,9 +8,10 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	View
  *	Delete
- *	Runaction
+ *	RunAction
  *	Publish
  *
  *	findModel
@@ -19,7 +20,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:56 WIB
- * @modified date 26 April 2018, 11:12 WIB
+ * @modified date 18 January 2019, 15:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -63,7 +64,7 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Lists all Reports models.
+	 * Lists all ReportUser models.
 	 * @return mixed
 	 */
 	public function actionManage()
@@ -81,7 +82,7 @@ class UserController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Report Users');
+		$this->view->title = Yii::t('app', 'Users');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -100,7 +101,7 @@ class UserController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report User', 'report-body' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-id}', ['model-class' => 'User', 'report-id' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -119,10 +120,9 @@ class UserController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->id]);
+			return $this->redirect(['manage']);
 		}
 	}
 
@@ -138,9 +138,9 @@ class UserController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success updated.'));
-			return $this->redirect(['index']);
+			return $this->redirect(['manage']);
 		}
 	}
 
@@ -153,7 +153,7 @@ class UserController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportUser::findOne($id)) !== null) 
+		if(($model = ReportUser::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

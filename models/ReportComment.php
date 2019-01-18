@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 23:27 WIB
- * @modified date 18 April 2018, 22:15 WIB
+ * @modified date 18 January 2019, 14:56 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_comment".
@@ -42,7 +42,8 @@ class ReportComment extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
+	public $cat_id;
 	public $report_search;
 	public $user_search;
 	public $modified_search;
@@ -64,7 +65,6 @@ class ReportComment extends \app\components\ActiveRecord
 			[['report_id', 'comment_text'], 'required'],
 			[['publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['comment_text'], 'string'],
-			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -85,6 +85,7 @@ class ReportComment extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
+			'cat_id' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
 			'user_search' => Yii::t('app', 'User'),
 			'modified_search' => Yii::t('app', 'Modified'),
@@ -116,9 +117,18 @@ class ReportComment extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\ReportComment the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\ReportComment(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -128,10 +138,19 @@ class ReportComment extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('report')) {
+			if(!Yii::$app->request->get('category')) {
+				$this->templateColumns['cat_id'] = [
+					'attribute' => 'cat_id',
+					'filter' => ReportCategory::getCategory(),
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->report) ? $model->report->category->title->message : '-';
+					},
+				];
+			}
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->report) ? $model->report->report_id : '-';
+					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
@@ -211,33 +230,9 @@ class ReportComment extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getComment
-	 */
-	public static function getComment($publish=null, $array=true) 
-	{
-		$model = self::find()->alias('t');
-		if($publish != null)
-			$model = $model->andWhere(['t.publish' => $publish]);
-
-		$model = $model->orderBy('t.comment_id ASC')->all();
-
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->comment_id] = $val->comment_id;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
-	}
-
-	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -249,56 +244,5 @@ class ReportComment extends \app\components\ActiveRecord
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After save attributes
-	 */
-	public function afterSave($insert, $changedAttributes) 
-	{
-		parent::afterSave($insert, $changedAttributes);
-
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-
 	}
 }

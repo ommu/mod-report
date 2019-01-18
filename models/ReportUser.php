@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 23:29 WIB
- * @modified date 18 April 2018, 22:16 WIB
+ * @modified date 18 January 2019, 14:57 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_user".
@@ -41,10 +41,10 @@ class ReportUser extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date'];
 
-	// Variable Search
-	public $category_search;
+	// Search Variable
+	public $cat_id;
 	public $report_search;
-	public $user_search;
+	public $reporter_search;
 	public $modified_search;
 
 	/**
@@ -63,7 +63,6 @@ class ReportUser extends \app\components\ActiveRecord
 		return [
 			[['report_id'], 'required'],
 			[['publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-			[['creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -83,9 +82,9 @@ class ReportUser extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'category_search' => Yii::t('app', 'Category'),
+			'cat_id' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
-			'user_search' => Yii::t('app', 'User'),
+			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -115,9 +114,18 @@ class ReportUser extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\ReportStatus the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\ReportStatus(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -126,16 +134,14 @@ class ReportUser extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('category') && !Yii::$app->request->get('report')) {
-			$this->templateColumns['category_search'] = [
-				'attribute' => 'category_search',
+		if(!Yii::$app->request->get('report')) {
+			$this->templateColumns['cat_id'] = [
+				'attribute' => 'cat_id',
 				'filter' => ReportCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->category->title->message : '-';
 				},
 			];
-		}
-		if(!Yii::$app->request->get('report')) {
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
@@ -144,8 +150,8 @@ class ReportUser extends \app\components\ActiveRecord
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['reporter_search'] = [
+				'attribute' => 'reporter_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -215,7 +221,7 @@ class ReportUser extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {

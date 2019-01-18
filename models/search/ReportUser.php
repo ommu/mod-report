@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:56 WIB
- * @modified date 26 April 2018, 11:12 WIB
+ * @modified date 18 January 2019, 15:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -30,7 +30,7 @@ class ReportUser extends ReportUserModel
 		return [
 			[['id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['creation_date', 'modified_date', 'updated_date',
-				'category_search', 'report_search', 'user_search', 'modified_search'], 'safe'],
+				'cat_id', 'report_search', 'reporter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +57,7 @@ class ReportUser extends ReportUserModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -70,12 +71,16 @@ class ReportUser extends ReportUserModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
+		$attributes['cat_id'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -83,7 +88,7 @@ class ReportUser extends ReportUserModel
 			'asc' => ['report.report_body' => SORT_ASC],
 			'desc' => ['report.report_body' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['reporter_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -113,7 +118,7 @@ class ReportUser extends ReportUserModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 		]);
 
 		if(isset($params['trash']))
@@ -126,7 +131,7 @@ class ReportUser extends ReportUserModel
 		}
 
 		$query->andFilterWhere(['like', 'report.report_body', $this->report_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.displayname', $this->reporter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;

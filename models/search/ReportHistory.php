@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:57 WIB
- * @modified date 26 April 2018, 06:34 WIB
+ * @modified date 18 January 2019, 15:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -30,7 +30,7 @@ class ReportHistory extends ReportHistoryModel
 		return [
 			[['id', 'report_id', 'user_id'], 'integer'],
 			[['report_date', 'report_ip',
-				'category_search', 'report_search', 'reporter_search'], 'safe'],
+				'cat_id', 'report_search', 'reporter_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +57,7 @@ class ReportHistory extends ReportHistoryModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -69,12 +70,16 @@ class ReportHistory extends ReportHistoryModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
+		$attributes['cat_id'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -105,7 +110,7 @@ class ReportHistory extends ReportHistoryModel
 			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.report_date as date)' => $this->report_date,
-			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 		]);
 
 		$query->andFilterWhere(['like', 't.report_ip', $this->report_ip])

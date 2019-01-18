@@ -8,6 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:54 WIB
+ * @modified date 18 January 2019, 15:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -21,11 +22,6 @@ use ommu\report\models\ReportComment as ReportCommentModel;
 
 class ReportComment extends ReportCommentModel
 {
-	// Variable Search	
-	public $reports_search;
-	public $user_search;
-	public $modified_search;
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -33,8 +29,8 @@ class ReportComment extends ReportCommentModel
 	{
 		return [
 			[['comment_id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-            [['comment_text', 'creation_date', 'modified_date', 'updated_date',
-				'reports_search', 'user_search', 'modified_search'], 'safe'],
+			[['comment_text', 'creation_date', 'modified_date', 'updated_date',
+				'cat_id', 'report_search', 'user_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -61,22 +57,35 @@ class ReportComment extends ReportCommentModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = ReportCommentModel::find()->alias('t');
-		$query->joinWith(['reports reports', 'user user', 'modified modified']);
-
-		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
+		$query->joinWith([
+			'report report', 
+			'user user', 
+			'modified modified'
 		]);
 
+		// add conditions that should always apply here
+		$dataParams = [
+			'query' => $query,
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
+
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['reports_search'] = [
-			'asc' => ['reports.comment_id' => SORT_ASC],
-			'desc' => ['reports.comment_id' => SORT_DESC],
+		$attributes['cat_id'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
+		$attributes['report_search'] = [
+			'asc' => ['report.report_body' => SORT_ASC],
+			'desc' => ['report.report_body' => SORT_DESC],
 		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
@@ -93,7 +102,7 @@ class ReportComment extends ReportCommentModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -102,13 +111,13 @@ class ReportComment extends ReportCommentModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.comment_id' => $this->comment_id,
-			't.report_id' => isset($params['reports']) ? $params['reports'] : $this->report_id,
-            't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-            'cast(t.creation_date as date)' => $this->creation_date,
-            'cast(t.modified_date as date)' => $this->modified_date,
-            't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-            'cast(t.updated_date as date)' => $this->updated_date,
-        ]);
+			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
+			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
+			'cast(t.creation_date as date)' => $this->creation_date,
+			'cast(t.modified_date as date)' => $this->modified_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
+		]);
 
 		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
@@ -119,10 +128,10 @@ class ReportComment extends ReportCommentModel
 				$query->andFilterWhere(['t.publish' => $this->publish]);
 		}
 
-        $query->andFilterWhere(['like', 't.comment_text', $this->comment_text])
-            ->andFilterWhere(['like', 'reports.comment_id', $this->reports_search])
-            ->andFilterWhere(['like', 'user.displayname', $this->user_search])
-            ->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+		$query->andFilterWhere(['like', 't.comment_text', $this->comment_text])
+			->andFilterWhere(['like', 'report.report_body', $this->report_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}

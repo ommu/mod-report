@@ -64,7 +64,6 @@ class Reports extends ReportsModel
 	{
 		$query = ReportsModel::find()->alias('t');
 		$query->joinWith([
-			'view view', 
 			'category.title category',
 			'user user', 
 			'modified modified'

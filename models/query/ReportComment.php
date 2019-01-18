@@ -1,21 +1,21 @@
 <?php
 /**
- * ReportCategory
+ * ReportComment
  *
- * This is the ActiveQuery class for [[\ommu\report\models\ReportCategory]].
- * @see \ommu\report\models\ReportCategory
+ * This is the ActiveQuery class for [[\ommu\report\models\ReportComment]].
+ * @see \ommu\report\models\ReportComment
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2019 OMMU (www.ommu.co)
- * @created date 16 January 2019, 16:26 WIB
+ * @created date 18 January 2019, 14:56 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 namespace ommu\report\models\query;
 
-class ReportCategory extends \yii\db\ActiveQuery
+class ReportComment extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()
@@ -42,7 +42,7 @@ class ReportCategory extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\ReportCategory[]|array
+	 * @return \ommu\report\models\ReportComment[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class ReportCategory extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\ReportCategory|array|null
+	 * @return \ommu\report\models\ReportComment|array|null
 	 */
 	public function one($db = null)
 	{

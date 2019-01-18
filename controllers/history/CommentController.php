@@ -8,11 +8,10 @@
  * Reference start
  * TOC :
  *	Index
- *	Create
- *	Update
+ *	Manage
  *	View
  *	Delete
- *	Runaction
+ *	RunAction
  *	Publish
  *
  *	findModel
@@ -21,6 +20,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:54 WIB
+ * @modified date 18 January 2019, 15:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -28,11 +28,11 @@
 namespace ommu\report\controllers\history;
 
 use Yii;
+use yii\filters\VerbFilter;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportComment;
 use ommu\report\models\search\ReportComment as ReportCommentSearch;
-use app\components\Controller;
-use yii\filters\VerbFilter;
-use mdm\admin\components\AccessControl;
 
 class CommentController extends Controller
 {
@@ -42,9 +42,9 @@ class CommentController extends Controller
 	public function behaviors()
 	{
 		return [
-            'access' => [
-                'class' => AccessControl::className(),
-            ],
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -64,7 +64,7 @@ class CommentController extends Controller
 	}
 
 	/**
-	 * Lists all Reports models.
+	 * Lists all ReportComment models.
 	 * @return mixed
 	 */
 	public function actionManage()
@@ -82,75 +82,26 @@ class CommentController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Report Comments');
+		$this->view->title = Yii::t('app', 'Comments');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
 	/**
-	 * Creates a new ReportComment model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
-	public function actionCreate()
-	{
-		$model = new ReportComment();
-
-		if ($model->load(Yii::$app->request->post()) ) {
-			//return $this->redirect(['view', 'id' => $model->comment_id]);
-			$model->user_id = Yii::$app->user->id;
-			$model->save();
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create Report Comment');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
-		}
-	}
-
-	/**
-	 * Updates an existing ReportComment model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param string $id
-	 * @return mixed
-	 */
-	public function actionUpdate($id)
-	{
-		$model = $this->findModel($id);
-
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->comment_id]);
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {comment_id}', ['modelClass' => 'Report Comment', 'comment_id' => $model->comment_id]);
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-			]);
-		}
-	}
-
-	/**
 	 * Displays a single ReportComment model.
-	 * @param string $id
+	 * @param integer $id
 	 * @return mixed
 	 */
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {comment_id}', ['modelClass' => 'Report Comment', 'comment_id' => $model->comment_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-id}', ['model-class' => 'Comment', 'report-id' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -161,7 +112,7 @@ class CommentController extends Controller
 	/**
 	 * Deletes an existing ReportComment model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 * @param string $id
+	 * @param integer $id
 	 * @return mixed
 	 */
 	public function actionDelete($id)
@@ -169,16 +120,16 @@ class CommentController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if ($model->save(false, ['publish'])) {
-			//return $this->redirect(['view', 'id' => $model->comment_id]);
-			return $this->redirect(['index']);
+		if($model->save(false, ['publish','modified_id'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success deleted.'));
+			return $this->redirect(['manage']);
 		}
 	}
 
 	/**
-	 * Publish/Unpublish an existing ReportComment model.
-	 * If publish/unpublish is successful, the browser will be redirected to the 'index' page.
-	 * @param string $id
+	 * actionPublish an existing ReportComment model.
+	 * If publish is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
 	 * @return mixed
 	 */
 	public function actionPublish($id)
@@ -187,20 +138,22 @@ class CommentController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if ($model->save(false, ['publish']))
-			return $this->redirect(['index']);
+		if($model->save(false, ['publish','modified_id'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success updated.'));
+			return $this->redirect(['manage']);
+		}
 	}
 
 	/**
 	 * Finds the ReportComment model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
-	 * @param string $id
+	 * @param integer $id
 	 * @return ReportComment the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = ReportComment::findOne($id)) !== null) 
+		if(($model = ReportComment::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

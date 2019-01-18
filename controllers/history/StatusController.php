@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	View
  *	Delete
  *
@@ -17,7 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:03 WIB
- * @modified date 26 April 2018, 09:31 WIB
+ * @modified date 18 January 2019, 15:38 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -60,7 +61,7 @@ class StatusController extends Controller
 	}
 
 	/**
-	 * Lists all Reports models.
+	 * Lists all ReportStatus models.
 	 * @return mixed
 	 */
 	public function actionManage()
@@ -78,7 +79,7 @@ class StatusController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Report Statuses');
+		$this->view->title = Yii::t('app', 'Statuses');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -97,7 +98,7 @@ class StatusController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report Status', 'report-body' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-id}', ['model-class' => 'Status', 'report-id' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -116,7 +117,7 @@ class StatusController extends Controller
 		$this->findModel($id)->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report status success deleted.'));
-		return $this->redirect(['index']);
+		return $this->redirect(['manage']);
 	}
 
 	/**
@@ -128,7 +129,7 @@ class StatusController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportStatus::findOne($id)) !== null) 
+		if(($model = ReportStatus::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

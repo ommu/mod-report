@@ -9,17 +9,16 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 13:57 WIB
- * @modified date 26 April 2018, 06:34 WIB
+ * @modified date 18 January 2019, 15:37 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Histories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Histories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->report->report_body;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
@@ -27,14 +26,17 @@ $this->params['menu']['content'] = [
 ];
 ?>
 
+<div class="report-history-view">
+
 <?php echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
 	'attributes' => [
+		'id',
 		[
-			'attribute' => 'category_search',
+			'attribute' => 'cat_id',
 			'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
 		],
 		[
@@ -52,3 +54,5 @@ $this->params['menu']['content'] = [
 		'report_ip',
 	],
 ]) ?>
+
+</div>

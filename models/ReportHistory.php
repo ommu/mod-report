@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 23:26 WIB
- * @modified date 18 April 2018, 22:15 WIB
+ * @modified date 18 January 2019, 14:56 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_history".
@@ -27,7 +27,6 @@
 namespace ommu\report\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
 
@@ -35,8 +34,8 @@ class ReportHistory extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
-	public $category_search;
+	// Search Variable
+	public $cat_id;
 	public $report_search;
 	public $reporter_search;
 
@@ -54,7 +53,7 @@ class ReportHistory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['report_id', 'report_ip'], 'required'],
+			[['report_id', 'user_id', 'report_ip'], 'required'],
 			[['report_id', 'user_id'], 'integer'],
 			[['report_date'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
@@ -74,7 +73,7 @@ class ReportHistory extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'report_date' => Yii::t('app', 'Report Date'),
 			'report_ip' => Yii::t('app', 'Report Ip'),
-			'category_search' => Yii::t('app', 'Category'),
+			'cat_id' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
 			'reporter_search' => Yii::t('app', 'Reporter'),
 		];
@@ -97,9 +96,18 @@ class ReportHistory extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\ReportHistory the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\ReportHistory(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -110,8 +118,8 @@ class ReportHistory extends \app\components\ActiveRecord
 		];
 		if(!Yii::$app->request->get('report')) {
 			if(!Yii::$app->request->get('category')) {
-				$this->templateColumns['category_search'] = [
-					'attribute' => 'category_search',
+				$this->templateColumns['cat_id'] = [
+					'attribute' => 'cat_id',
 					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
@@ -164,21 +172,5 @@ class ReportHistory extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
-	}
-
-	/**
-	 * before validate attributes
-	 */
-	public function beforeValidate() 
-	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				if($this->user_id == null)
-					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-			
-			$this->report_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
 	}
 }

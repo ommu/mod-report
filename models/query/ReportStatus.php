@@ -1,21 +1,21 @@
 <?php
 /**
- * Reports
+ * ReportStatus
  *
- * This is the ActiveQuery class for [[\ommu\report\models\Reports]].
- * @see \ommu\report\models\Reports
+ * This is the ActiveQuery class for [[\ommu\report\models\ReportStatus]].
+ * @see \ommu\report\models\ReportStatus
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2019 OMMU (www.ommu.co)
- * @created date 17 January 2019, 11:37 WIB
+ * @created date 18 January 2019, 14:57 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
 
 namespace ommu\report\models\query;
 
-class Reports extends \yii\db\ActiveQuery
+class ReportStatus extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()
@@ -26,7 +26,7 @@ class Reports extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\Reports[]|array
+	 * @return \ommu\report\models\ReportStatus[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class Reports extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\Reports|array|null
+	 * @return \ommu\report\models\ReportStatus|array|null
 	 */
 	public function one($db = null)
 	{

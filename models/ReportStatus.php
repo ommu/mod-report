@@ -6,13 +6,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 19 September 2017, 23:27 WIB
- * @modified date 18 April 2018, 22:16 WIB
+ * @modified date 18 January 2019, 14:57 WIB
  * @link https://github.com/ommu/mod-report
  *
  * This is the model class for table "ommu_report_status".
  *
  * The followings are the available columns in table "ommu_report_status":
- * @property integer $history_id
+ * @property integer $id
  * @property integer $status
  * @property integer $report_id
  * @property integer $user_id
@@ -42,8 +42,8 @@ class ReportStatus extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date'];
 
-	// Variable Search
-	public $category_search;
+	// Search Variable
+	public $cat_id;
 	public $report_search;
 	public $reporter_search;
 	public $modified_search;
@@ -65,7 +65,6 @@ class ReportStatus extends \app\components\ActiveRecord
 			[['status', 'report_id', 'report_message', 'updated_ip'], 'required'],
 			[['status', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['report_message'], 'string'],
-			[['updated_date', 'modified_date'], 'safe'],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
@@ -78,7 +77,7 @@ class ReportStatus extends \app\components\ActiveRecord
 	public function attributeLabels()
 	{
 		return [
-			'history_id' => Yii::t('app', 'History'),
+			'id' => Yii::t('app', 'ID'),
 			'status' => Yii::t('app', 'Status'),
 			'report_id' => Yii::t('app', 'Report'),
 			'user_id' => Yii::t('app', 'User'),
@@ -87,7 +86,7 @@ class ReportStatus extends \app\components\ActiveRecord
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
-			'category_search' => Yii::t('app', 'Category'),
+			'cat_id' => Yii::t('app', 'Category'),
 			'report_search' => Yii::t('app', 'Report'),
 			'reporter_search' => Yii::t('app', 'Reporter'),
 			'modified_search' => Yii::t('app', 'Modified'),
@@ -119,9 +118,18 @@ class ReportStatus extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\report\models\query\ReportStatus the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\report\models\query\ReportStatus(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -130,16 +138,14 @@ class ReportStatus extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('category') && !Yii::$app->request->get('report')) {
-			$this->templateColumns['category_search'] = [
-				'attribute' => 'category_search',
+		if(!Yii::$app->request->get('report')) {
+			$this->templateColumns['cat_id'] = [
+				'attribute' => 'cat_id',
 				'filter' => ReportCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->category->title->message : '-';
 				},
 			];
-		}
-		if(!Yii::$app->request->get('report')) {
 			$this->templateColumns['report_search'] = [
 				'attribute' => 'report_search',
 				'value' => function($model, $key, $index, $column) {
@@ -209,7 +215,7 @@ class ReportStatus extends \app\components\ActiveRecord
 		if($column != null) {
 			$model = self::find()
 				->select([$column])
-				->where(['history_id' => $id])
+				->where(['id' => $id])
 				->one();
 			return $model->$column;
 			
@@ -220,30 +226,9 @@ class ReportStatus extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getStatus
-	 */
-	public static function getStatus($array=true) 
-	{
-		$model = self::find()->alias('t');
-		$model = $model->orderBy('t.history_id ASC')->all();
-
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->history_id] = $val->history_id;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
-	}
-
-	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -253,7 +238,6 @@ class ReportStatus extends \app\components\ActiveRecord
 				if($this->modified_id == null)
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
-			
 			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
