@@ -40,6 +40,7 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\Users;
+use ommu\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {
@@ -180,6 +181,14 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(ReportCategoryView::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**

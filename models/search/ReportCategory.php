@@ -64,6 +64,7 @@ class ReportCategory extends ReportCategoryModel
 	{
 		$query = ReportCategoryModel::find()->alias('t');
 		$query->joinWith([
+			'view view', 
 			'title title', 
 			'description description', 
 			'creation creation', 
@@ -95,6 +96,18 @@ class ReportCategory extends ReportCategoryModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['reports'] = [
+			'asc' => ['view.report_all' => SORT_ASC],
+			'desc' => ['view.report_all' => SORT_DESC],
+		];
+		$attributes['resolved'] = [
+			'asc' => ['view.report_resolved' => SORT_ASC],
+			'desc' => ['view.report_resolved' => SORT_DESC],
+		];
+		$attributes['unresolved'] = [
+			'asc' => ['view.reports' => SORT_ASC],
+			'desc' => ['view.reports' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

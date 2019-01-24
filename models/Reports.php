@@ -43,6 +43,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
+use ommu\report\models\view\Reports as ReportsView;
 
 class Reports extends \app\components\ActiveRecord
 {
@@ -211,6 +212,14 @@ class Reports extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(ReportsView::className(), ['report_id' => 'report_id']);
 	}
 
 	/**

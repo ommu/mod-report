@@ -64,6 +64,7 @@ class Reports extends ReportsModel
 	{
 		$query = ReportsModel::find()->alias('t');
 		$query->joinWith([
+			'view view', 
 			'category.title category',
 			'user user', 
 			'modified modified'
@@ -90,6 +91,22 @@ class Reports extends ReportsModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['comments'] = [
+			'asc' => ['view.comments' => SORT_ASC],
+			'desc' => ['view.comments' => SORT_DESC],
+		];
+		$attributes['histories'] = [
+			'asc' => ['view.histories' => SORT_ASC],
+			'desc' => ['view.histories' => SORT_DESC],
+		];
+		$attributes['statuses'] = [
+			'asc' => ['view.statuses' => SORT_ASC],
+			'desc' => ['view.statuses' => SORT_DESC],
+		];
+		$attributes['users'] = [
+			'asc' => ['view.users' => SORT_ASC],
+			'desc' => ['view.users' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
