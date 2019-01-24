@@ -127,8 +127,12 @@ class Reports extends \app\components\ActiveRecord
 		if($count == true) {
 			$model = ReportComment::find()
 				->where(['report_id' => $this->report_id]);
-			if($publish !== null)
-				$model->andWhere(['publish' => $publish]);
+			if($publish == 0)
+				$model->unpublish();
+			elseif($publish == 1)
+				$model->published();
+			elseif($publish == 2)
+				$model->deleted();
 			return $model->count();
 		}
 
@@ -172,8 +176,12 @@ class Reports extends \app\components\ActiveRecord
 		if($count == true) {
 			$model = ReportUser::find()
 				->where(['report_id' => $this->report_id]);
-			if($publish !== null)
-				$model->andWhere(['publish' => $publish]);
+				if($publish == 0)
+					$model->unpublish();
+				elseif($publish == 1)
+					$model->published();
+				elseif($publish == 2)
+					$model->deleted();
 			return $model->count();
 		}
 

@@ -123,8 +123,10 @@ class ReportCategory extends \app\components\ActiveRecord
 		if($count == true) {
 			$model = Reports::find()
 				->where(['cat_id' => $this->cat_id]);
-			if($status !== null)
-				$model->andWhere(['status' => $status]);
+			if($status == 0)
+				$model->unresolved();
+			elseif($status == 1)
+				$model->resolved();
 			return $model->count();
 		}
 

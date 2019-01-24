@@ -42,6 +42,14 @@ class ReportUser extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
+	 */
+	public function deleted() 
+	{
+		return $this->andWhere(['publish' => 2]);
+	}
+
+	/**
+	 * {@inheritdoc}
 	 * @return \ommu\report\models\ReportUser[]|array
 	 */
 	public function all($db = null)

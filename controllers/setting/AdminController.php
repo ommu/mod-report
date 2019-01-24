@@ -29,7 +29,6 @@ use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportSetting;
-use ommu\report\models\search\ReportSetting as ReportSettingSearch;
 use ommu\report\models\search\ReportCategory as ReportCategorySearch;
 
 class AdminController extends Controller

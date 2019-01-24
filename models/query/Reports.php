@@ -26,6 +26,22 @@ class Reports extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
+	 */
+	public function resolved() 
+	{
+		return $this->andWhere(['status' => 1]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function unresolved() 
+	{
+		return $this->andWhere(['status' => 0]);
+	}
+
+	/**
+	 * {@inheritdoc}
 	 * @return \ommu\report\models\Reports[]|array
 	 */
 	public function all($db = null)

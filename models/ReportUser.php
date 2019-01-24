@@ -115,11 +115,11 @@ class ReportUser extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\query\ReportStatus the active query used by this AR class.
+	 * @return \ommu\report\models\query\ReportUser the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\report\models\query\ReportStatus(get_called_class());
+		return new \ommu\report\models\query\ReportUser(get_called_class());
 	}
 
 	/**
