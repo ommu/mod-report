@@ -49,11 +49,11 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modified_search','updated_date','comments','histories','statuses','users'];
+	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modifiedDisplayname','updated_date','comments','histories','statuses','users'];
 
 	// Search Variable
-	public $reporter_search;
-	public $modified_search;
+	public $reporterDisplayname;
+	public $modifiedDisplayname;
 
 	const SCENARIO_REPORT = 'reportForm';
 	const SCENARIO_RESOLVED = 'resolveForm';
@@ -115,8 +115,8 @@ class Reports extends \app\components\ActiveRecord
 			'histories' => Yii::t('app', 'Histories'),
 			'statuses' => Yii::t('app', 'Statuses'),
 			'users' => Yii::t('app', 'Users'),
-			'reporter_search' => Yii::t('app', 'Reporter'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'reporterDisplayname' => Yii::t('app', 'Reporter'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -253,8 +253,8 @@ class Reports extends \app\components\ActiveRecord
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporter_search'] = [
-				'attribute' => 'reporter_search',
+			$this->templateColumns['reporterDisplayname'] = [
+				'attribute' => 'reporterDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -301,8 +301,8 @@ class Reports extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},

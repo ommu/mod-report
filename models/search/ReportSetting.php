@@ -30,7 +30,7 @@ class ReportSetting extends ReportSettingModel
 		return [
 			[['id', 'permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
 			[['license', 'meta_description', 'meta_keyword', 'modified_date', 
-				'modified_search'], 'safe'],
+				'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -82,7 +82,7 @@ class ReportSetting extends ReportSettingModel
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -111,7 +111,7 @@ class ReportSetting extends ReportSettingModel
 		$query->andFilterWhere(['like', 't.license', $this->license])
 			->andFilterWhere(['like', 't.meta_description', $this->meta_description])
 			->andFilterWhere(['like', 't.meta_keyword', $this->meta_keyword])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

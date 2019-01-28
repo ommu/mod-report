@@ -17,6 +17,7 @@
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\report\models\ReportCategory;
 ?>
 
 <div class="report-comment-search search-form">
@@ -29,9 +30,13 @@ use app\components\ActiveForm;
 		],
 	]); ?>
 
-		<?php echo $form->field($model, 'report_search');?>
+		<?php $category = ReportCategory::getCategory();
+		echo $form->field($model, 'categoryId')
+			->dropDownList($category, ['prompt'=>'']);?>
 
-		<?php echo $form->field($model, 'user_search');?>
+		<?php echo $form->field($model, 'reportBody');?>
+
+		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php echo $form->field($model, 'comment_text');?>
 
@@ -41,7 +46,7 @@ use app\components\ActiveForm;
 		<?php echo $form->field($model, 'modified_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'modified_search');?>
+		<?php echo $form->field($model, 'modifiedDisplayname');?>
 
 		<?php echo $form->field($model, 'updated_date')
 			->input('date');?>

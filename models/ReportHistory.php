@@ -35,9 +35,9 @@ class ReportHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $cat_id;
-	public $report_search;
-	public $reporter_search;
+	public $categoryId;
+	public $reportBody;
+	public $reporterDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -73,9 +73,9 @@ class ReportHistory extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'report_date' => Yii::t('app', 'Report Date'),
 			'report_ip' => Yii::t('app', 'Report Ip'),
-			'cat_id' => Yii::t('app', 'Category'),
-			'report_search' => Yii::t('app', 'Report'),
-			'reporter_search' => Yii::t('app', 'Reporter'),
+			'categoryId' => Yii::t('app', 'Category'),
+			'reportBody' => Yii::t('app', 'Report'),
+			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 		];
 	}
 
@@ -118,24 +118,24 @@ class ReportHistory extends \app\components\ActiveRecord
 		];
 		if(!Yii::$app->request->get('report')) {
 			if(!Yii::$app->request->get('category')) {
-				$this->templateColumns['cat_id'] = [
-					'attribute' => 'cat_id',
+				$this->templateColumns['categoryId'] = [
+					'attribute' => 'categoryId',
 					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
 					},
 				];
 			}
-			$this->templateColumns['report_search'] = [
-				'attribute' => 'report_search',
+			$this->templateColumns['reportBody'] = [
+				'attribute' => 'reportBody',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporter_search'] = [
-				'attribute' => 'reporter_search',
+			$this->templateColumns['reporterDisplayname'] = [
+				'attribute' => 'reporterDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},

@@ -34,7 +34,7 @@ use ommu\report\models\ReportCategory;
 		echo $form->field($model, 'cat_id')
 			->dropDownList($category, ['prompt'=>'']);?>
 
-		<?php echo $form->field($model, 'reporter_search');?>
+		<?php echo $form->field($model, 'reporterDisplayname');?>
 
 		<?php echo $form->field($model, 'report_url');?>
 
@@ -52,7 +52,7 @@ use ommu\report\models\ReportCategory;
 		<?php echo $form->field($model, 'modified_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'modified_search');?>
+		<?php echo $form->field($model, 'modifiedDisplayname');?>
 
 		<?php echo $form->field($model, 'updated_date')
 			->input('date');?>

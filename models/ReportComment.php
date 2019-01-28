@@ -43,10 +43,10 @@ class ReportComment extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $cat_id;
-	public $report_search;
-	public $user_search;
-	public $modified_search;
+	public $categoryId;
+	public $reportBody;
+	public $userDisplayname;
+	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -85,10 +85,10 @@ class ReportComment extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'cat_id' => Yii::t('app', 'Category'),
-			'report_search' => Yii::t('app', 'Report'),
-			'user_search' => Yii::t('app', 'User'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'categoryId' => Yii::t('app', 'Category'),
+			'reportBody' => Yii::t('app', 'Report'),
+			'userDisplayname' => Yii::t('app', 'User'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -139,24 +139,24 @@ class ReportComment extends \app\components\ActiveRecord
 		];
 		if(!Yii::$app->request->get('report')) {
 			if(!Yii::$app->request->get('category')) {
-				$this->templateColumns['cat_id'] = [
-					'attribute' => 'cat_id',
+				$this->templateColumns['categoryId'] = [
+					'attribute' => 'categoryId',
 					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
 					},
 				];
 			}
-			$this->templateColumns['report_search'] = [
-				'attribute' => 'report_search',
+			$this->templateColumns['reportBody'] = [
+				'attribute' => 'reportBody',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -183,8 +183,8 @@ class ReportComment extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},

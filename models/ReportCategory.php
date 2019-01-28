@@ -46,13 +46,13 @@ class ReportCategory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['desc_i','modified_date','modified_search','updated_date','slug'];
+	public $gridForbiddenColumn = ['desc_i','modified_date','modifiedDisplayname','updated_date','slug'];
 	public $name_i;
 	public $desc_i;
 
 	// Search Variable
-	public $creation_search;
-	public $modified_search;
+	public $creationDisplayname;
+	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -111,8 +111,8 @@ class ReportCategory extends \app\components\ActiveRecord
 			'reports' => Yii::t('app', 'Reports'),
 			'resolved' => Yii::t('app', 'Resolved'),
 			'unresolved' => Yii::t('app', 'Unresolved'),
-			'creation_search' => Yii::t('app', 'Creation'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'creationDisplayname' => Yii::t('app', 'Creation'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -232,8 +232,8 @@ class ReportCategory extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
 		];
 		if(!Yii::$app->request->get('creation')) {
-			$this->templateColumns['creation_search'] = [
-				'attribute' => 'creation_search',
+			$this->templateColumns['creationDisplayname'] = [
+				'attribute' => 'creationDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
 				},
@@ -247,8 +247,8 @@ class ReportCategory extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},

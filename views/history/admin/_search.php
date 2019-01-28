@@ -17,6 +17,7 @@
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\report\models\ReportCategory;
 ?>
 
 <div class="report-history-search search-form">
@@ -29,9 +30,13 @@ use app\components\ActiveForm;
 		],
 	]); ?>
 
-		<?php echo $form->field($model, 'report_search');?>
+		<?php $category = ReportCategory::getCategory();
+		echo $form->field($model, 'categoryId')
+			->dropDownList($category, ['prompt'=>'']);?>
 
-		<?php echo $form->field($model, 'reporter_search');?>
+		<?php echo $form->field($model, 'reportBody');?>
+
+		<?php echo $form->field($model, 'reporterDisplayname');?>
 
 		<?php echo $form->field($model, 'report_date')
 			->input('date');?>

@@ -30,7 +30,7 @@ class ReportHistory extends ReportHistoryModel
 		return [
 			[['id', 'report_id', 'user_id'], 'integer'],
 			[['report_date', 'report_ip',
-				'cat_id', 'report_search', 'reporter_search'], 'safe'],
+				'categoryId', 'reportBody', 'reporterDisplayname'], 'safe'],
 		];
 	}
 
@@ -79,15 +79,15 @@ class ReportHistory extends ReportHistoryModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['cat_id'] = [
+		$attributes['categoryId'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['report_search'] = [
+		$attributes['reportBody'] = [
 			'asc' => ['report.report_body' => SORT_ASC],
 			'desc' => ['report.report_body' => SORT_DESC],
 		];
-		$attributes['reporter_search'] = [
+		$attributes['reporterDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -110,12 +110,12 @@ class ReportHistory extends ReportHistoryModel
 			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.report_date as date)' => $this->report_date,
-			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
 		$query->andFilterWhere(['like', 't.report_ip', $this->report_ip])
-			->andFilterWhere(['like', 'report.report_body', $this->report_search])
-			->andFilterWhere(['like', 'user.displayname', $this->reporter_search]);
+			->andFilterWhere(['like', 'report.report_body', $this->reportBody])
+			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname]);
 
 		return $dataProvider;
 	}

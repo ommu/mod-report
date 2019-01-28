@@ -40,15 +40,15 @@ $this->params['menu']['content'] = [
 			'value' => $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'),
 		],
 		[
-			'attribute' => 'cat_id',
+			'attribute' => 'categoryId',
 			'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
 		],
 		[
-			'attribute' => 'report_search',
+			'attribute' => 'reportBody',
 			'value' => isset($model->report) ? $model->report->report_body : '-',
 		],
 		[
-			'attribute' => 'reporter_search',
+			'attribute' => 'reporterDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
@@ -66,7 +66,7 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
-			'attribute' => 'modified_search',
+			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
 	],

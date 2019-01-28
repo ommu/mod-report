@@ -39,13 +39,13 @@ class ReportUser extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date'];
+	public $gridForbiddenColumn = ['modified_date','modifiedDisplayname','updated_date'];
 
 	// Search Variable
-	public $cat_id;
-	public $report_search;
-	public $reporter_search;
-	public $modified_search;
+	public $categoryId;
+	public $reportBody;
+	public $reporterDisplayname;
+	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -82,10 +82,10 @@ class ReportUser extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'cat_id' => Yii::t('app', 'Category'),
-			'report_search' => Yii::t('app', 'Report'),
-			'reporter_search' => Yii::t('app', 'Reporter'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'categoryId' => Yii::t('app', 'Category'),
+			'reportBody' => Yii::t('app', 'Report'),
+			'reporterDisplayname' => Yii::t('app', 'Reporter'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -135,23 +135,25 @@ class ReportUser extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('report')) {
-			$this->templateColumns['cat_id'] = [
-				'attribute' => 'cat_id',
-				'filter' => ReportCategory::getCategory(),
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->report) ? $model->report->category->title->message : '-';
-				},
-			];
-			$this->templateColumns['report_search'] = [
-				'attribute' => 'report_search',
+			if(!Yii::$app->request->get('category')) {
+				$this->templateColumns['categoryId'] = [
+					'attribute' => 'categoryId',
+					'filter' => ReportCategory::getCategory(),
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->report) ? $model->report->category->title->message : '-';
+					},
+				];
+			}
+			$this->templateColumns['reportBody'] = [
+				'attribute' => 'reportBody',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->report_body : '-';
 				},
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporter_search'] = [
-				'attribute' => 'reporter_search',
+			$this->templateColumns['reporterDisplayname'] = [
+				'attribute' => 'reporterDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -172,8 +174,8 @@ class ReportUser extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},

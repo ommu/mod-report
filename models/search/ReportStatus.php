@@ -30,7 +30,7 @@ class ReportStatus extends ReportStatusModel
 		return [
 			[['id', 'status', 'report_id', 'user_id', 'modified_id'], 'integer'],
 			[['report_message', 'updated_date', 'updated_ip', 'modified_date',
-				'cat_id', 'report_search', 'reporter_search', 'modified_search'], 'safe'],
+				'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -80,19 +80,19 @@ class ReportStatus extends ReportStatusModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['cat_id'] = [
+		$attributes['categoryId'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['report_search'] = [
+		$attributes['reportBody'] = [
 			'asc' => ['report.report_body' => SORT_ASC],
 			'desc' => ['report.report_body' => SORT_DESC],
 		];
-		$attributes['reporter_search'] = [
+		$attributes['reporterDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -118,14 +118,14 @@ class ReportStatus extends ReportStatusModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
 		$query->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-			->andFilterWhere(['like', 'report.report_body', $this->report_search])
-			->andFilterWhere(['like', 'user.displayname', $this->reporter_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'report.report_body', $this->reportBody])
+			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname])
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

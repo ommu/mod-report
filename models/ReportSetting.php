@@ -40,7 +40,7 @@ class ReportSetting extends \app\components\ActiveRecord
 	public $auto_report_i;
 
 	// Search Variable
-	public $modified_search;
+	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -80,7 +80,7 @@ class ReportSetting extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'auto_report_i' => Yii::t('app', 'Enable Auto Report'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -153,8 +153,8 @@ class ReportSetting extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},
