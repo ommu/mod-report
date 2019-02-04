@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->report_id, 'url' => ['view'
 $this->params['breadcrumbs'][] = $title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['manage']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye'],
 ];
 ?>
