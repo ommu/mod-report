@@ -77,17 +77,26 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'unresolved',
-			'value' => Html::a($model->unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$model->unresolved])]),
+			'value' => function ($model) {
+				$unresolved = $model->getUnresolved(true);
+				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'resolved',
-			'value' => Html::a($model->resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$model->resolved])]),
+			'value' => function ($model) {
+				$resolved = $model->getResolved(true);
+				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'reports',
-			'value' => Html::a($model->reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]),
+			'value' => function ($model) {
+				$reports = $model->getReports(true);
+				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
+			},
 			'format' => 'html',
 		],
 	],

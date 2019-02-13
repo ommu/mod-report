@@ -123,71 +123,77 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getComments($count=true, $publish=1)
+	public function getComments($count=false, $publish=1)
 	{
-		if($count == true) {
-			$model = ReportComment::find()
-				->where(['report_id' => $this->report_id]);
-			if($publish == 0)
-				$model->unpublish();
-			elseif($publish == 1)
-				$model->published();
-			elseif($publish == 2)
-				$model->deleted();
-			return $model->count();
+		if($count == false) {
+			return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
+				->andOnCondition([sprintf('%s.publish', ReportComment::tableName()) => $publish]);
 		}
 
-		return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
-			->andOnCondition([sprintf('%s.publish', ReportComment::tableName()) => $publish]);
+		$model = ReportComment::find()
+			->where(['report_id' => $this->report_id]);
+		if($publish == 0)
+			$model->unpublish();
+		elseif($publish == 1)
+			$model->published();
+		elseif($publish == 2)
+			$model->deleted();
+		$comments = $model->count();
+
+		return $comments ? $comments : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories($count=true)
+	public function getHistories($count=false)
 	{
-		if($count == true) {
-			$model = ReportHistory::find()
-				->where(['report_id' => $this->report_id]);
-			return $model->count();
-		}
+		if($count == false)
+			return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
 
-		return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
+		$model = ReportHistory::find()
+			->where(['report_id' => $this->report_id]);
+		$histories = $model->count();
+
+		return $histories ? $histories : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getStatuses($count=true)
+	public function getStatuses($count=false)
 	{
-		if($count == true) {
-			$model = ReportStatus::find()
-				->where(['report_id' => $this->report_id]);
-			return $model->count();
-		}
+		if($count == false)
+			return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
 
-		return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
+		$model = ReportStatus::find()
+			->where(['report_id' => $this->report_id]);
+		$statuses = $model->count();
+
+		return $statuses ? $statuses : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUsers($count=true, $publish=1)
+	public function getUsers($count=false, $publish=1)
 	{
-		if($count == true) {
-			$model = ReportUser::find()
-				->where(['report_id' => $this->report_id]);
-				if($publish == 0)
-					$model->unpublish();
-				elseif($publish == 1)
-					$model->published();
-				elseif($publish == 2)
-					$model->deleted();
-			return $model->count();
+		if($count == false) {
+			return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
+				->andOnCondition([sprintf('%s.publish', ReportUser::tableName()) => $publish]);
 		}
 
-		return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
-			->andOnCondition([sprintf('%s.publish', ReportUser::tableName()) => $publish]);
+		$model = ReportUser::find()
+			->where(['report_id' => $this->report_id]);
+		if($publish == 0)
+			$model->unpublish();
+		elseif($publish == 1)
+			$model->published();
+		elseif($publish == 2)
+			$model->deleted();
+		$users = $model->count();
+
+		return $users ? $users : 0;
 	}
 
 	/**
@@ -319,7 +325,8 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'reports',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]);
+				$reports = $model->reports;
+				return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -328,7 +335,8 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'comments',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]);
+				$comments = $model->getComments(true);
+				return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -337,7 +345,8 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'statuses',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]);
+				$statuses = $model->getStatuses(true);
+				return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -346,7 +355,8 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'users',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]);
+				$users = $model->getUsers(true);
+				return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',

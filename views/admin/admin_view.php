@@ -83,22 +83,34 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'reports',
-			'value' => Html::a($model->reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$model->reports])]),
+			'value' => function ($model) {
+				$reports = $model->reports;
+				return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'comments',
-			'value' => Html::a($model->comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$model->comments])]),
+			'value' => function ($model) {
+				$comments = $model->getComments(true);
+				return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'statuses',
-			'value' => Html::a($model->statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$model->statuses])]),
+			'value' => function ($model) {
+				$statuses = $model->getStatuses(true);
+				return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'users',
-			'value' => Html::a($model->users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$model->users])]),
+			'value' => function ($model) {
+				$users = $model->getUsers(true);
+				return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users])]);
+			},
 			'format' => 'html',
 		],
 	],
