@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\grid\GridView;
+use app\components\widgets\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 

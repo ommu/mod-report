@@ -17,11 +17,11 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\grid\GridView;
+use app\components\widgets\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
-use app\components\menu\MenuContent;
-use app\components\menu\MenuOption;
+use app\components\widgets\MenuContent;
+use app\components\widgets\MenuOption;
 use yii\widgets\DetailView;
 use ommu\report\models\ReportSetting;
 
