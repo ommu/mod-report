@@ -31,6 +31,7 @@ $redactorOptions = [
 <div class="reports-form">
 
 <?php $form = ActiveForm::begin([
+	'options' => ['class'=>'form-horizontal form-label-left'],
 	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -39,27 +40,27 @@ $redactorOptions = [
 <?php //echo $form->errorSummary($model);?>
 
 <?php $category = ReportCategory::getCategory(1);
-echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'cat_id')
 	->dropDownList($category, ['prompt'=>''])
-	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('cat_id')); ?>
 
-<?php echo $form->field($model, 'report_url', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'report_url')
 	->textInput()
-	->label($model->getAttributeLabel('report_url'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('report_url')); ?>
 
-<?php echo $form->field($model, 'report_body', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'report_body')
 	->textarea(['rows'=>6, 'cols'=>50])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
-	->label($model->getAttributeLabel('report_body'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('report_body')); ?>
 
 <?php if(!$model->isNewRecord) {
 	$status = [
 		1 => Yii::t('app', 'Resolved'),
 		0 => Yii::t('app', 'Unresolved'),
 	];
-	echo $form->field($model, 'status', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+	echo $form->field($model, 'status')
 		->radioList($status, ['class'=>'desc mt-10', 'separator' => '<br />'])
-		->label($model->getAttributeLabel('status'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
+		->label($model->getAttributeLabel('status'));
 } ?>
 
 <div class="ln_solid"></div>

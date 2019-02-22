@@ -24,6 +24,7 @@ use ommu\report\models\ReportCategory;
 <div class="report-setting-form">
 
 <?php $form = ActiveForm::begin([
+	'options' => ['class'=>'form-horizontal form-label-left'],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -42,22 +43,22 @@ echo $form->field($model, 'permission', ['template' => '{label}<div class="col-m
 	->radioList($permission, ['class'=>'desc mt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('permission'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php echo $form->field($model, 'meta_description', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'meta_description')
 	->textarea(['rows'=>6, 'cols'=>50])
-	->label($model->getAttributeLabel('meta_description'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('meta_description')); ?>
 
-<?php echo $form->field($model, 'meta_keyword', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'meta_keyword')
 	->textarea(['rows'=>6, 'cols'=>50])
-	->label($model->getAttributeLabel('meta_keyword'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('meta_keyword')); ?>
 
-<?php echo $form->field($model, 'auto_report_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'auto_report_i')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('auto_report_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('auto_report_i')); ?>
 
 <?php $category = ReportCategory::getCategory(1);
-echo $form->field($model, 'auto_report_cat_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'auto_report_cat_id')
 	->dropDownList($category, ['prompt'=>''])
-	->label($model->getAttributeLabel('auto_report_cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('auto_report_cat_id')); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">
