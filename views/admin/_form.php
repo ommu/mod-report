@@ -59,7 +59,7 @@ echo $form->field($model, 'cat_id')
 		0 => Yii::t('app', 'Unresolved'),
 	];
 	echo $form->field($model, 'status')
-		->radioList($status, ['class'=>'desc mt-10', 'separator' => '<br />'])
+		->radioList($status)
 		->label($model->getAttributeLabel('status'));
 } ?>
 
