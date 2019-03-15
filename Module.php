@@ -12,6 +12,8 @@
 
 namespace ommu\report;
 
+use Yii;
+
 class Module extends \app\components\Module
 {
 	public $layout = 'main';
@@ -27,7 +29,16 @@ class Module extends \app\components\Module
 	public function init()
 	{
 		parent::init();
+	}
 
-		// custom initialization code goes here
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getLayoutPath()
+	{
+		if(Yii::$app->view->theme)
+			return Yii::$app->view->theme->basePath . DIRECTORY_SEPARATOR . 'layouts';
+		else
+			return parent::getLayoutPath();
 	}
 }
