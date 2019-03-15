@@ -60,9 +60,12 @@ class ReportUser extends ReportUserModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = ReportUserModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = ReportUserModel::find()->alias('t');
+		else
+			$query = ReportUserModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'report report', 
 			'report.category.title category', 

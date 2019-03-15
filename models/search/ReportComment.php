@@ -60,9 +60,12 @@ class ReportComment extends ReportCommentModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = ReportCommentModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = ReportCommentModel::find()->alias('t');
+		else
+			$query = ReportCommentModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'report report', 
 			'user user', 

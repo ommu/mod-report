@@ -60,9 +60,12 @@ class ReportSetting extends ReportSettingModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = ReportSettingModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = ReportSettingModel::find()->alias('t');
+		else
+			$query = ReportSettingModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'category.title category', 
 			'modified modified'

@@ -60,9 +60,12 @@ class Reports extends ReportsModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = ReportsModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = ReportsModel::find()->alias('t');
+		else
+			$query = ReportsModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'view view', 
 			'category.title category',

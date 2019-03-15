@@ -60,9 +60,12 @@ class ReportHistory extends ReportHistoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = ReportHistoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = ReportHistoryModel::find()->alias('t');
+		else
+			$query = ReportHistoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'report report', 
 			'report.category.title category', 
