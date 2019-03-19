@@ -21,7 +21,7 @@ class m190319_120101_report_module_insert_menu extends \yii\db\Migration
 		if(Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Reports', 'report', null, Menu::getParentId('Dashboard#rbac'), '/report/admin/index', null, null],
-				['Report Setting', 'report', null, Menu::getParentId('Settings#rbac'), '/report/setting/admin/index', null, null],
+				['Report Settings', 'report', null, Menu::getParentId('Settings#rbac'), '/report/setting/admin/index', null, null],
 			]);
 		}
 	}
