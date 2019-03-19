@@ -11,7 +11,6 @@
  */
 
 use Yii;
-use yii\db\Schema;
 
 class m190318_120101_report_module_insert_role extends \yii\db\Migration
 {
