@@ -19,10 +19,6 @@ use yii\helpers\Url;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Settings'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['manage']), 'icon' => 'table'],
-];
 ?>
 
 <div class="report-setting-update">

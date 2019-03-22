@@ -1,0 +1,9 @@
+setting_submenu:
+  update:
+    label: Settings
+    url: ['setting/admin/update']
+    select: action
+  category:
+    label: Categories
+    url: ['setting/category']
+    select: controller

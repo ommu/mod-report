@@ -121,6 +121,7 @@ class AdminController extends Controller
 			}
 		}
 
+		$this->subMenu = $this->module->params['setting_submenu'];
 		$this->view->title = Yii::t('app', 'Report Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';

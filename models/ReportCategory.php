@@ -46,7 +46,7 @@ class ReportCategory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['desc_i','modified_date','modifiedDisplayname','updated_date','slug'];
+	public $gridForbiddenColumn = ['desc_i', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
 	public $name_i;
 	public $desc_i;
 
