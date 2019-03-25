@@ -272,31 +272,31 @@ class ReportCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['unresolved'] = [
 			'attribute' => 'unresolved',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$unresolved = $model->getUnresolved(true);
 				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['resolved'] = [
 			'attribute' => 'resolved',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$resolved = $model->getResolved(true);
 				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$reports = $model->getReports(true);
 				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];

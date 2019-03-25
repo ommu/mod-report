@@ -119,11 +119,11 @@ class ReportHistory extends \app\components\ActiveRecord
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',
-					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
 						// return $model->categoryId;
 					},
+					'filter' => ReportCategory::getCategory(),
 				];
 			}
 			$this->templateColumns['reportBody'] = [

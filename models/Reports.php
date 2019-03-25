@@ -326,52 +326,52 @@ class Reports extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$reports = $model->reports;
 				return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['comments'] = [
 			'attribute' => 'comments',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$comments = $model->getComments(true);
 				return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['statuses'] = [
 			'attribute' => 'statuses',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$statuses = $model->getStatuses(true);
 				return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['users'] = [
 			'attribute' => 'users',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$users = $model->getUsers(true);
 				return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$status = $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 				$title = $model->status != 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 				return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title])]);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

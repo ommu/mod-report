@@ -141,11 +141,11 @@ class ReportStatus extends \app\components\ActiveRecord
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',
-					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
 						// return $model->categoryId;
 					},
+					'filter' => ReportCategory::getCategory(),
 				];
 			}
 			$this->templateColumns['reportBody'] = [
@@ -203,10 +203,10 @@ class ReportStatus extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
