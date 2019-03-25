@@ -47,10 +47,9 @@ class ReportCategory extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = ['desc_i', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+
 	public $name_i;
 	public $desc_i;
-
-	// Search Variable
 	public $creationDisplayname;
 	public $modifiedDisplayname;
 
@@ -238,6 +237,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				'attribute' => 'creationDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
+					// return $model->creationDisplayname;
 				},
 			];
 		}
@@ -253,6 +253,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -358,6 +359,8 @@ class ReportCategory extends \app\components\ActiveRecord
 
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**

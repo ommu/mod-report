@@ -37,9 +37,8 @@ class ReportSetting extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = [];
-	public $auto_report_i;
 
-	// Search Variable
+	public $auto_report_i;
 	public $modifiedDisplayname;
 
 	/**
@@ -157,6 +156,7 @@ class ReportSetting extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -203,6 +203,7 @@ class ReportSetting extends \app\components\ActiveRecord
 	{
 		if($this->auto_report_cat_id)
 			$this->auto_report_i = 1;
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**

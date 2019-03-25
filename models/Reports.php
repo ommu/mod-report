@@ -51,7 +51,7 @@ class Reports extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modifiedDisplayname','updated_date','comments','histories','statuses','users'];
 
-	// Search Variable
+	public $categoryId;
 	public $reporterDisplayname;
 	public $modifiedDisplayname;
 
@@ -254,6 +254,7 @@ class Reports extends \app\components\ActiveRecord
 				'attribute' => 'cat_id',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->category) ? $model->category->title->message : '-';
+					// return $model->categoryId;
 				},
 				'filter' => ReportCategory::getCategory(),
 			];
@@ -263,6 +264,7 @@ class Reports extends \app\components\ActiveRecord
 				'attribute' => 'reporterDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+					// return $model->reporterDisplayname;
 				},
 			];
 		}
@@ -311,6 +313,7 @@ class Reports extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -424,6 +427,18 @@ class Reports extends \app\components\ActiveRecord
 				$report->save();
 			}
 		}
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		// $this->categoryId = isset($model->category) ? $model->category->title->message : '-';
+		// $this->reporterDisplayname = isset($model->user) ? $model->user->displayname : '-';
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**

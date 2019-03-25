@@ -41,7 +41,6 @@ class ReportUser extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['modified_date','modifiedDisplayname','updated_date'];
 
-	// Search Variable
 	public $categoryId;
 	public $reportBody;
 	public $reporterDisplayname;
@@ -141,6 +140,7 @@ class ReportUser extends \app\components\ActiveRecord
 					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
+						// return $model->categoryId;
 					},
 				];
 			}
@@ -148,6 +148,7 @@ class ReportUser extends \app\components\ActiveRecord
 				'attribute' => 'reportBody',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->report_body : '-';
+					// return $model->reportBody;
 				},
 			];
 		}
@@ -156,6 +157,7 @@ class ReportUser extends \app\components\ActiveRecord
 				'attribute' => 'reporterDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+					// return $model->reporterDisplayname;
 				},
 			];
 		}
@@ -178,6 +180,7 @@ class ReportUser extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -218,6 +221,19 @@ class ReportUser extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		// $this->categoryId = iisset($model->report) ? $model->report->category->title->message : '-';
+		// $this->reportBody = isset($model->report) ? $model->report->report_body : '-';
+		// $this->reporterDisplayname = isset($model->user) ? $model->user->displayname : '-';
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**

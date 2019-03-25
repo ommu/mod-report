@@ -42,7 +42,6 @@ class ReportComment extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $categoryId;
 	public $reportBody;
 	public $userDisplayname;
@@ -144,6 +143,7 @@ class ReportComment extends \app\components\ActiveRecord
 					'filter' => ReportCategory::getCategory(),
 					'value' => function($model, $key, $index, $column) {
 						return isset($model->report) ? $model->report->category->title->message : '-';
+						// return $model->categoryId;
 					},
 				];
 			}
@@ -151,6 +151,7 @@ class ReportComment extends \app\components\ActiveRecord
 				'attribute' => 'reportBody',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->report) ? $model->report->report_body : '-';
+					// return $model->reportBody;
 				},
 			];
 		}
@@ -159,6 +160,7 @@ class ReportComment extends \app\components\ActiveRecord
 				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+					// return $model->userDisplayname;
 				},
 			];
 		}
@@ -187,6 +189,7 @@ class ReportComment extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -227,6 +230,19 @@ class ReportComment extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		// $this->categoryId = iisset($model->report) ? $model->report->category->title->message : '-';
+		// $this->reportBody = isset($model->report) ? $model->report->report_body : '-';
+		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**
