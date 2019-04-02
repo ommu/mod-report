@@ -168,7 +168,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report', 'report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->oRender('admin_view', [
 			'model' => $model,
 		]);
 	}
