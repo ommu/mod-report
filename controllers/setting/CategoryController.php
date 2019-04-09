@@ -30,8 +30,8 @@
 namespace ommu\report\controllers\setting;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
+use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportCategory;
 use ommu\report\models\search\ReportCategory as ReportCategorySearch;

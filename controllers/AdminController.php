@@ -29,8 +29,8 @@
 namespace ommu\report\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
+use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\Reports;
 use ommu\report\models\search\Reports as ReportsSearch;

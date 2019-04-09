@@ -28,8 +28,8 @@
 namespace ommu\report\controllers\history;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
+use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportComment;
 use ommu\report\models\search\ReportComment as ReportCommentSearch;
