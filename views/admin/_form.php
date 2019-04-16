@@ -21,10 +21,8 @@ use yii\redactor\widgets\Redactor;
 use ommu\report\models\ReportCategory;
 
 $redactorOptions = [
-	'imageManagerJson' => ['/redactor/upload/image-json'],
-	'imageUpload' => ['/redactor/upload/image'],
-	'fileUpload' => ['/redactor/upload/file'],
-	'plugins' => ['clips', 'fontcolor','imagemanager']
+	'buttons' => ['html', 'format', 'bold', 'italic', 'deleted'],
+	'plugins' => ['fontcolor','imagemanager']
 ];
 ?>
 
