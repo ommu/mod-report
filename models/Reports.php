@@ -415,22 +415,26 @@ class Reports extends \app\components\ActiveRecord
 			->select(['auto_report_cat_id'])
 			->where(['id' => 1])->one();
 
-		$auto_report_cat_id = $setting !== null ? $setting->auto_report_cat_id : null;
+		$autoReportCatId = $setting !== null ? $setting->auto_report_cat_id : null;
 
-		if($auto_report_cat_id) {
-			$findReport = self::find()
-				->select(['report_id','report_url','reports'])
-				->where(['cat_id' => $auto_report_cat_id])
+		if($autoReportCatId) {
+			$report = self::find()
+				->select(['report_id','reports'])
+				->where(['cat_id' => $autoReportCatId])
+				->andWhere(['app' => \app\components\Application::getAppId()])
 				->andWhere(['report_url' => $report_url])
 				->one();
 				
-			if($findReport !== null)
-				$findReport->updateAttributes(['user_id'=>$user_id, 'reports'=>$findReport->reports+1, 'report_ip'=>$_SERVER['REMOTE_ADDR']]);
-	
-			else {
+			if($report !== null) {
+				$report->user_id = $user_id;
+				$report->reports = $report->reports+1;
+				$report->report_ip = $_SERVER['REMOTE_ADDR'];
+				$report->update();
+
+			} else {
 				$report = new Reports();
 				$report->scenario = Reports::SCENARIO_REPORT;
-				$report->cat_id = $auto_report_cat_id;
+				$report->cat_id = $autoReportCatId;
 				$report->report_url = $report_url;
 				$report->report_body = $report_body;
 				$report->save();
