@@ -101,7 +101,7 @@ class UserController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-id}', ['model-class' => 'User', 'report-id' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail User: {report-id}', ['report-id' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

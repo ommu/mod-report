@@ -147,7 +147,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {report-body}', ['model-class' => 'Report', 'report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', 'Update Report: {report-body}', ['report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -165,7 +165,7 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-body}', ['model-class' => 'Report', 'report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -211,7 +211,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', '{title} {model-class}: {report-body}', ['title' => $title, 'model-class' => 'Report', 'report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', '{title} Report: {report-body}', ['title' => $title, 'report-body' => $model->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_status', [

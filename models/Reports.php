@@ -413,7 +413,8 @@ class Reports extends \app\components\ActiveRecord
 
 		$setting = ReportSetting::find()
 			->select(['auto_report_cat_id'])
-			->where(['id' => 1])->one();
+			->where(['id' => 1])
+			->one();
 
 		$autoReportCatId = $setting !== null ? $setting->auto_report_cat_id : null;
 

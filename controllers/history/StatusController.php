@@ -98,7 +98,7 @@ class StatusController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {report-id}', ['model-class' => 'Status', 'report-id' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail Status: {report-id}', ['report-id' => $model->report->report_body]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
