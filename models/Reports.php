@@ -16,6 +16,7 @@
  * @property integer $status
  * @property integer $cat_id
  * @property integer $user_id
+ * @property string $app
  * @property string $report_url
  * @property string $report_body
  * @property string $report_message
@@ -72,10 +73,11 @@ class Reports extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'report_url', 'report_body', 'report_message'], 'required'],
+			[['cat_id', 'app', 'report_url', 'report_body', 'report_message'], 'required'],
 			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
-			[['report_url', 'report_body', 'report_message'], 'string'],
+			[['app', 'report_url', 'report_body', 'report_message'], 'string'],
 			[['report_ip'], 'string', 'max' => 20],
+			[['app'], 'string', 'max' => 32],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -87,7 +89,7 @@ class Reports extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		return [
-			self::SCENARIO_REPORT => ['cat_id', 'report_url', 'report_body'],
+			self::SCENARIO_REPORT => ['cat_id', 'app', 'report_url', 'report_body'],
 			self::SCENARIO_RESOLVED => ['report_message'],
 		];
 	}
@@ -102,6 +104,7 @@ class Reports extends \app\components\ActiveRecord
 			'status' => Yii::t('app', 'Status'),
 			'cat_id' => Yii::t('app', 'Category'),
 			'user_id' => Yii::t('app', 'User'),
+			'app' => Yii::t('app', 'Application'),
 			'report_url' => Yii::t('app', 'Report Url'),
 			'report_body' => Yii::t('app', 'Report Body'),
 			'report_message' => Yii::t('app', 'Report Message'),
@@ -268,6 +271,12 @@ class Reports extends \app\components\ActiveRecord
 				},
 			];
 		}
+		$this->templateColumns['app'] = [
+			'attribute' => 'app',
+			'value' => function($model, $key, $index, $column) {
+				return $model->app;
+			},
+		];
 		$this->templateColumns['report_url'] = [
 			'attribute' => 'report_url',
 			'value' => function($model, $key, $index, $column) {
@@ -454,6 +463,7 @@ class Reports extends \app\components\ActiveRecord
 				if($this->modified_id == null)
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
+			$this->app = \app\components\Application::getAppId();
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
