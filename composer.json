@@ -30,9 +30,7 @@
 	],
 	"require": {
 		"php": "~7.0",
-		"yiisoft/yii2": "~2.0.13",
-		"ommu/yii-traits": "~2.1",
-		"ommu/yii2-redactor": "~2.0"
+		"yiisoft/yii2": "~2.0.13"
 	},
 	"autoload": {
 		"psr-4": {
