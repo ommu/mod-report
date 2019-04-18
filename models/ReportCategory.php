@@ -37,6 +37,7 @@ namespace ommu\report\models;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Inflector;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\Users;
@@ -303,11 +304,11 @@ class ReportCategory extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
 					return $this->quickAction($url, $model->publish, 'Enable,Disable');
 				},
+				'filter' => $this->filterYesNo(),
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
 			];
@@ -389,7 +390,7 @@ class ReportCategory extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
 
-		$location = $this->urlTitle($module.' '.$controller);
+		$location = Inflector::slug($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
 			if($insert || (!$insert && !$this->name)) {
@@ -399,7 +400,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				if($name->save())
 					$this->name = $name->id;
 
-				$this->slug = $this->urlTitle($this->name_i);
+				$this->slug = Inflector::slug($this->name_i);
 
 			} else {
 				$name = SourceMessage::findOne($this->name);
