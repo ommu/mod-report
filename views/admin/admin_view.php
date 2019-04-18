@@ -39,7 +39,7 @@ $this->params['menu']['content'] = [
 		'report_id',
 		[
 			'attribute' => 'status',
-			'value' => $this->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Resolved,Unresolved'),
+			'value' => $model->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Resolved,Unresolved'),
 			'format' => 'raw',
 		],
 		[

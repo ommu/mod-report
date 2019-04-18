@@ -37,7 +37,7 @@ $this->params['menu']['option'] = [
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 
-<?php echo $this->render('_option_form', ['model'=>$searchModel, 'gridColumns'=>$this->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
+<?php echo $this->render('_option_form', ['model'=>$searchModel, 'gridColumns'=>$searchModel->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
 
 <?php 
 $columnData = $columns;

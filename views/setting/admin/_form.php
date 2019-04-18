@@ -33,7 +33,7 @@ use ommu\report\models\ReportCategory;
 <?php //echo $form->errorSummary($model);?>
 
 <?php if($model->isNewRecord && !$model->getErrors())
-	$model->license = $this->licenseCode();
+	$model->license = $model->licenseCode();
 echo $form->field($model, 'license', ['horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-12']])
 	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('license'))

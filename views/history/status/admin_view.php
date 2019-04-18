@@ -36,7 +36,7 @@ $this->params['menu']['content'] = [
 		'id',
 		[
 			'attribute' => 'status',
-			'value' => $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'),
+			'value' => $model->filterYesNo($model->status),
 		],
 		[
 			'attribute' => 'categoryId',
