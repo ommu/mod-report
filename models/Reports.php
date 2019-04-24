@@ -45,6 +45,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use ommu\users\models\Users;
 use ommu\report\models\view\Reports as ReportsView;
+use app\components\Application;
 
 class Reports extends \app\components\ActiveRecord
 {
@@ -422,7 +423,7 @@ class Reports extends \app\components\ActiveRecord
 			$report = self::find()
 				->select(['report_id','reports'])
 				->where(['cat_id' => $autoReportCatId])
-				->andWhere(['app' => \app\components\Application::getAppId()])
+				->andWhere(['app' => Application::getAppId()])
 				->andWhere(['report_url' => $report_url])
 				->one();
 				
@@ -468,7 +469,7 @@ class Reports extends \app\components\ActiveRecord
 				if($this->modified_id == null)
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
-			$this->app = \app\components\Application::getAppId();
+			$this->app = Application::getAppId();
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
