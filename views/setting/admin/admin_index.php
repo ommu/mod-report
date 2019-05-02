@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\widgets\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\widgets\MenuContent;
 use app\components\widgets\MenuOption;
