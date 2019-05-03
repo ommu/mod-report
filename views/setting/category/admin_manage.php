@@ -41,30 +41,17 @@ $this->params['menu']['option'] = [
 <?php 
 $columnData = $columns;
 array_push($columnData, [
-	'class' => 'yii\grid\ActionColumn',
+	'class' => 'app\components\grid\ActionColumn',
 	'header' => Yii::t('app', 'Option'),
-	'contentOptions' => [
-		'class'=>'action-column',
-	],
-	'buttons' => [
-		'view' => function ($url, $model, $key) {
-			$url = Url::to(['view', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Category')]);
-		},
-		'update' => function ($url, $model, $key) {
-			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Category'), 'class'=>'modal-btn']);
-		},
-		'delete' => function ($url, $model, $key) {
-			$url = Url::to(['delete', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-				'title' => Yii::t('app', 'Delete Category'),
-				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-				'data-method'  => 'post',
-			]);
-		},
-	],
-	'template' => '{view}{update}{delete}',
+	'urlCreator' => function($action, $model, $key, $index) {
+		if($action == 'view')
+			return Url::to(['view', 'id'=>$key]);
+		if($action == 'update')
+			return Url::to(['update', 'id'=>$key]);
+		if($action == 'delete')
+			return Url::to(['delete', 'id'=>$key]);
+	},
+	'template' => '{view} {update} {delete}',
 ]);
 
 echo GridView::widget([
