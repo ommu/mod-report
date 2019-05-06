@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\report\controllers\AdminController
  * @var $model ommu\report\models\Reports
- * @var $form app\components\ActiveForm
+ * @var $form yii\widgets\ActiveForm
  *
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @link https://github.com/ommu/mod-report
@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\ActiveForm;
+use yii\widgets\ActiveForm;
 use yii\redactor\widgets\Redactor;
 
 $redactorOptions = [

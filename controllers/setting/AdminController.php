@@ -117,7 +117,7 @@ class AdminController extends Controller
 
 			} else {
 				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
+					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
 			}
 		}
 

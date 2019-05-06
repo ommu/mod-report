@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\AdminController
  * @var $model ommu\report\models\ReportSetting
- * @var $form app\components\ActiveForm
+ * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -91,7 +91,7 @@ echo GridView::widget([
 
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-xs-12 col-12">
-		<?php echo \app\components\widgets\Alert::widget(); ?>
+		<?php echo \app\components\widgets\Alert::widget(['closeButton'=>false]); ?>
 
 		<div class="x_panel">
 			<div class="x_title">

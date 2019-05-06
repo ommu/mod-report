@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\report\controllers\setting\AdminController
  * @var $model ommu\report\models\ReportSetting
- * @var $form app\components\ActiveForm
+ * @var $form app\components\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)857-4115-5177
@@ -16,7 +16,7 @@
  */
 
 use yii\helpers\Html;
-use app\components\ActiveForm;
+use app\components\widgets\ActiveForm;
 use ommu\report\models\ReportSetting;
 use ommu\report\models\ReportCategory;
 ?>
