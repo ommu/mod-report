@@ -36,7 +36,7 @@ $this->params['menu']['option'] = [
 ?>
 
 <div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12 col-12">
+	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
 			<div class="x_title">
 				<?php if($this->params['menu']['content']):
@@ -90,7 +90,7 @@ echo GridView::widget([
 </div>
 
 <div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12 col-12">
+	<div class="col-md-12 col-sm-12 col-xs-12">
 		<?php echo \app\components\widgets\Alert::widget(['closeButton'=>false]); ?>
 
 		<div class="x_panel">
