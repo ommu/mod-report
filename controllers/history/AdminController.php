@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\history\AdminController
  * @var $model ommu\report\models\ReportHistory
  *
  * AdminController implements the CRUD actions for ReportHistory model.

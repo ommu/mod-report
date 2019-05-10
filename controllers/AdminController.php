@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\AdminController
  * @var $model ommu\report\models\Reports
  *
  * AdminController implements the CRUD actions for Reports model.

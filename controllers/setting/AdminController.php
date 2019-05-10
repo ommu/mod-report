@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\setting\AdminController
  * @var $model ommu\report\models\ReportSetting
  *
  * AdminController implements the CRUD actions for ReportSetting model.

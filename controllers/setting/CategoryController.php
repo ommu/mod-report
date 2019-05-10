@@ -1,7 +1,7 @@
 <?php
 /**
  * CategoryController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\setting\CategoryController
  * @var $model ommu\report\models\ReportCategory
  *
  * CategoryController implements the CRUD actions for ReportCategory model.

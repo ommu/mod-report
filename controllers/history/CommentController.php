@@ -1,7 +1,7 @@
 <?php
 /**
  * CommentController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\history\CommentController
  * @var $model ommu\report\models\ReportComment
  *
  * CommentController implements the CRUD actions for ReportComment model.

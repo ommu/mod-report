@@ -1,7 +1,7 @@
 <?php
 /**
  * UserController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\history\UserController
  * @var $model ommu\report\models\ReportUser
  *
  * UserController implements the CRUD actions for ReportUser model.

@@ -1,7 +1,7 @@
 <?php
 /**
  * StatusController
- * @var $this app\components\View
+ * @var $this ommu\report\controllers\history\StatusController
  * @var $model ommu\report\models\ReportStatus
  *
  * StatusController implements the CRUD actions for ReportStatus model.
