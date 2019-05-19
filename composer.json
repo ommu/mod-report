@@ -1,6 +1,7 @@
 {
 	"name": "ommu/report",
 	"description": "Module Report from Ommu Platform",
+	"type": "ommu-module",
 	"keywords": [
 		"module",
 		"report",
@@ -8,9 +9,8 @@
 		"ommu-platform",
 		"yii2"
 	],
-	"homepage": "https://github.com/ommu/mod-report",
-	"type": "ommu-module",
 	"license": "Apache-2.0",
+	"homepage": "https://github.com/ommu/mod-report",
 	"support": {
 		"issues": "https://github.com/ommu/mod-report/issues",
 		"wiki": "https://github.com/ommu/mod-report/wiki",
