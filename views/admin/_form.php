@@ -42,11 +42,13 @@ echo $form->field($model, 'cat_id')
 	->dropDownList($category, ['prompt'=>''])
 	->label($model->getAttributeLabel('cat_id')); ?>
 
-<?php echo $form->field($model, 'report_url')
+<?php $model->report_url = Yii::$app->request->get('url') ? Yii::$app->request->get('url') : '';
+echo $form->field($model, 'report_url')
 	->textInput()
 	->label($model->getAttributeLabel('report_url')); ?>
 
-<?php echo $form->field($model, 'report_body')
+<?php $model->report_body = Yii::$app->request->get('message') ? Yii::$app->request->get('message') : '';
+echo $form->field($model, 'report_body')
 	->textarea(['rows'=>6, 'cols'=>50])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('report_body')); ?>

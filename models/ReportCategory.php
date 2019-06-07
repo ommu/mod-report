@@ -305,7 +305,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
 				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
+					$url = Url::to(['setting/category/publish', 'id'=>$model->primaryKey]);
 					return $this->quickAction($url, $model->publish, 'Enable,Disable');
 				},
 				'filter' => $this->filterYesNo(),

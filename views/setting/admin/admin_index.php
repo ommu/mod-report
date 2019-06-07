@@ -17,13 +17,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\grid\GridView;
-use yii\widgets\Pjax;
-use app\components\widgets\MenuContent;
-use app\components\widgets\MenuOption;
-use yii\widgets\DetailView;
-use ommu\report\models\ReportSetting;
-
 $this->params['breadcrumbs'][] = Yii::t('app', 'Report Settings');
 
 $this->params['menu']['content'] = [
@@ -35,123 +28,13 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12">
-		<div class="x_panel">
-			<div class="x_title">
-				<?php if($this->params['menu']['content']):
-				echo MenuContent::widget(['items' => $this->params['menu']['content']]);
-				endif;?>
-				<ul class="nav navbar-right panel_toolbox">
-					<li><a href="#" title="<?php echo Yii::t('app', 'Toggle');?>" class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-					<?php if($this->params['menu']['option']):?>
-					<li class="dropdown">
-						<a href="#" title="<?php echo Yii::t('app', 'Options');?>" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-						<?php echo MenuOption::widget(['items' => $this->params['menu']['option']]);?>
-					</li>
-					<?php endif;?>
-					<li><a href="#" title="<?php echo Yii::t('app', 'Close');?>" class="close-link"><i class="fa fa-close"></i></a></li>
-				</ul>
-				<div class="clearfix"></div>
-			</div>
-			<div class="x_content">
-<?php Pjax::begin(); ?>
-
-<?php //echo $this->render('/setting/category/_search', ['model'=>$searchModel]); ?>
-
-<?php echo $this->render('/setting/category/_option_form', ['model'=>$searchModel, 'gridColumns'=>$searchModel->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
-
-<?php 
-$columnData = $columns;
-array_push($columnData, [
-	'class' => 'app\components\grid\ActionColumn',
-	'header' => Yii::t('app', 'Option'),
-	'urlCreator' => function($action, $model, $key, $index) {
-		if($action == 'view')
-			return Url::to(['setting/category/view', 'id'=>$key]);
-		if($action == 'update')
-			return Url::to(['setting/category/update', 'id'=>$key]);
-		if($action == 'delete')
-			return Url::to(['setting/category/delete', 'id'=>$key]);
-	},
-	'template' => '{view} {update} {delete}',
-]);
-
-echo GridView::widget([
+<?php echo $this->renderWidget('/setting/category/admin_manage', [
+	'contentMenu' => true,
+	'searchModel' => $searchModel,
 	'dataProvider' => $dataProvider,
-	'filterModel' => $searchModel,
-	'columns' => $columnData,
+	'columns' => $columns,
 ]); ?>
 
-<?php Pjax::end(); ?>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12">
-		<?php echo \app\components\widgets\Alert::widget(['closeButton'=>false]); ?>
-
-		<div class="x_panel">
-			<div class="x_title">
-				<ul class="nav navbar-right panel_toolbox">
-					<li><a href="#" title="<?php echo Yii::t('app', 'Toggle');?>" class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-					<li><a href="#" title="<?php echo Yii::t('app', 'Close');?>" class="close-link"><i class="fa fa-close"></i></a></li>
-				</ul>
-				<div class="clearfix"></div>
-			</div>
-			<div class="x_content">
-<div class="report-setting-index">
-<?php if(!$model->isNewRecord) {
-	echo DetailView::widget([
-		'model' => $model,
-		'options' => [
-			'class'=>'table table-striped detail-view',
-		],
-		'attributes' => [
-			'id',
-			'license',
-			[
-				'attribute' => 'permission',
-				'value' => ReportSetting::getPermission($model->permission),
-			],
-			[
-				'attribute' => 'meta_description',
-				'value' => $model->meta_description ? $model->meta_description : '-',
-			],
-			[
-				'attribute' => 'meta_keyword',
-				'value' => $model->meta_keyword ? $model->meta_keyword : '-',
-			],
-			[
-				'attribute' => 'auto_report_cat_id',
-				'value' => isset($model->category) ? $model->category->title->message : '-',
-			],
-			[
-				'attribute' => 'modified_date',
-				'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-			],
-			[
-				'attribute' => 'modifiedDisplayname',
-				'value' => isset($model->modified) ? $model->modified->displayname : '-',
-			],
-			[
-				'attribute' => '',
-				'value' => Html::a(Yii::t('app', 'Update'), Url::to(['update']), [
-					'class' => 'btn btn-primary',
-				]),
-				'format' => 'raw',
-			],
-		],
-	]);
-} else {
-	echo $this->render('_form', [
-		'model' => $model,
-	]);
-}?>
-</div>
-			</div>
-		</div>
-	</div>
-</div>
+<?php echo $this->renderWidget(!$model->isNewRecord ? 'admin_view' : 'admin_update', [
+	'model'=>$model,
+]); ?>
