@@ -71,6 +71,8 @@ class UserController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new ReportUserSearch();
+		if(($id = Yii::$app->request->get('id')) != null)
+			$searchModel = new ReportUserSearch(['report_id'=>$id]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -101,6 +103,7 @@ class UserController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
+		$this->subMenuParam = $model->report_id;
 
 		$this->view->title = Yii::t('app', 'Detail User: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
 		$this->view->description = '';
@@ -123,7 +126,7 @@ class UserController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-			return $this->redirect(['manage']);
+			return $this->redirect(['manage', 'id'=>$model->report_id]);
 		}
 	}
 
@@ -141,7 +144,7 @@ class UserController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success updated.'));
-			return $this->redirect(['manage']);
+			return $this->redirect(['manage', 'id'=>$model->report_id]);
 		}
 	}
 

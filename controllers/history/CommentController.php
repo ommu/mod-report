@@ -71,6 +71,8 @@ class CommentController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new ReportCommentSearch();
+		if(($id = Yii::$app->request->get('id')) != null)
+			$searchModel = new ReportCommentSearch(['report_id'=>$id]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -101,6 +103,7 @@ class CommentController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
+		$this->subMenuParam = $model->report_id;
 
 		$this->view->title = Yii::t('app', 'Detail Comment: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
 		$this->view->description = '';
@@ -123,7 +126,7 @@ class CommentController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success deleted.'));
-			return $this->redirect(['manage']);
+			return $this->redirect(['manage', 'id'=>$model->report_id]);
 		}
 	}
 
@@ -141,7 +144,7 @@ class CommentController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success updated.'));
-			return $this->redirect(['manage']);
+			return $this->redirect(['manage', 'id'=>$model->report_id]);
 		}
 	}
 

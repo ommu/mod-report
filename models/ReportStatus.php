@@ -77,7 +77,7 @@ class ReportStatus extends \app\components\ActiveRecord
 	{
 		return [
 			'id' => Yii::t('app', 'ID'),
-			'status' => Yii::t('app', 'Resolved'),
+			'status' => Yii::t('app', 'Status'),
 			'report_id' => Yii::t('app', 'Report'),
 			'user_id' => Yii::t('app', 'User'),
 			'report_message' => Yii::t('app', 'Noted'),
@@ -204,6 +204,7 @@ class ReportStatus extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
+			'label' => Yii::t('app', 'Resolved'),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->status);
 			},
