@@ -1,3 +1,38 @@
+report_submenu:
+  view:
+    label: Info
+    url:
+      0: 'admin/view'
+      id: $_GET*id
+    select: action
+  update:
+    label: Update
+    url:
+      0: 'admin/update'
+      id: $_GET*id
+    select: action
+  history:
+    label: Histories
+    url:
+      0: 'history/admin/manage'
+      id: $_GET*id
+    select: controller
+  status:
+    label: Statuses
+    url:
+      0: 'history/status/manage'
+      id: $_GET*id
+    select: controller
+  delete:
+    label: Delete
+    url:
+      0: 'admin/delete'
+      id: $_GET*id
+    htmlOptions:
+      data-confirm: Are you sure you want to delete this item?
+      data-method: post
+    select: action
+
 setting_submenu:
   update:
     label: Settings

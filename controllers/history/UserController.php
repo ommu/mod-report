@@ -33,6 +33,7 @@ use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportUser;
 use ommu\report\models\search\ReportUser as ReportUserSearch;
+use ommu\report\models\Reports;
 
 class UserController extends Controller
 {
@@ -101,7 +102,7 @@ class UserController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail User: {report-id}', ['report-id' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail User: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

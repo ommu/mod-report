@@ -20,12 +20,6 @@ use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->report_body;
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->report_id]), 'icon' => 'pencil', 'htmlOptions' => ['class'=>'btn btn-primary']],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->report_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
-];
 ?>
 
 <div class="reports-view">
@@ -38,17 +32,8 @@ $this->params['menu']['content'] = [
 	'attributes' => [
 		'report_id',
 		[
-			'attribute' => 'status',
-			'value' => $model->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Resolved,Unresolved'),
-			'format' => 'raw',
-		],
-		[
 			'attribute' => 'cat_id',
 			'value' => isset($model->category) ? $model->category->title->message : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
 			'attribute' => 'report_url',
@@ -57,10 +42,6 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'report_body',
 			'value' => $model->report_body ? $model->report_body : '-',
-		],
-		[
-			'attribute' => 'report_message',
-			'value' => $model->report_message ? $model->report_message : '-',
 			'format' => 'html',
 		],
 		[
@@ -68,6 +49,24 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
 		],
 		'report_ip',
+		[
+			'attribute' => 'reporterDisplayname',
+			'value' => isset($model->user) ? $model->user->displayname : '-',
+		],
+		[
+			'attribute' => 'status',
+			'value' => function ($model) {
+				$status = $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
+				$title = $model->status != 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
+				return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title])]);
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'report_message',
+			'value' => $model->report_message ? $model->report_message : '-',
+			'format' => 'html',
+		],
 		[
 			'attribute' => 'modified_date',
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),

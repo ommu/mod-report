@@ -80,7 +80,7 @@ class ReportStatus extends \app\components\ActiveRecord
 			'status' => Yii::t('app', 'Resolved'),
 			'report_id' => Yii::t('app', 'Report'),
 			'user_id' => Yii::t('app', 'User'),
-			'report_message' => Yii::t('app', 'Report Message'),
+			'report_message' => Yii::t('app', 'Noted'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
@@ -137,7 +137,7 @@ class ReportStatus extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('report')) {
+		if(!Yii::$app->request->get('report') && !Yii::$app->request->get('id')) {
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',
@@ -154,6 +154,7 @@ class ReportStatus extends \app\components\ActiveRecord
 					return isset($model->report) ? $model->report->report_body : '-';
 					// return $model->reportBody;
 				},
+				'format' => 'html',
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
@@ -208,7 +209,7 @@ class ReportStatus extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
 	}
 

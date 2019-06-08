@@ -115,7 +115,7 @@ class ReportHistory extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('report')) {
+		if(!Yii::$app->request->get('report') && !Yii::$app->request->get('id')) {
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',
@@ -132,6 +132,7 @@ class ReportHistory extends \app\components\ActiveRecord
 					return isset($model->report) ? $model->report->report_body : '-';
 					// return $model->reportBody;
 				},
+				'format' => 'html',
 			];
 		}
 		if(!Yii::$app->request->get('user')) {

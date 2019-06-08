@@ -23,16 +23,13 @@ $redactorOptions = [
 	'imageManagerJson' => ['/redactor/upload/image-json'],
 	'imageUpload' => ['/redactor/upload/image'],
 	'fileUpload' => ['/redactor/upload/file'],
-	'plugins' => ['clips', 'fontcolor','imagemanager']
+	'plugins' => ['fontcolor','imagemanager'],
+	'buttons' => ['html', 'format', 'bold', 'italic', 'deleted'],
 ];
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->report_id, 'url' => ['view', 'id'=>$model->report_id]];
 $this->params['breadcrumbs'][] = $title;
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->report_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
-];
 ?>
 
 <?php $form = ActiveForm::begin([

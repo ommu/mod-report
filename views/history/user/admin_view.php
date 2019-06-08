@@ -46,6 +46,7 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'reportBody',
 			'value' => isset($model->report) ? $model->report->report_body : '-',
+			'format' => 'html',
 		],
 		[
 			'attribute' => 'reporterDisplayname',

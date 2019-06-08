@@ -40,6 +40,16 @@ class AdminController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+		parent::init();
+		if(Yii::$app->request->get('id'))
+			$this->subMenu = $this->module->params['report_submenu'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
 		return [
@@ -107,7 +117,6 @@ class AdminController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id'=>$model->report_id]);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -139,7 +148,7 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['manage']);
+				return $this->redirect(['update', 'id'=>$model->report_id]);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -147,7 +156,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update Report: {report-body}', ['report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', 'Update Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
@@ -165,7 +174,7 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
 
-		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -181,7 +190,8 @@ class AdminController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
+		$model = $this->findModel($id);
+		$model->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report success deleted.'));
 		return $this->redirect(['manage']);
@@ -200,6 +210,8 @@ class AdminController extends Controller
 
 		$title = $model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved');
 		$replace = $model->status == 1 ? 0 : 1;
+
+		$model->setAttributeLabels(['report_message'=>Yii::t('app', '{status} Note', ['status'=>$title])]);
 		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -207,11 +219,11 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['manage']);
+				return $this->redirect(['view', 'id'=>$model->report_id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', '{title} Report: {report-body}', ['title' => $title, 'report-body' => $model->report_body]);
+		$this->view->title = Yii::t('app', '{title} Report: {report-body}', ['title' => $title, 'report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_status', [

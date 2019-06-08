@@ -153,6 +153,7 @@ class ReportComment extends \app\components\ActiveRecord
 					return isset($model->report) ? $model->report->report_body : '-';
 					// return $model->reportBody;
 				},
+				'format' => 'html',
 			];
 		}
 		if(!Yii::$app->request->get('user')) {

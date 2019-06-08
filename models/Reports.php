@@ -73,9 +73,12 @@ class Reports extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'app', 'report_url', 'report_body', 'report_message'], 'required'],
+			[['report_url', 'report_body'], 'required'],
+			[['app'], 'required', 'on' => self::SCENARIO_REPORT],
+			[['report_message'], 'required', 'on' => self::SCENARIO_RESOLVED],
 			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['app', 'report_url', 'report_body', 'report_message'], 'string'],
+			[['cat_id'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
 			[['app'], 'string', 'max' => 32],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
@@ -88,10 +91,10 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function scenarios()
 	{
-		return [
-			self::SCENARIO_REPORT => ['cat_id', 'app', 'report_url', 'report_body'],
-			self::SCENARIO_RESOLVED => ['report_message'],
-		];
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_REPORT] = ['cat_id', 'app', 'report_url', 'report_body'];
+		$scenarios[self::SCENARIO_RESOLVED] = ['report_message'];
+		return $scenarios;
 	}
 
 	/**
@@ -105,9 +108,9 @@ class Reports extends \app\components\ActiveRecord
 			'cat_id' => Yii::t('app', 'Category'),
 			'user_id' => Yii::t('app', 'User'),
 			'app' => Yii::t('app', 'Application'),
-			'report_url' => Yii::t('app', 'Report Url'),
-			'report_body' => Yii::t('app', 'Report Body'),
-			'report_message' => Yii::t('app', 'Report Message'),
+			'report_url' => Yii::t('app', 'URL'),
+			'report_body' => Yii::t('app', 'Error'),
+			'report_message' => Yii::t('app', 'Noted'),
 			'reports' => Yii::t('app', 'Reports'),
 			'report_date' => Yii::t('app', 'Report Date'),
 			'report_ip' => Yii::t('app', 'Report Ip'),

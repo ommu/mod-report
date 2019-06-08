@@ -31,9 +31,20 @@ use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportStatus;
 use ommu\report\models\search\ReportStatus as ReportStatusSearch;
+use ommu\report\models\Reports;
 
 class StatusController extends Controller
 {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init()
+	{
+		parent::init();
+		if(Yii::$app->request->get('id'))
+			$this->subMenu = $this->module->params['report_submenu'];
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -67,6 +78,8 @@ class StatusController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new ReportStatusSearch();
+		if(($id = Yii::$app->request->get('id')) != null)
+			$searchModel = new ReportStatusSearch(['report_id'=>$id]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -97,8 +110,9 @@ class StatusController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
+		$this->subMenuParam = $model->report_id;
 
-		$this->view->title = Yii::t('app', 'Detail Status: {report-id}', ['report-id' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail Status: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -114,10 +128,11 @@ class StatusController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
+		$model = $this->findModel($id);
+		$model->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report status success deleted.'));
-		return $this->redirect(['manage']);
+		return $this->redirect(['manage', 'id'=>$model->report_id]);
 	}
 
 	/**

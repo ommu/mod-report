@@ -33,6 +33,7 @@ use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportComment;
 use ommu\report\models\search\ReportComment as ReportCommentSearch;
+use ommu\report\models\Reports;
 
 class CommentController extends Controller
 {
@@ -101,7 +102,7 @@ class CommentController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail Comment: {report-id}', ['report-id' => $model->report->report_body]);
+		$this->view->title = Yii::t('app', 'Detail Comment: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
