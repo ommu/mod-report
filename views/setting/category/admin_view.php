@@ -31,75 +31,84 @@ $this->params['menu']['content'] = [
 
 <div class="report-category-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+	'cat_id',
+	[
+		'attribute' => 'publish',
+		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
+		'format' => 'raw',
+	],
+	[
+		'attribute' => 'name_i',
+		'value' => $model->name_i,
+	],
+	[
+		'attribute' => 'desc_i',
+		'value' => $model->desc_i,
+	],
+	[
+		'attribute' => 'creation_date',
+		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+	],
+	[
+		'attribute' => 'creationDisplayname',
+		'value' => isset($model->creation) ? $model->creation->displayname : '-',
+	],
+	[
+		'attribute' => 'modified_date',
+		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+	],
+	[
+		'attribute' => 'modifiedDisplayname',
+		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+	],
+	[
+		'attribute' => 'updated_date',
+		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+	],
+	[
+		'attribute' => 'slug',
+		'value' => $model->slug ? $model->slug : '-',
+	],
+	[
+		'attribute' => 'unresolved',
+		'value' => function ($model) {
+			$unresolved = $model->getUnresolved(true);
+			return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'resolved',
+		'value' => function ($model) {
+			$resolved = $model->getResolved(true);
+			return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'reports',
+		'value' => function ($model) {
+			$reports = $model->getReports(true);
+			return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => '',
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->cat_id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
+		'format' => 'html',
+		'visible' => Yii::$app->request->isAjax ? true : false,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'cat_id',
-		[
-			'attribute' => 'publish',
-			'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
-			'format' => 'raw',
-		],
-		[
-			'attribute' => 'name_i',
-			'value' => $model->name_i,
-		],
-		[
-			'attribute' => 'desc_i',
-			'value' => $model->desc_i,
-		],
-		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-		],
-		[
-			'attribute' => 'creationDisplayname',
-			'value' => isset($model->creation) ? $model->creation->displayname : '-',
-		],
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		],
-		[
-			'attribute' => 'modifiedDisplayname',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-		],
-		[
-			'attribute' => 'slug',
-			'value' => $model->slug ? $model->slug : '-',
-		],
-		[
-			'attribute' => 'unresolved',
-			'value' => function ($model) {
-				$unresolved = $model->getUnresolved(true);
-				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'resolved',
-			'value' => function ($model) {
-				$resolved = $model->getResolved(true);
-				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'reports',
-			'value' => function ($model) {
-				$reports = $model->getReports(true);
-				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
-			},
-			'format' => 'html',
-		],
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

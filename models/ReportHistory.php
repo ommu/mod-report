@@ -68,12 +68,12 @@ class ReportHistory extends \app\components\ActiveRecord
 	{
 		return [
 			'id' => Yii::t('app', 'ID'),
-			'report_id' => Yii::t('app', 'Report'),
+			'report_id' => Yii::t('app', 'Error'),
 			'user_id' => Yii::t('app', 'User'),
 			'report_date' => Yii::t('app', 'Report Date'),
-			'report_ip' => Yii::t('app', 'Report Ip'),
+			'report_ip' => Yii::t('app', 'Report IP'),
 			'categoryId' => Yii::t('app', 'Category'),
-			'reportBody' => Yii::t('app', 'Report'),
+			'reportBody' => Yii::t('app', 'Error'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 		];
 	}

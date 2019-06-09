@@ -29,8 +29,7 @@ class ReportComment extends ReportCommentModel
 	{
 		return [
 			[['comment_id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-			[['comment_text', 'creation_date', 'modified_date', 'updated_date',
-				'categoryId', 'reportBody', 'userDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['comment_text', 'creation_date', 'modified_date', 'updated_date', 'categoryId', 'reportBody', 'userDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 

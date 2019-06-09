@@ -25,12 +25,12 @@
  * @link https://github.com/ommu/mod-report
  *
  */
- 
+
 namespace ommu\report\controllers;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\Reports;
 use ommu\report\models\search\Reports as ReportsSearch;
@@ -92,6 +92,11 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if(($category = Yii::$app->request->get('category')) != null)
+			$category = \ommu\report\models\ReportCategory::findOne($category);
+		if(($user = Yii::$app->request->get('user')) != null)
+			$user = \ommu\users\models\Users::findOne($user);
+
 		$this->view->title = Yii::t('app', 'Reports');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -99,6 +104,8 @@ class AdminController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'category' => $category,
+			'user' => $user,
 		]);
 	}
 
@@ -114,6 +121,9 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
 				return $this->redirect(['manage']);
@@ -145,6 +155,8 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
@@ -192,7 +204,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 		$model->delete();
-		
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report success deleted.'));
 		return $this->redirect(['manage']);
 	}

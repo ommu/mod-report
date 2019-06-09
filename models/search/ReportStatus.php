@@ -29,8 +29,7 @@ class ReportStatus extends ReportStatusModel
 	{
 		return [
 			[['id', 'status', 'report_id', 'user_id', 'modified_id'], 'integer'],
-			[['report_message', 'updated_date', 'updated_ip', 'modified_date',
-				'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['report_message', 'updated_date', 'updated_ip', 'modified_date', 'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 

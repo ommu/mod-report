@@ -40,7 +40,7 @@ class ReportComment extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date'];
 
 	public $categoryId;
 	public $reportBody;
@@ -77,15 +77,15 @@ class ReportComment extends \app\components\ActiveRecord
 		return [
 			'comment_id' => Yii::t('app', 'Comment'),
 			'publish' => Yii::t('app', 'Publish'),
-			'report_id' => Yii::t('app', 'Report'),
+			'report_id' => Yii::t('app', 'Error'),
 			'user_id' => Yii::t('app', 'User'),
-			'comment_text' => Yii::t('app', 'Comment Text'),
+			'comment_text' => Yii::t('app', 'Comment'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'categoryId' => Yii::t('app', 'Category'),
-			'reportBody' => Yii::t('app', 'Report'),
+			'reportBody' => Yii::t('app', 'Error'),
 			'userDisplayname' => Yii::t('app', 'User'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
@@ -136,7 +136,7 @@ class ReportComment extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('report')) {
+		if(!Yii::$app->request->get('report') && !Yii::$app->request->get('id')) {
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',
@@ -156,6 +156,12 @@ class ReportComment extends \app\components\ActiveRecord
 				'format' => 'html',
 			];
 		}
+		$this->templateColumns['comment_text'] = [
+			'attribute' => 'comment_text',
+			'value' => function($model, $key, $index, $column) {
+				return $model->comment_text;
+			},
+		];
 		if(!Yii::$app->request->get('user')) {
 			$this->templateColumns['userDisplayname'] = [
 				'attribute' => 'userDisplayname',
@@ -165,12 +171,6 @@ class ReportComment extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['comment_text'] = [
-			'attribute' => 'comment_text',
-			'value' => function($model, $key, $index, $column) {
-				return $model->comment_text;
-			},
-		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
 			'value' => function($model, $key, $index, $column) {

@@ -29,8 +29,7 @@ class ReportHistory extends ReportHistoryModel
 	{
 		return [
 			[['id', 'report_id', 'user_id'], 'integer'],
-			[['report_date', 'report_ip',
-				'categoryId', 'reportBody', 'reporterDisplayname'], 'safe'],
+			[['report_date', 'report_ip', 'categoryId', 'reportBody', 'reporterDisplayname'], 'safe'],
 		];
 	}
 

@@ -29,8 +29,7 @@ class Reports extends ReportsModel
 	{
 		return [
 			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
-			[['app', 'report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date',
-				'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['app', 'report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date', 'categoryName', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -68,7 +67,7 @@ class Reports extends ReportsModel
 			$query = ReportsModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'view view', 
-			'category.title category',
+			'category.title category', 
 			'user user', 
 			'modified modified'
 		]);
@@ -84,6 +83,10 @@ class Reports extends ReportsModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['cat_id'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
+		$attributes['categoryName'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -142,6 +145,7 @@ class Reports extends ReportsModel
 			->andFilterWhere(['like', 't.report_body', $this->report_body])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
+			->andFilterWhere(['like', 'category.message', $this->categoryName])
 			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 

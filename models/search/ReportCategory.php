@@ -29,8 +29,7 @@ class ReportCategory extends ReportCategoryModel
 	{
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
-			[['creation_date', 'modified_date', 'updated_date', 'slug', 'name_i', 'desc_i',
-				'creationDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['creation_date', 'modified_date', 'updated_date', 'slug', 'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 

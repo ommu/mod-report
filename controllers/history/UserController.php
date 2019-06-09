@@ -24,12 +24,12 @@
  * @link https://github.com/ommu/mod-report
  *
  */
- 
+
 namespace ommu\report\controllers\history;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportUser;
 use ommu\report\models\search\ReportUser as ReportUserSearch;
@@ -85,6 +85,11 @@ class UserController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if(($report = Yii::$app->request->get('report')) != null || ($report = $id) != null)
+			$report = \ommu\report\models\Reports::findOne($report);
+		if(($user = Yii::$app->request->get('user')) != null)
+			$user = \ommu\users\models\Users::findOne($user);
+
 		$this->view->title = Yii::t('app', 'Users');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -92,6 +97,8 @@ class UserController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'report' => $report,
+			'user' => $user,
 		]);
 	}
 

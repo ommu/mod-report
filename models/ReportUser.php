@@ -75,14 +75,14 @@ class ReportUser extends \app\components\ActiveRecord
 		return [
 			'id' => Yii::t('app', 'ID'),
 			'publish' => Yii::t('app', 'Publish'),
-			'report_id' => Yii::t('app', 'Report'),
+			'report_id' => Yii::t('app', 'Error'),
 			'user_id' => Yii::t('app', 'User'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'categoryId' => Yii::t('app', 'Category'),
-			'reportBody' => Yii::t('app', 'Report'),
+			'reportBody' => Yii::t('app', 'Error'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
@@ -133,7 +133,7 @@ class ReportUser extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('report')) {
+		if(!Yii::$app->request->get('report') && !Yii::$app->request->get('id')) {
 			if(!Yii::$app->request->get('category')) {
 				$this->templateColumns['categoryId'] = [
 					'attribute' => 'categoryId',

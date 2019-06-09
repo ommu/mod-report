@@ -26,12 +26,12 @@
  * @link https://github.com/ommu/mod-report
  *
  */
- 
+
 namespace ommu\report\controllers\setting;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportCategory;
 use ommu\report\models\search\ReportCategory as ReportCategorySearch;
@@ -114,6 +114,9 @@ class CategoryController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success created.'));
 				return $this->redirect(['manage']);
@@ -145,6 +148,8 @@ class CategoryController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report category success updated.'));

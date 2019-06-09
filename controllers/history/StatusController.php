@@ -22,12 +22,12 @@
  * @link https://github.com/ommu/mod-report
  *
  */
- 
+
 namespace ommu\report\controllers\history;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportStatus;
 use ommu\report\models\search\ReportStatus as ReportStatusSearch;
@@ -92,6 +92,11 @@ class StatusController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if(($report = Yii::$app->request->get('report')) != null || ($report = $id) != null)
+			$report = \ommu\report\models\Reports::findOne($report);
+		if(($user = Yii::$app->request->get('user')) != null)
+			$user = \ommu\users\models\Users::findOne($user);
+
 		$this->view->title = Yii::t('app', 'Statuses');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -99,6 +104,8 @@ class StatusController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'report' => $report,
+			'user' => $user,
 		]);
 	}
 
@@ -130,7 +137,7 @@ class StatusController extends Controller
 	{
 		$model = $this->findModel($id);
 		$model->delete();
-		
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report status success deleted.'));
 		return $this->redirect(['manage', 'id'=>$model->report_id]);
 	}

@@ -14,6 +14,7 @@
  *
  */
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -27,32 +28,46 @@ $this->params['menu']['content'] = [
 
 <div class="report-history-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+	'id',
+	[
+		'attribute' => 'categoryId',
+		'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
+	],
+	[
+		'attribute' => 'reportBody',
+		'value' => function ($model) {
+			$reportBody = isset($model->report) ? $model->report->report_body : '-';
+			if($reportBody != '-')
+				return Html::a($reportBody, ['admin/view', 'id'=>$model->report_id], ['title'=>$reportBody, 'class'=>'modal-btn']);
+			return $reportBody;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'reporterDisplayname',
+		'value' => isset($model->user) ? $model->user->displayname : '-',
+	],
+	[
+		'attribute' => 'report_date',
+		'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
+	],
+	'report_ip',
+	[
+		'attribute' => '',
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
+		'format' => 'html',
+		'visible' => Yii::$app->request->isAjax ? true : false,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'categoryId',
-			'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
-		],
-		[
-			'attribute' => 'reportBody',
-			'value' => isset($model->report) ? $model->report->report_body : '-',
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'reporterDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'report_date',
-			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
-		],
-		'report_ip',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

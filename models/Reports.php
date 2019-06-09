@@ -52,7 +52,7 @@ class Reports extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modifiedDisplayname','updated_date','comments','histories','statuses','users'];
 
-	public $categoryId;
+	public $categoryName;
 	public $reporterDisplayname;
 	public $modifiedDisplayname;
 
@@ -113,7 +113,7 @@ class Reports extends \app\components\ActiveRecord
 			'report_message' => Yii::t('app', 'Noted'),
 			'reports' => Yii::t('app', 'Reports'),
 			'report_date' => Yii::t('app', 'Report Date'),
-			'report_ip' => Yii::t('app', 'Report Ip'),
+			'report_ip' => Yii::t('app', 'Report IP'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
@@ -121,6 +121,7 @@ class Reports extends \app\components\ActiveRecord
 			'histories' => Yii::t('app', 'Histories'),
 			'statuses' => Yii::t('app', 'Statuses'),
 			'users' => Yii::t('app', 'Users'),
+			'categoryName' => Yii::t('app', 'Category'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
@@ -255,31 +256,22 @@ class Reports extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('category')) {
-			$this->templateColumns['cat_id'] = [
-				'attribute' => 'cat_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->category) ? $model->category->title->message : '-';
-					// return $model->categoryId;
-				},
-				'filter' => ReportCategory::getCategory(),
-			];
-		}
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporterDisplayname'] = [
-				'attribute' => 'reporterDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-					// return $model->reporterDisplayname;
-				},
-			];
-		}
 		$this->templateColumns['app'] = [
 			'attribute' => 'app',
 			'value' => function($model, $key, $index, $column) {
 				return $model->app;
 			},
 		];
+		if(!Yii::$app->request->get('category')) {
+			$this->templateColumns['cat_id'] = [
+				'attribute' => 'cat_id',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->category) ? $model->category->title->message : '-';
+					// return $model->categoryName;
+				},
+				'filter' => ReportCategory::getCategory(),
+			];
+		}
 		$this->templateColumns['report_url'] = [
 			'attribute' => 'report_url',
 			'value' => function($model, $key, $index, $column) {
@@ -300,6 +292,15 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
+		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['reporterDisplayname'] = [
+				'attribute' => 'reporterDisplayname',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
+					// return $model->reporterDisplayname;
+				},
+			];
+		}
 		$this->templateColumns['report_date'] = [
 			'attribute' => 'report_date',
 			'value' => function($model, $key, $index, $column) {
@@ -453,7 +454,7 @@ class Reports extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		// $this->categoryId = isset($model->category) ? $model->category->title->message : '-';
+		// $this->categoryName = isset($model->category) ? $model->category->title->message : '-';
 		// $this->reporterDisplayname = isset($model->user) ? $model->user->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}

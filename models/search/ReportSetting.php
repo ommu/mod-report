@@ -29,8 +29,7 @@ class ReportSetting extends ReportSettingModel
 	{
 		return [
 			[['id', 'permission', 'auto_report_cat_id', 'modified_id'], 'integer'],
-			[['license', 'meta_description', 'meta_keyword', 'modified_date', 
-				'modifiedDisplayname'], 'safe'],
+			[['license', 'meta_description', 'meta_keyword', 'modified_date', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 

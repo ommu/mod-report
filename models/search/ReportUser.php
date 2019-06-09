@@ -29,8 +29,7 @@ class ReportUser extends ReportUserModel
 	{
 		return [
 			[['id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-			[['creation_date', 'modified_date', 'updated_date',
-				'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['creation_date', 'modified_date', 'updated_date', 'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 

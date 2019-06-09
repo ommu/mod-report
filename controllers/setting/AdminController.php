@@ -21,12 +21,12 @@
  * @link https://github.com/ommu/mod-report
  *
  */
- 
+
 namespace ommu\report\controllers\setting;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\report\models\ReportSetting;
 use ommu\report\models\search\ReportCategory as ReportCategorySearch;
@@ -65,6 +65,8 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
@@ -110,6 +112,8 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success updated.'));
@@ -140,7 +144,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 		$model->delete();
-		
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report setting success deleted.'));
 		return $this->redirect(['update']);
 	}

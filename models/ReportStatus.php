@@ -78,15 +78,15 @@ class ReportStatus extends \app\components\ActiveRecord
 		return [
 			'id' => Yii::t('app', 'ID'),
 			'status' => Yii::t('app', 'Status'),
-			'report_id' => Yii::t('app', 'Report'),
+			'report_id' => Yii::t('app', 'Error'),
 			'user_id' => Yii::t('app', 'User'),
 			'report_message' => Yii::t('app', 'Noted'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'categoryId' => Yii::t('app', 'Category'),
-			'reportBody' => Yii::t('app', 'Report'),
+			'reportBody' => Yii::t('app', 'Error'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
@@ -157,6 +157,13 @@ class ReportStatus extends \app\components\ActiveRecord
 				'format' => 'html',
 			];
 		}
+		$this->templateColumns['report_message'] = [
+			'attribute' => 'report_message',
+			'value' => function($model, $key, $index, $column) {
+				return $model->report_message;
+			},
+			'format' => 'html',
+		];
 		if(!Yii::$app->request->get('user')) {
 			$this->templateColumns['reporterDisplayname'] = [
 				'attribute' => 'reporterDisplayname',
@@ -166,13 +173,6 @@ class ReportStatus extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['report_message'] = [
-			'attribute' => 'report_message',
-			'value' => function($model, $key, $index, $column) {
-				return $model->report_message;
-			},
-			'format' => 'html',
-		];
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
 			'value' => function($model, $key, $index, $column) {
