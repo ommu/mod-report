@@ -57,9 +57,10 @@ class SiteController extends Controller
 			// $model->load($postData);
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success added.'));
-				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id'=>$model->report_id]);
+				return \yii\helpers\Json::encode([
+					'error' => 0,
+					'message' => Yii::t('app', 'Report success added.'),
+				]);
 
 			} else {
 				if(Yii::$app->request->isAjax)
