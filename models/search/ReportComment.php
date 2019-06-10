@@ -67,6 +67,7 @@ class ReportComment extends ReportCommentModel
 			$query = ReportCommentModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'report report', 
+			'report.category.title category', 
 			'user user', 
 			'modified modified'
 		]);
