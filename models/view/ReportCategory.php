@@ -71,9 +71,12 @@ class ReportCategory extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
+
+		if(!(Yii::$app instanceof \app\components\Application))
+			return;
 
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
