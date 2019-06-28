@@ -24,7 +24,7 @@ $redactorOptions = [
 	'imageManagerJson' => ['/redactor/upload/image-json'],
 	'imageUpload' => ['/redactor/upload/image'],
 	'fileUpload' => ['/redactor/upload/file'],
-	'plugins' => ['fontcolor','imagemanager'],
+	'plugins' => ['fontcolor', 'imagemanager'],
 	'buttons' => ['html', 'format', 'bold', 'italic', 'deleted'],
 ];
 ?>

@@ -28,7 +28,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'View');
 
 <?php
 $attributes = [
-	'id',
+	[
+		'attribute' => 'id',
+		'value' => $model->id ? $model->id : '-',
+		'visible' => !$small,
+	],
 	'license',
 	[
 		'attribute' => 'permission',

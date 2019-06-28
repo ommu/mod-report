@@ -21,7 +21,7 @@ use ommu\report\models\ReportCategory;
 
 $redactorOptions = [
 	'buttons' => ['html', 'format', 'bold', 'italic', 'deleted'],
-	'plugins' => ['fontcolor','imagemanager']
+	'plugins' => ['fontcolor', 'imagemanager']
 ];
 ?>
 

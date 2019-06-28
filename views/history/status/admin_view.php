@@ -21,16 +21,21 @@ use yii\widgets\DetailView;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Statuses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->report->report_body;
 
+if(!$small) {
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
-?>
+} ?>
 
 <div class="report-status-view">
 
 <?php
 $attributes = [
-	'id',
+	[
+		'attribute' => 'id',
+		'value' => $model->id ? $model->id : '-',
+		'visible' => !$small,
+	],
 	[
 		'attribute' => 'status',
 		'value' => $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved'),
