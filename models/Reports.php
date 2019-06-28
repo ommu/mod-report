@@ -134,7 +134,8 @@ class Reports extends \app\components\ActiveRecord
 	{
 		if($count == false) {
 			return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
-				->andOnCondition([sprintf('%s.publish', ReportComment::tableName()) => $publish]);
+				->alias('comments')
+				->andOnCondition([sprintf('%s.publish', 'comments') => $publish]);
 		}
 
 		$model = ReportComment::find()
@@ -187,7 +188,8 @@ class Reports extends \app\components\ActiveRecord
 	{
 		if($count == false) {
 			return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
-				->andOnCondition([sprintf('%s.publish', ReportUser::tableName()) => $publish]);
+				->alias('users')
+				->andOnCondition([sprintf('%s.publish', 'users') => $publish]);
 		}
 
 		$model = ReportUser::find()
