@@ -16,6 +16,7 @@
  */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use app\components\widgets\ActiveForm;
 use yii\redactor\widgets\Redactor;
 use ommu\report\models\ReportCategory;

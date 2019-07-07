@@ -68,7 +68,8 @@ class ReportSetting extends ReportSettingModel
 		$query->joinWith([
 			'category.title category', 
 			'modified modified'
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

@@ -70,7 +70,8 @@ class ReportUser extends ReportUserModel
 			'report.category.title category', 
 			'user user', 
 			'modified modified'
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

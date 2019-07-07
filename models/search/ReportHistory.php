@@ -69,7 +69,8 @@ class ReportHistory extends ReportHistoryModel
 			'report report', 
 			'report.category.title category', 
 			'user user'
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

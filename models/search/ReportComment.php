@@ -70,7 +70,8 @@ class ReportComment extends ReportCommentModel
 			'report.category.title category', 
 			'user user', 
 			'modified modified'
-		]);
+		])
+		->groupBy(['comment_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [
