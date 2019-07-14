@@ -20,9 +20,13 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use ommu\report\models\ReportSetting;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report Settings'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = Yii::t('app', 'View');
-?>
+$this->params['breadcrumbs'][] = $this->title;
+
+if(!$small) {
+$this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Reset'), 'url' => Url::to(['delete']), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to reset this setting?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+];
+} ?>
 
 <div class="report-setting-view">
 
@@ -60,7 +64,7 @@ $attributes = [
 	],
 	[
 		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
+		'value' => Html::a(Yii::t('app', 'Update'), ['update'], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
 		'format' => 'html',
 	],
 ];
