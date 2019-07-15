@@ -18,7 +18,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use ommu\report\models\ReportSetting;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -40,7 +39,7 @@ $attributes = [
 	'license',
 	[
 		'attribute' => 'permission',
-		'value' => ReportSetting::getPermission($model->permission),
+		'value' => $model::getPermission($model->permission),
 	],
 	[
 		'attribute' => 'meta_description',
