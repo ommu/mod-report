@@ -425,11 +425,11 @@ class Reports extends \app\components\ActiveRecord
 			->where(['id' => 1])
 			->one();
 
-		$autoReportCatId = $setting !== null ? $setting->auto_report_cat_id : null;
+		$autoReportCatId = $setting !== null && isset($setting->category) ? $setting->auto_report_cat_id : null;
 
 		if($autoReportCatId) {
 			$report = self::find()
-				->select(['report_id','reports'])
+				->select(['report_id', 'status', 'report_url', 'report_body', 'reports'])
 				->where(['cat_id' => $autoReportCatId])
 				->andWhere(['app' => Yii::$app->id])
 				->andWhere(['report_url' => $report_url])
