@@ -37,7 +37,12 @@ $attributes = [
 	],
 	[
 		'attribute' => 'report_url',
-		'value' => $model->report_url ? $model->report_url : '-',
+		'value' => function ($model) {
+			if($model->report_url && $model->report_url != '-')
+				return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+			return '-';
+		},
+		'format' => 'raw',
 	],
 	[
 		'attribute' => 'report_body',
