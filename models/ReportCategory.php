@@ -324,11 +324,13 @@ class ReportCategory extends \app\components\ActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::find()
-				->select([$column])
-				->where(['cat_id' => $id])
-				->one();
-			return $model->$column;
+			$model = self::find();
+			if(is_array($column))
+				$model->select($column);
+			else
+				$model->select([$column]);
+			$model = $model->where(['cat_id' => $id])->one();
+			return is_array($column) ? $model : $model->$column;
 			
 		} else {
 			$model = self::findOne($id);

@@ -171,11 +171,13 @@ class ReportSetting extends \app\components\ActiveRecord
 	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::find()
-				->select([$column])
-				->where(['id' => 1])
-				->one();
-			return $model->$column;
+			$model = self::find();
+			if(is_array($column))
+				$model->select($column);
+			else
+				$model->select([$column]);
+			$model = $model->where(['id' => 1])->one();
+			return is_array($column) ? $model : $model->$column;
 			
 		} else {
 			$model = self::findOne(1);
