@@ -4,7 +4,7 @@
  *
  * ReportCategory represents the model behind the search form about `ommu\report\models\ReportCategory`.
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 22 September 2017, 16:13 WIB

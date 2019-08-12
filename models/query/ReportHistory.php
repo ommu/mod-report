@@ -5,7 +5,7 @@
  * This is the ActiveQuery class for [[\ommu\report\models\ReportHistory]].
  * @see \ommu\report\models\ReportHistory
  * 
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2019 OMMU (www.ommu.co)
  * @created date 18 January 2019, 14:56 WIB
