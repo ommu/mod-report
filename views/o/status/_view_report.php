@@ -4,7 +4,7 @@
  * @var $this StatusController
  * @var $model ReportStatus
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @created date 24 August 2017, 06:06 WIB

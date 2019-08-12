@@ -4,7 +4,7 @@
  * @var $this AdminController
  * @var $model Reports
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 16 September 2018, 23:58 WIB
