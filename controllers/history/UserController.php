@@ -133,7 +133,7 @@ class UserController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-			return $this->redirect(['manage', 'id'=>$model->report_id]);
+			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'id'=>$model->report_id]);
 		}
 	}
 
@@ -151,7 +151,7 @@ class UserController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success updated.'));
-			return $this->redirect(['manage', 'id'=>$model->report_id]);
+			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'id'=>$model->report_id]);
 		}
 	}
 
