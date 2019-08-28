@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $model->report->report_body;
 
 if(!$small) {
 $this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
 } ?>
@@ -57,13 +58,12 @@ $attributes = [
 	[
 		'attribute' => 'report_date',
 		'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
+		'visible' => !$small,
 	],
-	'report_ip',
 	[
-		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
-		'format' => 'html',
-		'visible' => Yii::$app->request->isAjax ? true : false,
+		'attribute' => 'report_ip',
+		'value' => $model->report_ip,
+		'visible' => !$small,
 	],
 ];
 

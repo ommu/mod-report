@@ -19,9 +19,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\DetailView;
-use ommu\report\models\ReportCategory;
-use ommu\users\models\Users;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -37,59 +34,11 @@ $this->params['menu']['option'] = [
 <div class="reports-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($category != null) {
-$model = $category;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'name_i',
-			'value' => function ($model) {
-				if($model->name_i != '')
-					return Html::a($model->name_i, ['category/view', 'id'=>$model->cat_id], ['title'=>$model->name_i, 'class'=>'modal-btn']);
-				return $model->name_i;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'desc_i',
-			'value' => $model->desc_i,
-		],
-	],
-]);
-}?>
+<?php if($category != null)
+	echo $this->render('/setting/category/admin_view', ['model'=>$category, 'small'=>true]); ?>
 
-<?php if($user != null) {
-$model = $user;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'enabled',
-			'value' => Users::getEnabled($model->enabled),
-		],
-		[
-			'attribute' => 'verified',
-			'value' => $model->verified == 1 ? Yii::t('app', 'Verified') : Yii::t('app', 'Unverified'),
-		],
-		[
-			'attribute' => 'levelName',
-			'value' => isset($model->level) ? $model->level->title->message : '-',
-		],
-		'email:email',
-		[
-			'attribute' => 'lastlogin_date',
-			'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
-		],
-	],
-]);
-}?>
+<?php if($user != null)
+	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 

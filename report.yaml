@@ -11,17 +11,29 @@ report_submenu:
       0: 'admin/update'
       id: $_GET*id
     select: action
-  status:
-    label: Statuses
-    url:
-      0: 'history/status/manage'
-      id: $_GET*id
-    select: controller
   history:
     label: Histories
     url:
       0: 'history/admin/manage'
-      id: $_GET*id
+      report: $_GET*id
+    select: controller
+  user:
+    label: Users
+    url:
+      0: 'history/user/manage'
+      report: $_GET*id
+    select: controller
+  status:
+    label: Statuses
+    url:
+      0: 'history/status/manage'
+      report: $_GET*id
+    select: controller
+  comment:
+    label: Comments
+    url:
+      0: 'history/comment/manage'
+      report: $_GET*id
     select: controller
   delete:
     label: Delete

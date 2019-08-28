@@ -34,11 +34,16 @@ $this->params['menu']['content'] = [
 
 <?php
 $attributes = [
-	'cat_id',
+	[
+		'attribute' => 'cat_id',
+		'value' => $model->cat_id,
+		'visible' => !$small,
+	],
 	[
 		'attribute' => 'publish',
 		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
 		'format' => 'raw',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'name_i',
@@ -49,36 +54,13 @@ $attributes = [
 		'value' => $model->desc_i,
 	],
 	[
-		'attribute' => 'creation_date',
-		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-	],
-	[
-		'attribute' => 'creationDisplayname',
-		'value' => isset($model->creation) ? $model->creation->displayname : '-',
-	],
-	[
-		'attribute' => 'modified_date',
-		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-	],
-	[
-		'attribute' => 'modifiedDisplayname',
-		'value' => isset($model->modified) ? $model->modified->displayname : '-',
-	],
-	[
-		'attribute' => 'updated_date',
-		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-	],
-	[
-		'attribute' => 'slug',
-		'value' => $model->slug ? $model->slug : '-',
-	],
-	[
 		'attribute' => 'unresolved',
 		'value' => function ($model) {
 			$unresolved = $model->getUnresolved(true);
 			return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'resolved',
@@ -87,6 +69,7 @@ $attributes = [
 			return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'reports',
@@ -95,12 +78,43 @@ $attributes = [
 			return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creation_date',
+		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creationDisplayname',
+		'value' => isset($model->creation) ? $model->creation->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modified_date',
+		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modifiedDisplayname',
+		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'updated_date',
+		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'slug',
+		'value' => $model->slug ? $model->slug : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => '',
 		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->cat_id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
 		'format' => 'html',
-		'visible' => Yii::$app->request->isAjax ? true : false,
+		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],
 ];
 

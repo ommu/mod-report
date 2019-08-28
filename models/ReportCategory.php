@@ -278,31 +278,31 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'unresolved',
 			'value' => function($model, $key, $index, $column) {
 				$unresolved = $model->getUnresolved(true);
-				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved])]);
+				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['resolved'] = [
 			'attribute' => 'resolved',
 			'value' => function($model, $key, $index, $column) {
 				$resolved = $model->getResolved(true);
-				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved])]);
+				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
 			'value' => function($model, $key, $index, $column) {
 				$reports = $model->getReports(true);
-				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
+				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [

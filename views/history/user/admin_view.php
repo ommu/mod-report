@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $model->report->report_body;
 
 if(!$small) {
 $this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
 } ?>
@@ -40,6 +41,7 @@ $attributes = [
 		'attribute' => 'publish',
 		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
 		'format' => 'raw',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'categoryId',
@@ -62,24 +64,22 @@ $attributes = [
 	[
 		'attribute' => 'creation_date',
 		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modified_date',
 		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modifiedDisplayname',
 		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'updated_date',
 		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-	],
-	[
-		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
-		'format' => 'html',
-		'visible' => Yii::$app->request->isAjax ? true : false,
+		'visible' => !$small,
 	],
 ];
 

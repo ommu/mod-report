@@ -36,7 +36,10 @@ $attributes = [
 		'value' => $model->id ? $model->id : '-',
 		'visible' => !$small,
 	],
-	'license',
+	[
+		'attribute' => 'license',
+		'value' => $model->license,
+	],
 	[
 		'attribute' => 'permission',
 		'value' => $model::getPermission($model->permission),
@@ -44,22 +47,27 @@ $attributes = [
 	[
 		'attribute' => 'meta_description',
 		'value' => $model->meta_description ? $model->meta_description : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'meta_keyword',
 		'value' => $model->meta_keyword ? $model->meta_keyword : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'auto_report_cat_id',
 		'value' => isset($model->category) ? $model->category->title->message : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modified_date',
 		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modifiedDisplayname',
 		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => '',

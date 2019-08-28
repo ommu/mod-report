@@ -19,9 +19,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\DetailView;
-use ommu\report\models\Reports;
-use ommu\users\models\Users;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -34,75 +31,11 @@ $this->params['menu']['option'] = [
 <div class="report-user-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($report != null) {
-$model = $report;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		'app',
-		[
-			'attribute' => 'categoryName',
-			'value' => function ($model) {
-				$categoryName = isset($model->category) ? $model->category->title->message : '-';
-				if($categoryName != '-')
-					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName, 'class'=>'modal-btn']);
-				return $categoryName;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'report_url',
-			'value' => $model->report_url ? $model->report_url : '-',
-		],
-		[
-			'attribute' => 'report_body',
-			'value' => $model->report_body ? $model->report_body : '-',
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'reporterDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'report_date',
-			'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
-		],
-		'report_ip',
-	],
-]);
-}?>
+<?php if($report != null)
+	echo $this->render('/admin/admin_view', ['model'=>$report, 'small'=>true]); ?>
 
-<?php if($user != null) {
-$model = $user;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'enabled',
-			'value' => Users::getEnabled($model->enabled),
-		],
-		[
-			'attribute' => 'verified',
-			'value' => $model->verified == 1 ? Yii::t('app', 'Verified') : Yii::t('app', 'Unverified'),
-		],
-		[
-			'attribute' => 'levelName',
-			'value' => isset($model->level) ? $model->level->title->message : '-',
-		],
-		'email:email',
-		[
-			'attribute' => 'lastlogin_date',
-			'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
-		],
-	],
-]);
-}?>
+<?php if($user != null)
+	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 
@@ -123,10 +56,10 @@ array_push($columnData, [
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail')]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail'), 'class'=>'modal-btn']);
 		},
 		'update' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update'), 'class'=>'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [

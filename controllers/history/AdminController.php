@@ -41,7 +41,7 @@ class AdminController extends Controller
 	public function init()
 	{
 		parent::init();
-		if(Yii::$app->request->get('id'))
+		if(Yii::$app->request->get('id') || Yii::$app->request->get('report'))
 			$this->subMenu = $this->module->params['report_submenu'];
 	}
 
@@ -78,8 +78,6 @@ class AdminController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new ReportHistorySearch();
-		if(($id = Yii::$app->request->get('id')) != null)
-			$searchModel = new ReportHistorySearch(['report_id'=>$id]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -92,8 +90,10 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(($report = Yii::$app->request->get('report')) != null || ($report = $id) != null)
+		if(($report = Yii::$app->request->get('report')) != null) {
+			$this->subMenuParam = $report;
 			$report = \ommu\report\models\Reports::findOne($report);
+		}
 		if(($user = Yii::$app->request->get('user')) != null)
 			$user = \ommu\users\models\Users::findOne($user);
 
@@ -139,7 +139,7 @@ class AdminController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report history success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'id'=>$model->report_id]);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
 	}
 
 	/**

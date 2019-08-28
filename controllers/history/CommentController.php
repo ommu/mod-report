@@ -40,6 +40,16 @@ class CommentController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+		parent::init();
+		if(Yii::$app->request->get('id') || Yii::$app->request->get('report'))
+			$this->subMenu = $this->module->params['report_submenu'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
 		return [
@@ -71,8 +81,6 @@ class CommentController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new ReportCommentSearch();
-		if(($id = Yii::$app->request->get('id')) != null)
-			$searchModel = new ReportCommentSearch(['report_id'=>$id]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -85,8 +93,10 @@ class CommentController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(($report = Yii::$app->request->get('report')) != null || ($report = $id) != null)
+		if(($report = Yii::$app->request->get('report')) != null) {
+			$this->subMenuParam = $report;
 			$report = \ommu\report\models\Reports::findOne($report);
+		}
 		if(($user = Yii::$app->request->get('user')) != null)
 			$user = \ommu\users\models\Users::findOne($user);
 
@@ -133,7 +143,7 @@ class CommentController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success deleted.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'id'=>$model->report_id]);
+			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
 		}
 	}
 
@@ -151,7 +161,7 @@ class CommentController extends Controller
 
 		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success updated.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'id'=>$model->report_id]);
+			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
 		}
 	}
 

@@ -26,7 +26,11 @@ $this->params['breadcrumbs'][] = $model->report_body;
 
 <?php
 $attributes = [
-	'report_id',
+	[
+		'attribute' => 'report_id',
+		'value' => $model->report_id,
+		'visible' => !$small,
+	],
 	[
 		'attribute' => 'app',
 		'value' => $model->app,
@@ -52,37 +56,26 @@ $attributes = [
 	[
 		'attribute' => 'reporterDisplayname',
 		'value' => isset($model->user) ? $model->user->displayname : '-',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'report_date',
 		'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
+		'visible' => !$small,
 	],
-	'report_ip',
+	[
+		'attribute' => 'report_ip',
+		'value' => $model->report_ip,
+		'visible' => !$small,
+	],
 	[
 		'attribute' => 'status',
 		'value' => function ($model) {
 			$status = $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 			$title = $model->status != 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
-			return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title])]);
+			return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title]), 'class'=>'modal-btn']);
 		},
 		'format' => 'html',
-	],
-	[
-		'attribute' => 'report_message',
-		'value' => $model->report_message ? $model->report_message : '-',
-		'format' => 'html',
-	],
-	[
-		'attribute' => 'modified_date',
-		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-	],
-	[
-		'attribute' => 'modifiedDisplayname',
-		'value' => isset($model->modified) ? $model->modified->displayname : '-',
-	],
-	[
-		'attribute' => 'updated_date',
-		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 	],
 	[
 		'attribute' => 'reports',
@@ -91,6 +84,7 @@ $attributes = [
 			return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'comments',
@@ -99,6 +93,7 @@ $attributes = [
 			return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'statuses',
@@ -107,6 +102,7 @@ $attributes = [
 			return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'users',
@@ -115,12 +111,34 @@ $attributes = [
 			return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users])]);
 		},
 		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'report_message',
+		'value' => $model->report_message ? $model->report_message : '-',
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modified_date',
+		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modifiedDisplayname',
+		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'updated_date',
+		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+		'visible' => !$small,
 	],
 	[
 		'attribute' => '',
 		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->report_id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
 		'format' => 'html',
-		'visible' => Yii::$app->request->isAjax ? true : false,
+		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],
 ];
 

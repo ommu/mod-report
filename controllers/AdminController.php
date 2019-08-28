@@ -127,7 +127,9 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
-				return $this->redirect(['manage']);
+				if(!Yii::$app->request->isAjax)
+					return $this->redirect(['manage']);
+				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -162,7 +164,9 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['update', 'id'=>$model->report_id]);
+				if(!Yii::$app->request->isAjax)
+					return $this->redirect(['update', 'id'=>$model->report_id]);
+				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -233,7 +237,9 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
-				return $this->redirect(['view', 'id'=>$model->report_id]);
+				if(!Yii::$app->request->isAjax)
+					return $this->redirect(['view', 'id'=>$model->report_id]);
+				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -244,7 +250,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', '{title} Report: {report-body}', ['title' => $title, 'report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_status', [
+		return $this->oRender('admin_status', [
 			'model' => $model,
 			'title' => $title,
 		]);
