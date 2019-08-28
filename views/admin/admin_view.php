@@ -76,6 +76,7 @@ $attributes = [
 			return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title]), 'class'=>'modal-btn']);
 		},
 		'format' => 'html',
+		'visible' => !$small,
 	],
 	[
 		'attribute' => 'reports',
