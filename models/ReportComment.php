@@ -135,7 +135,7 @@ class ReportComment extends \app\components\ActiveRecord
 			return;
 
 		$this->templateColumns['_no'] = [
-			'header' => Yii::t('app', 'No'),
+			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
