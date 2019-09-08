@@ -29,7 +29,7 @@ class ReportCategory extends \yii\db\ActiveQuery
 	 */
 	public function published() 
 	{
-		return $this->andWhere(['publish' => 1]);
+		return $this->andWhere(['t.publish' => 1]);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class ReportCategory extends \yii\db\ActiveQuery
 	 */
 	public function unpublish() 
 	{
-		return $this->andWhere(['publish' => 0]);
+		return $this->andWhere(['t.publish' => 0]);
 	}
 
 	/**
@@ -45,7 +45,7 @@ class ReportCategory extends \yii\db\ActiveQuery
 	 */
 	public function deleted() 
 	{
-		return $this->andWhere(['publish' => 2]);
+		return $this->andWhere(['t.publish' => 2]);
 	}
 
 	/**

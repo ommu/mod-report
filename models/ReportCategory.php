@@ -127,7 +127,8 @@ class ReportCategory extends \app\components\ActiveRecord
 		}
 
 		$model = Reports::find()
-			->where(['cat_id' => $this->cat_id]);
+			->alias('t')
+			->where(['t.cat_id' => $this->cat_id]);
 		if($status == 0)
 			$model->unresolved();
 		elseif($status == 1)

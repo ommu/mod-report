@@ -139,7 +139,8 @@ class Reports extends \app\components\ActiveRecord
 		}
 
 		$model = ReportComment::find()
-			->where(['report_id' => $this->report_id]);
+			->alias('t')
+			->where(['t.report_id' => $this->report_id]);
 		if($publish == 0)
 			$model->unpublish();
 		elseif($publish == 1)
@@ -160,7 +161,8 @@ class Reports extends \app\components\ActiveRecord
 			return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
 
 		$model = ReportHistory::find()
-			->where(['report_id' => $this->report_id]);
+			->alias('t')
+			->where(['t.report_id' => $this->report_id]);
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;
@@ -175,7 +177,8 @@ class Reports extends \app\components\ActiveRecord
 			return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
 
 		$model = ReportStatus::find()
-			->where(['report_id' => $this->report_id]);
+			->alias('t')
+			->where(['t.report_id' => $this->report_id]);
 		$statuses = $model->count();
 
 		return $statuses ? $statuses : 0;
@@ -193,7 +196,8 @@ class Reports extends \app\components\ActiveRecord
 		}
 
 		$model = ReportUser::find()
-			->where(['report_id' => $this->report_id]);
+			->alias('t')
+			->where(['t.report_id' => $this->report_id]);
 		if($publish == 0)
 			$model->unpublish();
 		elseif($publish == 1)
