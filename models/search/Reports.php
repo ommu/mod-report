@@ -131,6 +131,7 @@ class Reports extends ReportsModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.report_id' => $this->report_id,
+			't.app' => $this->app,
 			't.status' => isset($params['status']) ? $params['status'] : $this->status,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
@@ -141,8 +142,7 @@ class Reports extends ReportsModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-		$query->andFilterWhere(['like', 't.app', $this->app])
-			->andFilterWhere(['like', 't.report_url', $this->report_url])
+		$query->andFilterWhere(['like', 't.report_url', $this->report_url])
 			->andFilterWhere(['like', 't.report_body', $this->report_body])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
