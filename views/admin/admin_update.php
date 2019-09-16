@@ -17,6 +17,7 @@
 
 use yii\helpers\Url;
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->report_body, 'url' => ['view', 'id'=>$model->report_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

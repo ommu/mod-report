@@ -19,7 +19,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
+if($breadcrumb) {
 $this->params['breadcrumbs'][] = $this->title;
+}
 
 if(!$small) {
 $this->params['menu']['content'] = [

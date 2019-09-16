@@ -20,7 +20,11 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
+if($breadcrumb) {
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => ['/setting/update']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report'), 'url' => ['setting/admin/index']];
 $this->params['breadcrumbs'][] = $this->title;
+}
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['setting/category/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn modal-btn btn-success']],

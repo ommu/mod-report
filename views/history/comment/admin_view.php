@@ -18,10 +18,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Comments'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->report->report_body;
-
 if(!$small) {
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['admin/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->report->report_body, 'url' => ['admin/view', 'id'=>$model->report_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Comments'), 'url' => ['history/comment/manage', 'report'=>$model->report_id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
+
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->comment_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->comment_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],

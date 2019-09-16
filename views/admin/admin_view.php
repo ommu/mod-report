@@ -18,8 +18,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
+if(!$small) {
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->report_body;
+}
 ?>
 
 <div class="reports-view">

@@ -20,6 +20,10 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['admin/index']];
+if($report != null)
+	$this->params['breadcrumbs'][] = ['label' => $report->report_body, 'url' => ['admin/view', 'id'=>$report->report_id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['option'] = [

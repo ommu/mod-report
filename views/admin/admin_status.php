@@ -19,6 +19,11 @@ use yii\helpers\Url;
 use app\components\widgets\ActiveForm;
 use yii\redactor\widgets\Redactor;
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->report_body, 'url' => ['view', 'id'=>$model->report_id]];
+$this->params['breadcrumbs'][] = $title;
+
 $redactorOptions = [
 	'imageManagerJson' => ['/redactor/upload/image-json'],
 	'imageUpload' => ['/redactor/upload/image'],
@@ -26,10 +31,6 @@ $redactorOptions = [
 	'plugins' => ['fontcolor', 'imagemanager'],
 	'buttons' => ['html', 'format', 'bold', 'italic', 'deleted'],
 ];
-
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->report_id, 'url' => ['view', 'id'=>$model->report_id]];
-$this->params['breadcrumbs'][] = $title;
 ?>
 
 <?php $form = ActiveForm::begin([
