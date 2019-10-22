@@ -32,11 +32,11 @@ $this->params['menu']['option'] = [
 	'searchModel' => $searchModel,
 	'dataProvider' => $dataProvider,
 	'columns' => $columns,
-	'breadcrumb'=>false,
+	'breadcrumb' => false,
 ]); ?>
 
 <?php echo $this->renderWidget(!$model->isNewRecord ? 'admin_view' : 'admin_update', [
 	'contentMenu' => true,
-	'model'=>$model,
-	'breadcrumb'=>false,
+	'model' => $model,
+	'breadcrumb' => false,
 ]); ?>
