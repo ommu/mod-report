@@ -141,15 +141,14 @@ class ReportSetting extends \app\components\ActiveRecord
 				return $model->meta_keyword;
 			},
 		];
-		if(!Yii::$app->request->get('category')) {
-			$this->templateColumns['auto_report_cat_id'] = [
-				'attribute' => 'auto_report_cat_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->category) ? $model->category->title->message : '-';
-				},
-				'filter' => ReportCategory::getCategory(),
-			];
-		}
+		$this->templateColumns['auto_report_cat_id'] = [
+			'attribute' => 'auto_report_cat_id',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->category) ? $model->category->title->message : '-';
+			},
+			'filter' => ReportCategory::getCategory(),
+			'visible' => !Yii::$app->request->get('category') ? true : false,
+		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
 			'value' => function($model, $key, $index, $column) {
@@ -157,15 +156,14 @@ class ReportSetting extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 	}
 
 	/**

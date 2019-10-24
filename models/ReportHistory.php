@@ -121,35 +121,32 @@ class ReportHistory extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('report') && !Yii::$app->request->get('id')) {
-			if(!Yii::$app->request->get('category')) {
-				$this->templateColumns['categoryId'] = [
-					'attribute' => 'categoryId',
-					'value' => function($model, $key, $index, $column) {
-						return isset($model->report) ? $model->report->category->title->message : '-';
-						// return $model->categoryId;
-					},
-					'filter' => ReportCategory::getCategory(),
-				];
-			}
-			$this->templateColumns['reportBody'] = [
-				'attribute' => 'reportBody',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->report) ? $model->report->report_body : '-';
-					// return $model->reportBody;
-				},
-				'format' => 'html',
-			];
-		}
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporterDisplayname'] = [
-				'attribute' => 'reporterDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-					// return $model->reporterDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['categoryId'] = [
+			'attribute' => 'categoryId',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->report) ? $model->report->category->title->message : '-';
+				// return $model->categoryId;
+			},
+			'filter' => ReportCategory::getCategory(),
+			'visible' => !Yii::$app->request->get('report') && !Yii::$app->request->get('id') && !Yii::$app->request->get('category') ? true : false,
+		];
+		$this->templateColumns['reportBody'] = [
+			'attribute' => 'reportBody',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->report) ? $model->report->report_body : '-';
+				// return $model->reportBody;
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('report') && !Yii::$app->request->get('id') ? true : false,
+		];
+		$this->templateColumns['reporterDisplayname'] = [
+			'attribute' => 'reporterDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+				// return $model->reporterDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['report_date'] = [
 			'attribute' => 'report_date',
 			'value' => function($model, $key, $index, $column) {

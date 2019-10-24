@@ -274,16 +274,15 @@ class Reports extends \app\components\ActiveRecord
 				return $model->app;
 			},
 		];
-		if(!Yii::$app->request->get('category')) {
-			$this->templateColumns['cat_id'] = [
-				'attribute' => 'cat_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->category) ? $model->category->title->message : '-';
-					// return $model->categoryName;
-				},
-				'filter' => ReportCategory::getCategory(),
-			];
-		}
+		$this->templateColumns['cat_id'] = [
+			'attribute' => 'cat_id',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->category) ? $model->category->title->message : '-';
+				// return $model->categoryName;
+			},
+			'filter' => ReportCategory::getCategory(),
+			'visible' => !Yii::$app->request->get('category') ? true : false,
+		];
 		$this->templateColumns['report_url'] = [
 			'attribute' => 'report_url',
 			'value' => function($model, $key, $index, $column) {
@@ -304,15 +303,14 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['reporterDisplayname'] = [
-				'attribute' => 'reporterDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-					// return $model->reporterDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['reporterDisplayname'] = [
+			'attribute' => 'reporterDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+				// return $model->reporterDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['report_date'] = [
 			'attribute' => 'report_date',
 			'value' => function($model, $key, $index, $column) {
@@ -333,15 +331,14 @@ class Reports extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
 			'value' => function($model, $key, $index, $column) {
