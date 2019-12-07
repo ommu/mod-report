@@ -64,7 +64,7 @@ echo $form->field($model, 'report_body')
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('report_body')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

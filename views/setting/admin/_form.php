@@ -66,7 +66,7 @@ echo $form->field($model, 'auto_report_cat_id')
 	->dropDownList($category, ['prompt'=>''])
 	->label($model->getAttributeLabel('auto_report_cat_id')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>
