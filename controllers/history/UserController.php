@@ -28,9 +28,9 @@
 namespace ommu\report\controllers\history;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
+use yii\filters\VerbFilter;
 use ommu\report\models\ReportUser;
 use ommu\report\models\search\ReportUser as ReportUserSearch;
 use ommu\report\models\Reports;
