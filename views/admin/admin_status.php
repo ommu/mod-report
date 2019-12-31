@@ -18,6 +18,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\widgets\ActiveForm;
 use yii\redactor\widgets\Redactor;
+use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
@@ -33,9 +34,54 @@ $redactorOptions = [
 ];
 ?>
 
+<?php
+$attributes = [
+	[
+		'attribute' => 'app',
+		'value' => $model->app,
+	],
+	[
+		'attribute' => 'cat_id',
+		'value' => isset($model->category) ? $model->category->title->message : '-',
+	],
+	[
+		'attribute' => 'report_url',
+		'value' => function ($model) {
+			if($model->report_url && $model->report_url != '-')
+				return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+			return '-';
+		},
+		'format' => 'raw',
+	],
+	[
+		'attribute' => 'report_body',
+		'value' => $model->report_body ? $model->report_body : '-',
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'reporterDisplayname',
+		'value' => isset($model->user) ? $model->user->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'report_date',
+		'value' => Yii::$app->formatter->asDatetime($model->report_date, 'medium'),
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
+	'model' => $model,
+	'options' => [
+		'class'=>'table table-striped detail-view',
+	],
+	'template' => '<tr><th{captionOptions} class="active">{label}</th><td{contentOptions}>{value}</td></tr>',
+	'attributes' => $attributes,
+]); ?>
+
 <?php $form = ActiveForm::begin([
 	'options' => ['class'=>'form-horizontal form-label-left'],
-	'enableClientValidation' => true,
+	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
 	'fieldConfig' => [

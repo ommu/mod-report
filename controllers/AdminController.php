@@ -97,8 +97,8 @@ class AdminController extends Controller
 		if(($user = Yii::$app->request->get('user')) != null)
 			$user = \ommu\users\models\Users::findOne($user);
 
-		$this->view->title = Yii::t('app', 'Reports');
-		$this->view->description = '';
+		$this->view->title = Yii::t('app', 'Abuse Reports');
+		$this->view->description = Yii::t('app', 'This page lists all of the reports your users have sent in regarding inappropriate content, system abuse, spam, and so forth. You can use the search field to look for reports that contain a particular word or phrase. Very old reports are periodically deleted by the system.');
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
