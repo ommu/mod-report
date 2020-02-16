@@ -219,7 +219,7 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -283,7 +283,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['resolved'] = [
@@ -293,7 +293,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['reports'] = [
@@ -303,7 +303,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['publish'] = [
@@ -313,7 +313,7 @@ class ReportCategory extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->publish, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];

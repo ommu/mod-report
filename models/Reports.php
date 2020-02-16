@@ -266,7 +266,7 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['app'] = [
 			'attribute' => 'app',
@@ -353,7 +353,7 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['comments'] = [
@@ -363,7 +363,7 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['statuses'] = [
@@ -373,7 +373,7 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['users'] = [
@@ -383,7 +383,7 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
@@ -394,7 +394,7 @@ class Reports extends \app\components\ActiveRecord
 				return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title]), 'class'=>'modal-btn']);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 	}
