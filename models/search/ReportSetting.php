@@ -4,9 +4,9 @@
  *
  * ReportSetting represents the model behind the search form about `ommu\report\models\ReportSetting`.
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 22 September 2017, 13:49 WIB
  * @modified date 16 January 2019, 11:11 WIB
  * @link https://github.com/ommu/mod-report

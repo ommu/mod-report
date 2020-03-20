@@ -5,9 +5,9 @@
  * This is the ActiveQuery class for [[\ommu\report\models\ReportCategory]].
  * @see \ommu\report\models\ReportCategory
  * 
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2019 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2019 OMMU (www.ommu.id)
  * @created date 16 January 2019, 16:26 WIB
  * @link https://github.com/ommu/mod-report
  *

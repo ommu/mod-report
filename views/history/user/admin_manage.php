@@ -6,9 +6,9 @@
  * @var $model ommu\report\models\ReportUser
  * @var $searchModel ommu\report\models\search\ReportUser
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 22 September 2017, 13:56 WIB
  * @modified date 18 January 2019, 15:38 WIB
  * @link https://github.com/ommu/mod-report
