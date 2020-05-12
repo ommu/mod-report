@@ -30,7 +30,7 @@
 namespace ommu\report\models;
 
 use Yii;
-use ommu\users\models\Users;
+use app\models\Users;
 
 class ReportSetting extends \app\components\ActiveRecord
 {

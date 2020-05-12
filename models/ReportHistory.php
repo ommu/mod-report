@@ -28,7 +28,7 @@ namespace ommu\report\models;
 
 use Yii;
 use yii\helpers\Html;
-use ommu\users\models\Users;
+use app\models\Users;
 
 class ReportHistory extends \app\components\ActiveRecord
 {

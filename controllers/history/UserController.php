@@ -98,7 +98,7 @@ class UserController extends Controller
 			$report = \ommu\report\models\Reports::findOne($report);
 		}
 		if(($user = Yii::$app->request->get('user')) != null)
-			$user = \ommu\users\models\Users::findOne($user);
+			$user = \app\models\Users::findOne($user);
 
 		$this->view->title = Yii::t('app', 'Users');
 		$this->view->description = '';
