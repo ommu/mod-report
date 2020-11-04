@@ -106,11 +106,13 @@ class ReportSetting extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -171,14 +173,15 @@ class ReportSetting extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['id' => 1])->one();
-			return is_array($column) ? $model : $model->$column;
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['id' => 1])->one();
+            return is_array($column) ? $model : $model->$column;
 			
 		} else {
 			$model = self::findOne(1);
@@ -193,27 +196,30 @@ class ReportSetting extends \app\components\ActiveRecord
 	{
 		$moduleName = "module name";
 		$module = strtolower(Yii::$app->controller->module->id);
-		if(($module = Yii::$app->moduleManager->getModule($module)) != null);
-			$moduleName = strtolower($module->getName());
+        if (($module = Yii::$app->moduleManager->getModule($module)) != null) {
+            $moduleName = strtolower($module->getName());
+        }
 
 		$items = array(
 			1 => Yii::t('app', 'Yes, the public can view {module} unless they are made private.', ['module'=>$moduleName]),
 			0 => Yii::t('app', 'No, the public cannot view {module}.', ['module'=>$moduleName]),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
-		if($this->auto_report_cat_id)
-			$this->auto_report_i = 1;
+        if ($this->auto_report_cat_id) {
+            $this->auto_report_i = 1;
+        }
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
@@ -222,16 +228,18 @@ class ReportSetting extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if(!$this->isNewRecord) {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
+        if (parent::beforeValidate()) {
+            if (!$this->isNewRecord) {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
 
-			if($this->auto_report_i && !$this->auto_report_cat_id)
-				$this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('auto_report_cat_id')]));
-		}
-		return true;
+            if ($this->auto_report_i && !$this->auto_report_cat_id) {
+                $this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('auto_report_cat_id')]));
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -239,11 +247,12 @@ class ReportSetting extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
-		if(parent::beforeSave($insert)) {
-			if(!$this->auto_report_i)
-				$this->auto_report_cat_id = null;
+        if (parent::beforeSave($insert)) {
+            if (!$this->auto_report_i) {
+                $this->auto_report_cat_id = null;
+            }
 
-		}
-		return true;
+        }
+        return true;
 	}
 }

@@ -50,7 +50,7 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['report_url','report_message','report_ip','modified_date','modifiedDisplayname','updated_date','comments','histories','statuses','users'];
+	public $gridForbiddenColumn = ['report_url', 'report_message', 'report_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'comments', 'histories', 'statuses', 'users'];
 
 	public $categoryName;
 	public $reporterDisplayname;
@@ -132,21 +132,22 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getComments($count=false, $publish=1)
 	{
-		if($count == false) {
-			return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
-				->alias('comments')
-				->andOnCondition([sprintf('%s.publish', 'comments') => $publish]);
-		}
+        if ($count == false) {
+            return $this->hasMany(ReportComment::className(), ['report_id' => 'report_id'])
+                ->alias('comments')
+                ->andOnCondition([sprintf('%s.publish', 'comments') => $publish]);
+        }
 
 		$model = ReportComment::find()
-			->alias('t')
-			->where(['t.report_id' => $this->report_id]);
-		if($publish == 0)
-			$model->unpublish();
-		elseif($publish == 1)
-			$model->published();
-		elseif($publish == 2)
-			$model->deleted();
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
+        if ($publish == 0) {
+            $model->unpublish();
+        } else if ($publish == 1) {
+            $model->published();
+        } else if ($publish == 2) {
+            $model->deleted();
+        }
 		$comments = $model->count();
 
 		return $comments ? $comments : 0;
@@ -157,12 +158,13 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getHistories($count=false)
 	{
-		if($count == false)
-			return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
+        if ($count == false) {
+            return $this->hasMany(ReportHistory::className(), ['report_id' => 'report_id']);
+        }
 
 		$model = ReportHistory::find()
-			->alias('t')
-			->where(['t.report_id' => $this->report_id]);
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;
@@ -173,12 +175,13 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getStatuses($count=false)
 	{
-		if($count == false)
-			return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
+        if ($count == false) {
+            return $this->hasMany(ReportStatus::className(), ['report_id' => 'report_id']);
+        }
 
 		$model = ReportStatus::find()
-			->alias('t')
-			->where(['t.report_id' => $this->report_id]);
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
 		$statuses = $model->count();
 
 		return $statuses ? $statuses : 0;
@@ -189,21 +192,22 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getUsers($count=false, $publish=1)
 	{
-		if($count == false) {
-			return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
-				->alias('users')
-				->andOnCondition([sprintf('%s.publish', 'users') => $publish]);
-		}
+        if ($count == false) {
+            return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
+                ->alias('users')
+                ->andOnCondition([sprintf('%s.publish', 'users') => $publish]);
+        }
 
 		$model = ReportUser::find()
-			->alias('t')
-			->where(['t.report_id' => $this->report_id]);
-		if($publish == 0)
-			$model->unpublish();
-		elseif($publish == 1)
-			$model->published();
-		elseif($publish == 2)
-			$model->deleted();
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
+        if ($publish == 0) {
+            $model->unpublish();
+        } else if ($publish == 1) {
+            $model->published();
+        } else if ($publish == 2) {
+            $model->deleted();
+        }
 		$users = $model->count();
 
 		return $users ? $users : 0;
@@ -257,11 +261,13 @@ class Reports extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -404,19 +410,20 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['report_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['report_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
@@ -433,7 +440,7 @@ class Reports extends \app\components\ActiveRecord
 
 		$autoReportCatId = $setting !== null && isset($setting->category) ? $setting->auto_report_cat_id : null;
 
-		if($autoReportCatId) {
+        if ($autoReportCatId) {
 			$report = self::find()
 				->select(['report_id', 'status', 'report_url', 'report_body', 'reports'])
 				->where(['cat_id' => $autoReportCatId])
@@ -441,7 +448,7 @@ class Reports extends \app\components\ActiveRecord
 				->andWhere(['report_url' => $report_url])
 				->one();
 				
-			if($report !== null) {
+            if ($report !== null) {
 				$report->user_id = $user_id;
 				$report->reports = $report->reports+1;
 				$report->report_ip = $_SERVER['REMOTE_ADDR'];
@@ -475,15 +482,17 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				if($this->user_id == null)
-					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-			$this->app = Yii::$app->id;
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
+                if ($this->user_id == null) {
+                    $this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+            $this->app = Yii::$app->id;
 			$this->report_ip = $_SERVER['REMOTE_ADDR'];
 		}
 

@@ -121,18 +121,19 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getReports($count=false, $status=null)
 	{
-		if($count == false) {
-			return $this->hasMany(Reports::className(), ['cat_id' => 'cat_id'])
+        if ($count == false) {
+            return $this->hasMany(Reports::className(), ['cat_id' => 'cat_id'])
 				->andOnCondition([sprintf('%s.status', Reports::tableName()) => $status]);
 		}
 
 		$model = Reports::find()
-			->alias('t')
-			->where(['t.cat_id' => $this->cat_id]);
-		if($status == 0)
-			$model->unresolved();
-		elseif($status == 1)
-			$model->resolved();
+            ->alias('t')
+            ->where(['t.cat_id' => $this->cat_id]);
+        if ($status == 0) {
+            $model->unresolved();
+        } else if ($status == 1) {
+            $model->resolved();
+        }
 		$reports = $model->count();
 
 		return $reports ? $reports : 0;
@@ -210,11 +211,13 @@ class ReportCategory extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -324,35 +327,38 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['cat_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['cat_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
 	 * function getCategory
 	 */
-	public static function getCategory($publish=null, $array=true) 
+	public static function getCategory($publish=null, $array=true)
 	{
 		$model = self::find()->alias('t');
 		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
-		if($publish != null)
-			$model->andWhere(['t.publish' => $publish]);
+        if ($publish != null) {
+            $model->andWhere(['t.publish' => $publish]);
+        }
 
 		$model = $model->orderBy('title.message ASC')->all();
 
-		if($array == true)
-			return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+        if ($array == true) {
+            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+        }
 
 		return $model;
 	}
@@ -375,16 +381,18 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				if($this->creation_id == null)
-					$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-		}
-		return true;
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
+                if ($this->creation_id == null) {
+                    $this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -392,42 +400,43 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
-		$module = strtolower(Yii::$app->controller->module->id);
-		$controller = strtolower(Yii::$app->controller->id);
-		$action = strtolower(Yii::$app->controller->action->id);
+        $module = strtolower(Yii::$app->controller->module->id);
+        $controller = strtolower(Yii::$app->controller->id);
+        $action = strtolower(Yii::$app->controller->action->id);
 
-		$location = Inflector::slug($module.' '.$controller);
+        $location = Inflector::slug($module.' '.$controller);
 
-		if(parent::beforeSave($insert)) {
-			if($insert || (!$insert && !$this->name)) {
-				$name = new SourceMessage();
-				$name->location = $location.'_title';
-				$name->message = $this->name_i;
-				if($name->save())
-					$this->name = $name->id;
+        if (parent::beforeSave($insert)) {
+            if ($insert || (!$insert && !$this->name)) {
+                $name = new SourceMessage();
+                $name->location = $location.'_title';
+                $name->message = $this->name_i;
+                if ($name->save()) {
+                    $this->name = $name->id;
+                }
 
-				$this->slug = Inflector::slug($this->name_i);
+                $this->slug = Inflector::slug($this->name_i);
 
-			} else {
-				$name = SourceMessage::findOne($this->name);
-				$name->message = $this->name_i;
-				$name->save();
-			}
+            } else {
+                $name = SourceMessage::findOne($this->name);
+                $name->message = $this->name_i;
+                $name->save();
+            }
 
-			if($insert || (!$insert && !$this->desc)) {
-				$desc = new SourceMessage();
-				$desc->location = $location.'_description';
-				$desc->message = $this->desc_i;
-				if($desc->save())
-					$this->desc = $desc->id;
+            if ($insert || (!$insert && !$this->desc)) {
+                $desc = new SourceMessage();
+                $desc->location = $location.'_description';
+                $desc->message = $this->desc_i;
+                if ($desc->save()) {
+                    $this->desc = $desc->id;
+                }
 
-			} else {
-				$desc = SourceMessage::findOne($this->desc);
-				$desc->message = $this->desc_i;
-				$desc->save();
-			}
-
-		}
-		return true;
+            } else {
+                $desc = SourceMessage::findOne($this->desc);
+                $desc->message = $this->desc_i;
+                $desc->save();
+            }
+        }
+        return true;
 	}
 }

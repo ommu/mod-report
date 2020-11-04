@@ -17,10 +17,10 @@
 
 use yii\helpers\Url;
 
-if($breadcrumb) {
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => ['/setting/update']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report'), 'url' => ['setting/admin/index']];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+if ($breadcrumb) {
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => ['/setting/update']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Report'), 'url' => ['setting/admin/index']];
+    $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 }
 
 $this->params['menu']['content'] = [

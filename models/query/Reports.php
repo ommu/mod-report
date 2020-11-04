@@ -27,7 +27,7 @@ class Reports extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function resolved() 
+	public function resolved()
 	{
 		return $this->andWhere(['status' => 1]);
 	}
@@ -35,7 +35,7 @@ class Reports extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function unresolved() 
+	public function unresolved()
 	{
 		return $this->andWhere(['status' => 0]);
 	}

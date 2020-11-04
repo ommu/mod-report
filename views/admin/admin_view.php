@@ -18,12 +18,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-if(!$small) {
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->report_body;
-}
-?>
+if (!$small) {
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
+    $this->params['breadcrumbs'][] = $model->report_body;
+} ?>
 
 <div class="reports-view">
 
@@ -45,8 +44,9 @@ $attributes = [
 	[
 		'attribute' => 'report_url',
 		'value' => function ($model) {
-			if($model->report_url && $model->report_url != '-')
-				return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+            if ($model->report_url && $model->report_url != '-') {
+                return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+            }
 			return '-';
 		},
 		'format' => 'raw',

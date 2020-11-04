@@ -40,9 +40,11 @@ class AdminController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		if(Yii::$app->request->get('id') || Yii::$app->request->get('report'))
+        parent::init();
+
+        if (Yii::$app->request->get('id') || Yii::$app->request->get('report')) {
 			$this->subMenu = $this->module->params['report_submenu'];
+        }
 	}
 
 	/**
@@ -77,25 +79,27 @@ class AdminController extends Controller
 	 */
 	public function actionManage()
 	{
-		$searchModel = new ReportHistorySearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new ReportHistorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
-		if(($report = Yii::$app->request->get('report')) != null) {
+        if (($report = Yii::$app->request->get('report')) != null) {
 			$this->subMenuParam = $report;
 			$report = \ommu\report\models\Reports::findOne($report);
 		}
-		if(($user = Yii::$app->request->get('user')) != null)
-			$user = \app\models\Users::findOne($user);
+        if (($user = Yii::$app->request->get('user')) != null) {
+            $user = \app\models\Users::findOne($user);
+        }
 
 		$this->view->title = Yii::t('app', 'Histories');
 		$this->view->description = '';
@@ -151,8 +155,9 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportHistory::findOne($id)) !== null)
-			return $model;
+        if (($model = ReportHistory::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

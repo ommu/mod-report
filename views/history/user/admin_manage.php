@@ -22,8 +22,9 @@ use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['admin/index']];
-if($report != null)
+if ($report != null) {
 	$this->params['breadcrumbs'][] = ['label' => $report->report_body, 'url' => ['admin/view', 'id'=>$report->report_id]];
+}
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['option'] = [
@@ -35,11 +36,13 @@ $this->params['menu']['option'] = [
 <div class="report-user-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($report != null)
-	echo $this->render('/admin/admin_view', ['model'=>$report, 'small'=>true]); ?>
+<?php if ($report != null) {
+	echo $this->render('/admin/admin_view', ['model'=>$report, 'small'=>true]);
+} ?>
 
-<?php if($user != null)
-	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]); ?>
+<?php if ($user != null) {
+	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]);
+} ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 
@@ -51,12 +54,15 @@ array_push($columnData, [
 	'class' => 'app\components\grid\ActionColumn',
 	'header' => Yii::t('app', 'Option'),
 	'urlCreator' => function($action, $model, $key, $index) {
-		if($action == 'view')
-			return Url::to(['view', 'id'=>$key]);
-		if($action == 'update')
-			return Url::to(['update', 'id'=>$key]);
-		if($action == 'delete')
-			return Url::to(['delete', 'id'=>$key]);
+        if ($action == 'view') {
+            return Url::to(['view', 'id'=>$key]);
+        }
+        if ($action == 'update') {
+            return Url::to(['update', 'id'=>$key]);
+        }
+        if ($action == 'delete') {
+            return Url::to(['delete', 'id'=>$key]);
+        }
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {

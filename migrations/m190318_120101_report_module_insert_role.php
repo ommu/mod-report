@@ -17,7 +17,7 @@ class m190318_120101_report_module_insert_role extends \yii\db\Migration
 	public function up()
 	{
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_core_auth_item';
-		if(Yii::$app->db->getTableSchema($tableName, true)) {
+        if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert('ommu_core_auth_item', ['name', 'type', 'data', 'created_at'], [
 				['reportModLevelAdmin', '2', '', time()],
 				['reportModLevelModerator', '2', '', time()],
@@ -35,7 +35,7 @@ class m190318_120101_report_module_insert_role extends \yii\db\Migration
 		}
 
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_core_auth_item_child';
-		if(Yii::$app->db->getTableSchema($tableName, true)) {
+        if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert('ommu_core_auth_item_child', ['parent', 'child'], [
 				['userAdmin', 'reportModLevelAdmin'],
 				['userModerator', 'reportModLevelModerator'],

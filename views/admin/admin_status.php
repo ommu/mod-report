@@ -47,8 +47,9 @@ $attributes = [
 	[
 		'attribute' => 'report_url',
 		'value' => function ($model) {
-			if($model->report_url && $model->report_url != '-')
-				return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+            if ($model->report_url && $model->report_url != '-') {
+                return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+            }
 			return '-';
 		},
 		'format' => 'raw',
@@ -93,8 +94,10 @@ echo DetailView::widget([
 
 <?php //echo $form->errorSummary($model);?>
 
-<?php if(!$model->getErrors())
-	$model->report_message = '';
+<?php 
+if (!$model->getErrors()) {
+    $model->report_message = '';
+}
 echo $form->field($model, 'report_message')
 	->textarea(['rows'=>6, 'cols'=>50])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])

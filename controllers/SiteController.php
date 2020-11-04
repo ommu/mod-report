@@ -51,21 +51,22 @@ class SiteController extends Controller
 		$model = new Reports();
 		$model->scenario = Reports::SCENARIO_REPORT;
 
-		if(Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			// $postData = Yii::$app->request->post();
 			// $model->load($postData);
 			// $model->order = $postData['order'] ? $postData['order'] : 0;
 
-			if($model->save()) {
+            if ($model->save()) {
 				return \yii\helpers\Json::encode([
 					'error' => 0,
 					'message' => Yii::t('app', 'Report success added.'),
 				]);
 
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+                }
 			}
 		}
 
@@ -86,8 +87,9 @@ class SiteController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Reports::findOne($id)) !== null)
-			return $model;
+        if (($model = Reports::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

@@ -42,9 +42,11 @@ class CommentController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		if(Yii::$app->request->get('id') || Yii::$app->request->get('report'))
+        parent::init();
+
+        if (Yii::$app->request->get('id') || Yii::$app->request->get('report')) {
 			$this->subMenu = $this->module->params['report_submenu'];
+        }
 	}
 
 	/**
@@ -80,25 +82,27 @@ class CommentController extends Controller
 	 */
 	public function actionManage()
 	{
-		$searchModel = new ReportCommentSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new ReportCommentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
-		if(($report = Yii::$app->request->get('report')) != null) {
+        if (($report = Yii::$app->request->get('report')) != null) {
 			$this->subMenuParam = $report;
 			$report = \ommu\report\models\Reports::findOne($report);
 		}
-		if(($user = Yii::$app->request->get('user')) != null)
-			$user = \app\models\Users::findOne($user);
+        if (($user = Yii::$app->request->get('user')) != null) {
+            $user = \app\models\Users::findOne($user);
+        }
 
 		$this->view->title = Yii::t('app', 'Comments');
 		$this->view->description = '';
@@ -141,7 +145,7 @@ class CommentController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish','modified_id'])) {
+        if ($model->save(false, ['publish', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success deleted.'));
 			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
 		}
@@ -159,7 +163,7 @@ class CommentController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish','modified_id'])) {
+        if ($model->save(false, ['publish', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Report comment success updated.'));
 			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
 		}
@@ -174,8 +178,9 @@ class CommentController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = ReportComment::findOne($id)) !== null)
-			return $model;
+        if (($model = ReportComment::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
