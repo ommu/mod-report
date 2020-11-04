@@ -54,17 +54,17 @@ class AdminController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -72,7 +72,7 @@ class AdminController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['manage']);
+        return $this->redirect(['manage']);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class AdminController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($category = Yii::$app->request->get('category')) != null) {
-			$category = \ommu\report\models\ReportCategory::findOne($category);
+            $category = \ommu\report\models\ReportCategory::findOne($category);
         }
         if (($user = Yii::$app->request->get('user')) != null) {
             $user = \app\models\Users::findOne($user);
@@ -121,28 +121,28 @@ class AdminController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new Reports();
+        $model = new Reports();
 		$model->scenario = Reports::SCENARIO_REPORT;
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Report success created.'));
                 if (!Yii::$app->request->isAjax) {
                     return $this->redirect(['manage']);
                 }
-				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Report');
 		$this->view->description = '';
@@ -164,24 +164,24 @@ class AdminController extends Controller
 		$model->scenario = Reports::SCENARIO_REPORT;
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
                 if (!Yii::$app->request->isAjax) {
 					return $this->redirect(['update', 'id'=>$model->report_id]);
                 }
-				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Update Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
@@ -198,7 +198,7 @@ class AdminController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
 
 		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
@@ -241,22 +241,22 @@ class AdminController extends Controller
 		$model->setAttributeLabels(['report_message'=>Yii::t('app', '{status} Note', ['status'=>$title])]);
 		
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			$model->status = $replace;
+            $model->load(Yii::$app->request->post());
+            $model->status = $replace;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
                 if (!Yii::$app->request->isAjax) {
 					return $this->redirect(['view', 'id'=>$model->report_id]);
                 }
-				return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', '{title} Report: {report-body}', ['title' => $title, 'report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';

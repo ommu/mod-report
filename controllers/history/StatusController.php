@@ -40,7 +40,7 @@ class StatusController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
+        parent::init();
 
         if (Yii::$app->request->get('id') || Yii::$app->request->get('report')) {
 			$this->subMenu = $this->module->params['report_submenu'];
@@ -52,17 +52,17 @@ class StatusController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -70,7 +70,7 @@ class StatusController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['manage']);
+        return $this->redirect(['manage']);
 	}
 
 	/**
@@ -94,7 +94,7 @@ class StatusController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($report = Yii::$app->request->get('report')) != null) {
-			$this->subMenuParam = $report;
+            $this->subMenuParam = $report;
 			$report = \ommu\report\models\Reports::findOne($report);
 		}
         if (($user = Yii::$app->request->get('user')) != null) {
@@ -120,7 +120,7 @@ class StatusController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 		$this->subMenuParam = $model->report_id;
 
 		$this->view->title = Yii::t('app', 'Detail Status: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
