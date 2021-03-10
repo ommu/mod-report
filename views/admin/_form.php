@@ -33,7 +33,7 @@ $redactorOptions = [
 <div class="reports-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -56,7 +56,7 @@ echo $form->field($model, 'report_url')
 
 <?php $category = ReportCategory::getCategory(1);
 echo $form->field($model, 'cat_id')
-	->dropDownList($category, ['prompt'=>''])
+	->dropDownList($category, ['prompt' => ''])
 	->label($model->getAttributeLabel('cat_id')); ?>
 
 <?php 
@@ -64,7 +64,7 @@ if ($model->isNewRecord) {
     $model->report_body = Yii::$app->request->get('message') ? Yii::$app->request->get('message') : '';
 }
 echo $form->field($model, 'report_body')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('report_body')); ?>
 

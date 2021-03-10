@@ -143,7 +143,7 @@ class StatusController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Report status success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report'=>$model->report_id]);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report' => $model->report_id]);
 	}
 
 	/**

@@ -49,7 +49,7 @@ JS;
         <ul>
             <?php foreach ($columns as $key => $val) { ?>
             <li>
-				<?php echo Html::checkBox(sprintf("GridColumn[%s]", $key), in_array($key, $gridColumns) ? true : false, ['id'=>'GridColumn_'.$key]); ?>
+				<?php echo Html::checkBox(sprintf("GridColumn[%s]", $key), in_array($key, $gridColumns) ? true : false, ['id' => 'GridColumn_'.$key]); ?>
 				<?php echo Html::label($model->getAttributeLabel($val), 'GridColumn_'.$val); ?>
             </li>
             <?php } ?>

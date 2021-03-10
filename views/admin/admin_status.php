@@ -22,7 +22,7 @@ use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->report_body, 'url' => ['view', 'id'=>$model->report_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->report_body, 'url' => ['view', 'id' => $model->report_id]];
 $this->params['breadcrumbs'][] = $title;
 
 $redactorOptions = [
@@ -48,7 +48,7 @@ $attributes = [
 		'attribute' => 'report_url',
 		'value' => function ($model) {
             if ($model->report_url && $model->report_url != '-') {
-                return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+                return Html::a($model->report_url, $model->report_url, ['title' => $model->report_url, 'target' => '_blank']);
             }
 			return '-';
 		},
@@ -74,14 +74,14 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'template' => '<tr><th{captionOptions} class="active">{label}</th><td{contentOptions}>{value}</td></tr>',
 	'attributes' => $attributes,
 ]); ?>
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -99,7 +99,7 @@ if (!$model->getErrors()) {
     $model->report_message = '';
 }
 echo $form->field($model, 'report_message')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->widget(Redactor::className(), ['clientOptions' => $redactorOptions])
 	->label($model->getAttributeLabel('report_message')); ?>
 

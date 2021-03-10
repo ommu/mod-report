@@ -172,7 +172,7 @@ class AdminController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
                 if (!Yii::$app->request->isAjax) {
-					return $this->redirect(['update', 'id'=>$model->report_id]);
+					return $this->redirect(['update', 'id' => $model->report_id]);
                 }
                 return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 
@@ -238,7 +238,7 @@ class AdminController extends Controller
 		$title = $model->status == 1 ? Yii::t('app', 'Unresolved') : Yii::t('app', 'Resolved');
 		$replace = $model->status == 1 ? 0 : 1;
 
-		$model->setAttributeLabels(['report_message'=>Yii::t('app', '{status} Note', ['status'=>$title])]);
+		$model->setAttributeLabels(['report_message' => Yii::t('app', '{status} Note', ['status' => $title])]);
 		
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
@@ -247,7 +247,7 @@ class AdminController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Report success updated.'));
                 if (!Yii::$app->request->isAjax) {
-					return $this->redirect(['view', 'id'=>$model->report_id]);
+					return $this->redirect(['view', 'id' => $model->report_id]);
                 }
                 return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 

@@ -59,7 +59,7 @@ class AdminController extends Controller
 	{
 		$model = ReportSetting::findOne(1);
         if ($model === null) {
-			$model = new ReportSetting(['id'=>1]);
+			$model = new ReportSetting(['id' => 1]);
         }
 
         if (Yii::$app->request->isPost) {
@@ -110,7 +110,7 @@ class AdminController extends Controller
 	{
 		$model = ReportSetting::findOne(1);
         if ($model === null) {
-			$model = new ReportSetting(['id'=>1]);
+			$model = new ReportSetting(['id' => 1]);
         }
 
         if (Yii::$app->request->isPost) {

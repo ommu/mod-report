@@ -32,7 +32,7 @@ use ommu\report\models\ReportCategory;
 
 		<?php $category = ReportCategory::getCategory();
 		echo $form->field($model, 'cat_id')
-			->dropDownList($category, ['prompt'=>'']);?>
+			->dropDownList($category, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'reporterDisplayname');?>
 
@@ -58,7 +58,7 @@ use ommu\report\models\ReportCategory;
 			->input('date');?>
 
 		<?php echo $form->field($model, 'status')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

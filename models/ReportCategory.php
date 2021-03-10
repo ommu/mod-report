@@ -222,7 +222,7 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -283,40 +283,40 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'unresolved',
 			'value' => function($model, $key, $index, $column) {
 				$unresolved = $model->getUnresolved(true);
-				return Html::a($unresolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 0], ['title'=>Yii::t('app', '{count} unresolved', ['count'=>$unresolved]), 'data-pjax'=>0]);
+				return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['resolved'] = [
 			'attribute' => 'resolved',
 			'value' => function($model, $key, $index, $column) {
 				$resolved = $model->getResolved(true);
-				return Html::a($resolved, ['admin/manage', 'category'=>$model->primaryKey, 'status' => 1], ['title'=>Yii::t('app', '{count} resolved', ['count'=>$resolved]), 'data-pjax'=>0]);
+				return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['reports'] = [
 			'attribute' => 'reports',
 			'value' => function($model, $key, $index, $column) {
 				$reports = $model->getReports(true);
-				return Html::a($reports, ['admin/manage', 'category'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports]), 'data-pjax'=>0]);
+				return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['publish'] = [
 			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['setting/category/publish', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/category/publish', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->publish, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];

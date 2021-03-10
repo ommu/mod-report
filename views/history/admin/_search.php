@@ -32,7 +32,7 @@ use ommu\report\models\ReportCategory;
 
 		<?php $category = ReportCategory::getCategory();
 		echo $form->field($model, 'categoryId')
-			->dropDownList($category, ['prompt'=>'']);?>
+			->dropDownList($category, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'reportBody');?>
 

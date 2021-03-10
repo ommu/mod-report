@@ -143,7 +143,7 @@ class ReportStatus extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
@@ -213,7 +213,7 @@ class ReportStatus extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->status);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'html',
 		];
 	}

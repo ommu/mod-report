@@ -21,13 +21,13 @@ use yii\widgets\DetailView;
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/admin/dashboard/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Reports'), 'url' => ['admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->report->report_body, 'url' => ['admin/view', 'id'=>$model->report_id]];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['history/user/manage', 'report'=>$model->report_id]];
+    $this->params['breadcrumbs'][] = ['label' => $model->report->report_body, 'url' => ['admin/view', 'id' => $model->report_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['history/user/manage', 'report' => $model->report_id]];
     $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id' => $model->id]), 'icon' => 'eye', 'htmlOptions' => ['class' => 'btn btn-info']],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -42,7 +42,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'publish',
-		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
+		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
@@ -55,7 +55,7 @@ $attributes = [
 		'value' => function ($model) {
 			$reportBody = isset($model->report) ? $model->report->report_body : '-';
             if ($reportBody != '-') {
-                return Html::a($reportBody, ['admin/view', 'id'=>$model->report_id], ['title'=>$reportBody, 'class'=>'modal-btn']);
+                return Html::a($reportBody, ['admin/view', 'id' => $model->report_id], ['title' => $reportBody, 'class' => 'modal-btn']);
             }
 			return $reportBody;
 		},
@@ -90,7 +90,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>

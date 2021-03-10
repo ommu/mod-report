@@ -45,7 +45,7 @@ $attributes = [
 		'attribute' => 'report_url',
 		'value' => function ($model) {
             if ($model->report_url && $model->report_url != '-') {
-                return Html::a($model->report_url, $model->report_url, ['title'=>$model->report_url, 'target'=>'_blank']);
+                return Html::a($model->report_url, $model->report_url, ['title' => $model->report_url, 'target' => '_blank']);
             }
 			return '-';
 		},
@@ -76,7 +76,7 @@ $attributes = [
 		'value' => function ($model) {
 			$status = $model->status == 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
 			$title = $model->status != 1 ? Yii::t('app', 'Resolved') : Yii::t('app', 'Unresolved');
-			return Html::a($status, ['status', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Click to {title}', ['title'=>$title]), 'class'=>'modal-btn']);
+			return Html::a($status, ['status', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Click to {title}', ['title' => $title]), 'class' => 'modal-btn']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -85,7 +85,7 @@ $attributes = [
 		'attribute' => 'reports',
 		'value' => function ($model) {
 			$reports = $model->reports;
-			return Html::a($reports, ['history/admin/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} reports', ['count'=>$reports])]);
+			return Html::a($reports, ['history/admin/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -94,7 +94,7 @@ $attributes = [
 		'attribute' => 'comments',
 		'value' => function ($model) {
 			$comments = $model->getComments(true);
-			return Html::a($comments, ['history/comment/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} comments', ['count'=>$comments])]);
+			return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -103,7 +103,7 @@ $attributes = [
 		'attribute' => 'statuses',
 		'value' => function ($model) {
 			$statuses = $model->getStatuses(true);
-			return Html::a($statuses, ['history/status/manage', 'report'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} statuses', ['count'=>$statuses])]);
+			return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -112,7 +112,7 @@ $attributes = [
 		'attribute' => 'users',
 		'value' => function ($model) {
 			$users = $model->getUsers(true);
-			return Html::a($users, ['history/user/manage', 'report'=>$model->primaryKey, 'publish'=>1], ['title'=>Yii::t('app', '{count} users', ['count'=>$users])]);
+			return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -140,7 +140,7 @@ $attributes = [
 	],
 	[
 		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-success btn-sm']),
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm']),
 		'format' => 'html',
 		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],
@@ -149,7 +149,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>
