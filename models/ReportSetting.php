@@ -38,7 +38,7 @@ class ReportSetting extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	public $auto_report_i;
+	public $autoReport;
 	public $modifiedDisplayname;
 
 	/**
@@ -56,9 +56,9 @@ class ReportSetting extends \app\components\ActiveRecord
 	{
 		return [
 			[['license', 'meta_description', 'meta_keyword'], 'required'],
-			[['permission', 'auto_report_cat_id', 'modified_id', 'auto_report_i'], 'integer'],
+			[['permission', 'auto_report_cat_id', 'modified_id', 'autoReport'], 'integer'],
 			[['meta_description', 'meta_keyword'], 'string'],
-			[['auto_report_cat_id', 'auto_report_i'], 'safe'],
+			[['auto_report_cat_id', 'autoReport'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 			[['auto_report_cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['auto_report_cat_id' => 'cat_id']],
 		];
@@ -78,7 +78,7 @@ class ReportSetting extends \app\components\ActiveRecord
 			'auto_report_cat_id' => Yii::t('app', 'Auto Report Category'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
-			'auto_report_i' => Yii::t('app', 'Enable Auto Report'),
+			'autoReport' => Yii::t('app', 'Enable Auto Report'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -218,7 +218,7 @@ class ReportSetting extends \app\components\ActiveRecord
 	public function afterFind()
 	{
         if ($this->auto_report_cat_id) {
-            $this->auto_report_i = 1;
+            $this->autoReport = 1;
         }
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
@@ -235,7 +235,7 @@ class ReportSetting extends \app\components\ActiveRecord
                 }
             }
 
-            if ($this->auto_report_i && !$this->auto_report_cat_id) {
+            if ($this->autoReport && !$this->auto_report_cat_id) {
                 $this->addError('auto_report_cat_id', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('auto_report_cat_id')]));
             }
         }
@@ -248,7 +248,7 @@ class ReportSetting extends \app\components\ActiveRecord
 	public function beforeSave($insert)
 	{
         if (parent::beforeSave($insert)) {
-            if (!$this->auto_report_i) {
+            if (!$this->autoReport) {
                 $this->auto_report_cat_id = null;
             }
 

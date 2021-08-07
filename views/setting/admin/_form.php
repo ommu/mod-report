@@ -59,9 +59,9 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('meta_keyword')); ?>
 
-<?php echo $form->field($model, 'auto_report_i')
+<?php echo $form->field($model, 'autoReport')
 	->checkbox()
-	->label($model->getAttributeLabel('auto_report_i')); ?>
+	->label($model->getAttributeLabel('autoReport')); ?>
 
 <?php $category = ReportCategory::getCategory(1);
 echo $form->field($model, 'auto_report_cat_id')
