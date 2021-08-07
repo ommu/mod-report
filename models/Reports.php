@@ -190,24 +190,15 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUsers($count=false, $publish=1)
+	public function getUsers($count=false)
 	{
         if ($count == false) {
-            return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id'])
-                ->alias('users')
-                ->andOnCondition([sprintf('%s.publish', 'users') => $publish]);
+            return $this->hasMany(ReportUser::className(), ['report_id' => 'report_id']);
         }
 
 		$model = ReportUser::find()
             ->alias('t')
             ->where(['t.report_id' => $this->report_id]);
-        if ($publish == 0) {
-            $model->unpublish();
-        } else if ($publish == 1) {
-            $model->published();
-        } else if ($publish == 2) {
-            $model->deleted();
-        }
 		$users = $model->count();
 
 		return $users ? $users : 0;

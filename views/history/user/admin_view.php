@@ -41,12 +41,6 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'publish',
-		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
-		'format' => 'raw',
-		'visible' => !$small,
-	],
-	[
 		'attribute' => 'categoryId',
 		'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
 	],
@@ -68,21 +62,6 @@ $attributes = [
 	[
 		'attribute' => 'creation_date',
 		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'modified_date',
-		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'modifiedDisplayname',
-		'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'updated_date',
-		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		'visible' => !$small,
 	],
 ];

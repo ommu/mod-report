@@ -13,18 +13,13 @@
  *
  * The followings are the available columns in table "ommu_report_user":
  * @property integer $id
- * @property integer $publish
  * @property integer $report_id
  * @property integer $user_id
  * @property string $creation_date
- * @property string $modified_date
- * @property integer $modified_id
- * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property Reports $report
  * @property Users $user
- * @property Users $modified
  *
  */
 
@@ -39,12 +34,11 @@ class ReportUser extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date'];
+	public $gridForbiddenColumn = [];
 
 	public $categoryId;
 	public $reportBody;
 	public $reporterDisplayname;
-	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -61,7 +55,7 @@ class ReportUser extends \app\components\ActiveRecord
 	{
 		return [
 			[['report_id'], 'required'],
-			[['publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
+			[['report_id', 'user_id'], 'integer'],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -74,17 +68,12 @@ class ReportUser extends \app\components\ActiveRecord
 	{
 		return [
 			'id' => Yii::t('app', 'ID'),
-			'publish' => Yii::t('app', 'Publish'),
 			'report_id' => Yii::t('app', 'Error'),
 			'user_id' => Yii::t('app', 'User'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
-			'modified_date' => Yii::t('app', 'Modified Date'),
-			'modified_id' => Yii::t('app', 'Modified'),
-			'updated_date' => Yii::t('app', 'Updated Date'),
 			'categoryId' => Yii::t('app', 'Category'),
 			'reportBody' => Yii::t('app', 'Error'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
-			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -102,14 +91,6 @@ class ReportUser extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getModified()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
 	}
 
 	/**
@@ -174,39 +155,6 @@ class ReportUser extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
 		];
-		$this->templateColumns['modified_date'] = [
-			'attribute' => 'modified_date',
-			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asDatetime($model->modified_date, 'medium');
-			},
-			'filter' => $this->filterDatepicker($this, 'modified_date'),
-		];
-		$this->templateColumns['modifiedDisplayname'] = [
-			'attribute' => 'modifiedDisplayname',
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->modified) ? $model->modified->displayname : '-';
-				// return $model->modifiedDisplayname;
-			},
-			'visible' => !Yii::$app->request->get('modified') ? true : false,
-		];
-		$this->templateColumns['updated_date'] = [
-			'attribute' => 'updated_date',
-			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asDatetime($model->updated_date, 'medium');
-			},
-			'filter' => $this->filterDatepicker($this, 'updated_date'),
-		];
-		$this->templateColumns['publish'] = [
-			'attribute' => 'publish',
-			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['publish', 'id' => $model->primaryKey]);
-				return $this->quickAction($url, $model->publish);
-			},
-			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class' => 'text-center'],
-			'format' => 'raw',
-			'visible' => !Yii::$app->request->get('trash') ? true : false,
-		];
 	}
 
 	/**
@@ -240,7 +188,6 @@ class ReportUser extends \app\components\ActiveRecord
 		// $this->categoryId = iisset($model->report) ? $model->report->category->title->message : '-';
 		// $this->reportBody = isset($model->report) ? $model->report->report_body : '-';
 		// $this->reporterDisplayname = isset($model->user) ? $model->user->displayname : '-';
-		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**
@@ -252,10 +199,6 @@ class ReportUser extends \app\components\ActiveRecord
             if ($this->isNewRecord) {
                 if ($this->user_id == null) {
                     $this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-                }
-            } else {
-                if ($this->modified_id == null) {
-                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
                 }
             }
         }

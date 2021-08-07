@@ -11,8 +11,6 @@
  *	Manage
  *	View
  *	Delete
- *	RunAction
- *	Publish
  *
  *	findModel
  *
@@ -143,30 +141,10 @@ class UserController extends Controller
 	public function actionDelete($id)
 	{
 		$model = $this->findModel($id);
-		$model->publish = 2;
+		$model->delete();
 
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report' => $model->report_id]);
-		}
-	}
-
-	/**
-	 * actionPublish an existing ReportUser model.
-	 * If publish is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionPublish($id)
-	{
-		$model = $this->findModel($id);
-		$replace = $model->publish == 1 ? 0 : 1;
-		$model->publish = $replace;
-
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success updated.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report' => $model->report_id]);
-		}
+        Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
+        return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report' => $model->report_id]);
 	}
 
 	/**

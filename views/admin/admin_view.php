@@ -112,7 +112,7 @@ $attributes = [
 		'attribute' => 'users',
 		'value' => function ($model) {
 			$users = $model->getUsers(true);
-			return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users])]);
+			return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} users', ['count' => $users])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,

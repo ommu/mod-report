@@ -41,17 +41,6 @@ use ommu\report\models\ReportCategory;
 		<?php echo $form->field($model, 'creation_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'modified_date')
-			->input('date');?>
-
-		<?php echo $form->field($model, 'modifiedDisplayname');?>
-
-		<?php echo $form->field($model, 'updated_date')
-			->input('date');?>
-
-		<?php echo $form->field($model, 'publish')
-			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
-
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']); ?>

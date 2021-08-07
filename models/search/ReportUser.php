@@ -28,8 +28,8 @@ class ReportUser extends ReportUserModel
 	public function rules()
 	{
 		return [
-			[['id', 'publish', 'report_id', 'user_id', 'modified_id'], 'integer'],
-			[['creation_date', 'modified_date', 'updated_date', 'categoryId', 'reportBody', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['id', 'report_id', 'user_id'], 'integer'],
+			[['creation_date', 'categoryId', 'reportBody', 'reporterDisplayname'], 'safe'],
 		];
 	}
 
@@ -70,7 +70,6 @@ class ReportUser extends ReportUserModel
 			'report report', 
 			'report.category.title category', 
 			'user user', 
-			'modified modified'
 		]);
 
 		$query->groupBy(['id']);
@@ -98,10 +97,6 @@ class ReportUser extends ReportUserModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['modifiedDisplayname'] = [
-			'asc' => ['modified.displayname' => SORT_ASC],
-			'desc' => ['modified.displayname' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['id' => SORT_DESC],
@@ -124,25 +119,11 @@ class ReportUser extends ReportUserModel
 			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.creation_date as date)' => $this->creation_date,
-			'cast(t.modified_date as date)' => $this->modified_date,
-			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
-			'cast(t.updated_date as date)' => $this->updated_date,
 			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
-        if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-        } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
-            }
-        }
-
 		$query->andFilterWhere(['like', 'report.report_body', $this->reportBody])
-			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname])
-			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
+			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname]);
 
 		return $dataProvider;
 	}
