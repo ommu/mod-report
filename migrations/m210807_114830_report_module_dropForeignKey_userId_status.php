@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 7 August 2021, 11:48 WIB
- * @link https://www.ommu.id
+ * @link https://github.com/ommu/mod-report
  *
  */
 
