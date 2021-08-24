@@ -19,18 +19,18 @@ class m210807_121431_report_module_dropColumn_publish_modifiedDate_modifiedId_up
 	{
         $this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateUser`');
 
-        // view _report_statistic_user
+        // alter view _report_statistic_user
         $alterViewReportStatisticUser = <<< SQL
 ALTER ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `_report_statistic_user` AS 
 SELECT
 `a`.`report_id` AS `report_id`,
 COUNT(`a`.`user_id`) AS `users`
 FROM `ommu_report_user` `a`
-GROUP BY `a`.`report_id`
+GROUP BY `a`.`report_id`;
 SQL;
         $this->execute($alterViewReportStatisticUser);
 
-        // view _reports
+        // alter view _reports
         $alterViewReports = <<< SQL
 ALTER ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `_reports` AS 
 SELECT
@@ -51,13 +51,14 @@ FROM ((((`ommu_reports` `a`
       ON (`a`.`report_id` = `d`.`report_id`))
    LEFT JOIN `_report_statistic_user` `e`
      ON (`a`.`report_id` = `e`.`report_id`))
-GROUP BY `a`.`report_id`
+GROUP BY `a`.`report_id`;
 SQL;
         $this->execute($alterViewReports);
 
-        // table ommu_report_user
+        // alter table ommu_report_user
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_report_user';
 		if (Yii::$app->db->getTableSchema($tableName, true)) {
+            // drop column publish, modified_date, modified_id, updated_date
 			$this->dropColumn(
 				$tableName,
 				'publish',
@@ -77,24 +78,24 @@ SQL;
 				$tableName,
 				'updated_date',
 			);
-		}
 
-        // sp reportSetUser
-        $alterProsedureReportSetUser = <<< SQL
+            // alter sp reportSetUser
+            $alterProsedureReportSetUser = <<< SQL
 CREATE PROCEDURE `reportSetUser`(IN `report_id_sp` INT, IN `user_id_sp` INT, IN `creation_date_sp` DATETIME)
 BEGIN
-	DECLARE id_sp INT;
-	
-	IF (user_id_sp IS NOT NULL) THEN
-		SELECT `id` INTO id_sp FROM `ommu_report_user` WHERE `report_id`=report_id_sp AND `user_id`=user_id_sp;
-		IF (id_sp IS NULL) THEN
-			INSERT `ommu_report_user` (`report_id`, `user_id`, `creation_date`)
-			VALUE (report_id_sp, user_id_sp, creation_date_sp);
-		END IF;
-	END IF;
-    END;
+    DECLARE id_sp INT;
+    
+    IF (user_id_sp IS NOT NULL) THEN
+        SELECT `id` INTO id_sp FROM `ommu_report_user` WHERE `report_id`=report_id_sp AND `user_id`=user_id_sp;
+        IF (id_sp IS NULL) THEN
+            INSERT `ommu_report_user` (`report_id`, `user_id`, `creation_date`)
+            VALUE (report_id_sp, user_id_sp, creation_date_sp);
+        END IF;
+    END IF;
+END;
 SQL;
-        $this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
-        $this->execute($alterProsedureReportSetUser);
+            $this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
+            $this->execute($alterProsedureReportSetUser);
+		}
 	}
 }

@@ -37,6 +37,38 @@ class m210807_102429_report_module_create_table_user extends \yii\db\Migration
 				'CONSTRAINT ommu_report_user_ibfk_2 FOREIGN KEY ([[user_id]]) REFERENCES ommu_users ([[user_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);
 		}
+
+		if (Yii::$app->db->getTableSchema($tableName, true)) {
+            // create sp reportSetUser
+            $createProsedureReportSetUser = <<< SQL
+CREATE PROCEDURE `reportSetUser`(IN `report_id_sp` INT, IN `user_id_sp` INT, IN `creation_date_sp` DATETIME)
+BEGIN
+    DECLARE id_sp INT;
+    
+    IF (user_id_sp IS NOT NULL) THEN
+        SELECT `id` INTO id_sp FROM `ommu_report_user` WHERE `publish`='1' AND `report_id`=report_id_sp AND `user_id`=user_id_sp;
+        IF (id_sp IS NULL) THEN
+            INSERT `ommu_report_user` (`report_id`, `user_id`, `creation_date`)
+            VALUE (report_id_sp, user_id_sp, creation_date_sp);
+        END IF;
+    END IF;
+END;
+SQL;
+            $this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
+            $this->execute($createProsedureReportSetUser);
+
+            // create view _report_statistic_user
+            $createViewStatisticUser = <<< SQL
+CREATE VIEW `_report_statistic_user` AS 
+SELECT
+  `a`.`report_id` AS `report_id`,
+  SUM(CASE WHEN `a`.`publish` = '1' THEN 1 ELSE 0 END) AS `users`,
+  COUNT(`a`.`user_id`) AS `user_all`
+FROM `ommu_report_user` `a`
+GROUP BY `a`.`report_id`;
+SQL;
+            $this->execute($createViewStatisticUser);
+        }
 	}
 
 	public function down()
