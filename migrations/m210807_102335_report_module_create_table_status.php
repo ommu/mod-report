@@ -37,9 +37,7 @@ class m210807_102335_report_module_create_table_status extends \yii\db\Migration
 				'CONSTRAINT ommu_report_status_ibfk_1 FFOREIGN KEY ([[report_id]]) REFERENCES ommu_reports ([[report_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 				'CONSTRAINT ommu_report_status_ibfk_2 FFOREIGN KEY ([[user_id]]) REFERENCES ommu_users ([[user_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);
-		}
 
-		if (Yii::$app->db->getTableSchema($tableName, true)) {
             // create view _report_statistic_status
             $createViewStatisticStatus = <<< SQL
 CREATE VIEW `_report_statistic_status` AS 
@@ -52,7 +50,7 @@ FROM `ommu_report_status` `a`
 GROUP BY `a`.`report_id`;
 SQL;
             $this->execute($createViewStatisticStatus);
-        }
+		}
 	}
 
 	public function down()

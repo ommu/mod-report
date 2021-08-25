@@ -36,9 +36,7 @@ class m210807_102429_report_module_create_table_user extends \yii\db\Migration
 				'CONSTRAINT ommu_report_user_ibfk_1 FOREIGN KEY ([[report_id]]) REFERENCES ommu_reports ([[report_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 				'CONSTRAINT ommu_report_user_ibfk_2 FOREIGN KEY ([[user_id]]) REFERENCES ommu_users ([[user_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);
-		}
 
-		if (Yii::$app->db->getTableSchema($tableName, true)) {
             // create sp reportSetUser
             $createProsedureReportSetUser = <<< SQL
 CREATE PROCEDURE `reportSetUser`(IN `report_id_sp` INT, IN `user_id_sp` INT, IN `creation_date_sp` DATETIME)
@@ -68,7 +66,7 @@ FROM `ommu_report_user` `a`
 GROUP BY `a`.`report_id`;
 SQL;
             $this->execute($createViewStatisticUser);
-        }
+		}
 	}
 
 	public function down()

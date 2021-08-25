@@ -48,9 +48,7 @@ class m210807_100628_report_module_create_table_category extends \yii\db\Migrati
 				$tableName,
 				'name'
 			);
-		}
 
-		if (Yii::$app->db->getTableSchema($tableName, true)) {
             // create view _report_category
             $createViewCategory = <<< SQL
 CREATE VIEW `_report_category` AS 
@@ -65,7 +63,7 @@ FROM (`ommu_report_category` `a`
 GROUP BY `a`.`cat_id`;
 SQL;
             $this->execute($createViewCategory);
-        }
+		}
 	}
 
 	public function down()

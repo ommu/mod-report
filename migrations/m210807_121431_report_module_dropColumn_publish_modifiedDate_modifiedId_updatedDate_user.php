@@ -19,8 +19,11 @@ class m210807_121431_report_module_dropColumn_publish_modifiedDate_modifiedId_up
 	{
         $this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateUser`');
 
-        // alter view _report_statistic_user
-        $alterViewReportStatisticUser = <<< SQL
+        // alter table ommu_report_user
+		$tableName = Yii::$app->db->tablePrefix . 'ommu_report_user';
+		if (Yii::$app->db->getTableSchema($tableName, true)) {
+            // alter view _report_statistic_user
+            $alterViewReportStatisticUser = <<< SQL
 ALTER ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `_report_statistic_user` AS 
 SELECT
 `a`.`report_id` AS `report_id`,
@@ -28,10 +31,10 @@ COUNT(`a`.`user_id`) AS `users`
 FROM `ommu_report_user` `a`
 GROUP BY `a`.`report_id`;
 SQL;
-        $this->execute($alterViewReportStatisticUser);
+            $this->execute($alterViewReportStatisticUser);
 
-        // alter view _reports
-        $alterViewReports = <<< SQL
+            // alter view _reports
+            $alterViewReports = <<< SQL
 ALTER ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `_reports` AS 
 SELECT
   `a`.`report_id`   AS `report_id`,
@@ -53,11 +56,8 @@ FROM ((((`ommu_reports` `a`
      ON (`a`.`report_id` = `e`.`report_id`))
 GROUP BY `a`.`report_id`;
 SQL;
-        $this->execute($alterViewReports);
+            $this->execute($alterViewReports);
 
-        // alter table ommu_report_user
-		$tableName = Yii::$app->db->tablePrefix . 'ommu_report_user';
-		if (Yii::$app->db->getTableSchema($tableName, true)) {
             // drop column publish, modified_date, modified_id, updated_date
 			$this->dropColumn(
 				$tableName,
