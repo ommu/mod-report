@@ -63,6 +63,12 @@ FROM (`ommu_report_category` `a`
 GROUP BY `a`.`cat_id`;
 SQL;
             $this->execute($createViewCategory);
+
+			$this->batchInsert($tableName, ['publish', 'name', 'desc'], [
+				['1', SourceMessage::setMessage('Spam', 'report category title'), SourceMessage::setMessage('Spam', 'report category description')],
+				['1', SourceMessage::setMessage('Inappropriate Content', 'report category title'), SourceMessage::setMessage('Inappropriate Content', 'report category description')],
+				['1', SourceMessage::setMessage('Abuse', 'report category title'), SourceMessage::setMessage('Abuse', 'report category description')],
+			]);
 		}
 	}
 
