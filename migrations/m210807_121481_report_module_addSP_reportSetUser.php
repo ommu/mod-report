@@ -36,6 +36,7 @@ END;
 SQL;
         $this->execute($alterProsedureReportSetUser);
 	}
+
 	public function down()
 	{
         $this->execute('DROP PROCEDURE `reportSetUser`');
