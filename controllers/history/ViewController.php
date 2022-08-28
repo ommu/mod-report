@@ -9,7 +9,6 @@
  * TOC :
  *  Index
  *  Manage
- *  View
  *  Delete
  *
  *  findModel
@@ -92,6 +91,7 @@ class ViewController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($report = Yii::$app->request->get('report')) != null) {
+            $this->subMenuParam = $report;
             $report = \ommu\report\models\Reports::findOne($report);
         }
         if (($user = Yii::$app->request->get('user')) != null) {
@@ -107,24 +107,6 @@ class ViewController extends Controller
 			'columns' => $columns,
 			'report' => $report,
 			'user' => $user,
-		]);
-	}
-
-	/**
-	 * Displays a single ReportView model.
-	 * @param string $id
-	 * @return mixed
-	 */
-	public function actionView($id)
-	{
-        $model = $this->findModel($id);
-		$this->subMenuParam = $model->report_id;
-
-		$this->view->title = Yii::t('app', 'Detail View: {report-id}', ['report-id' => $model->report->report_body]);
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->oRender('admin_view', [
-			'model' => $model,
 		]);
 	}
 

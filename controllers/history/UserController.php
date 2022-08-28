@@ -9,7 +9,6 @@
  * TOC :
  *	Index
  *	Manage
- *	View
  *	Delete
  *
  *	findModel
@@ -111,24 +110,6 @@ class UserController extends Controller
 			'columns' => $columns,
 			'report' => $report,
 			'user' => $user,
-		]);
-	}
-
-	/**
-	 * Displays a single ReportUser model.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionView($id)
-	{
-        $model = $this->findModel($id);
-		$this->subMenuParam = $model->report_id;
-
-		$this->view->title = Yii::t('app', 'Detail User: {report-id}', ['report-id' => Reports::htmlHardDecode($model->report->report_body)]);
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->oRender('admin_view', [
-			'model' => $model,
 		]);
 	}
 
