@@ -35,6 +35,12 @@ report_submenu:
       0: 'history/comment/manage'
       report: $_GET*id
     select: controller
+  views:
+    label: Views
+    url:
+      0: 'history/view/manage'
+      report: $_GET*id
+    select: controller
   delete:
     label: Delete
     url:
