@@ -49,10 +49,11 @@ class ReportView extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['id', 'report_id', 'user_id'], 'required'],
+			[['id', 'report_id'], 'required'],
 			[['report_id', 'user_id'], 'integer'],
 			[['id'], 'string', 'max' => 36],
 			[['id'], 'unique'],
+			[['user_id'], 'safe'],
 			[['report_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reports::className(), 'targetAttribute' => ['report_id' => 'report_id']],
 		];
 	}
@@ -161,6 +162,23 @@ class ReportView extends \app\components\ActiveRecord
             $model = self::findOne($id);
             return $model;
         }
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function insertView($report_id, $user_id=null)
+	{
+        if ($user_id == null) {
+            $user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        }
+
+        $model = new self();
+        $model->report_id = $report_id;
+        if ($user_id != null) {
+            $model->user_id = $user_id;
+        }
+        $model->save();
 	}
 
 	/**

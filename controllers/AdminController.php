@@ -33,6 +33,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
 use ommu\report\models\Reports;
+use ommu\report\models\ReportView;
 use ommu\report\models\search\Reports as ReportsSearch;
 
 class AdminController extends Controller
@@ -200,6 +201,7 @@ class AdminController extends Controller
 	{
         $model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
+		ReportView::insertView($id, Yii::$app->user->id);
 
 		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
