@@ -201,7 +201,15 @@ class AdminController extends Controller
 	{
         $model = $this->findModel($id);
 		//Reports::insertReport($model->report_url, $model->report_body);
+
+        // insert reportview
 		ReportView::insertView($id, Yii::$app->user->id);
+
+        // update read status
+        if ($model->read == 0) {
+            $model->read = 1;
+            $model->save();
+        }
 
 		$this->view->title = Yii::t('app', 'Detail Report: {report-body}', ['report-body' => Reports::htmlHardDecode($model->report_body)]);
 		$this->view->description = '';
