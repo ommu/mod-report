@@ -15,6 +15,7 @@
  * @property integer $report_id
  * @property string $app
  * @property integer $status
+ * @property integer $read
  * @property integer $cat_id
  * @property integer $user_id
  * @property string $report_url
@@ -32,6 +33,7 @@
  * @property ReportHistory[] $histories
  * @property ReportStatus[] $statuses
  * @property ReportUser[] $users
+ * @property ReportView[] $reads
  * @property ReportCategory $category
  * @property Users $user
  * @property Users $modified
@@ -50,7 +52,7 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['report_url', 'report_message', 'report_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'comments', 'histories', 'statuses', 'users'];
+	public $gridForbiddenColumn = ['report_url', 'report_message', 'reports', 'report_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'comments', 'histories', 'statuses', 'users', 'reads'];
 
 	public $categoryName;
 	public $reporterDisplayname;
@@ -76,7 +78,7 @@ class Reports extends \app\components\ActiveRecord
 			[['report_url', 'report_body'], 'required'],
 			[['app'], 'required', 'on' => self::SCENARIO_REPORT],
 			[['report_message'], 'required', 'on' => self::SCENARIO_RESOLVED],
-			[['status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
+			[['status', 'read', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['app', 'report_url', 'report_body', 'report_message'], 'string'],
 			[['app', 'cat_id'], 'safe'],
 			[['report_ip'], 'string', 'max' => 20],
@@ -106,6 +108,7 @@ class Reports extends \app\components\ActiveRecord
 			'report_id' => Yii::t('app', 'Report'),
 			'app' => Yii::t('app', 'Application'),
 			'status' => Yii::t('app', 'Status'),
+			'read' => Yii::t('app', 'Read'),
 			'cat_id' => Yii::t('app', 'Category'),
 			'user_id' => Yii::t('app', 'User'),
 			'report_url' => Yii::t('app', 'URL'),
@@ -121,6 +124,7 @@ class Reports extends \app\components\ActiveRecord
 			'histories' => Yii::t('app', 'Histories'),
 			'statuses' => Yii::t('app', 'Statuses'),
 			'users' => Yii::t('app', 'Users'),
+			'reads' => Yii::t('app', 'Reads'),
 			'categoryName' => Yii::t('app', 'Category'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
@@ -207,6 +211,23 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getReads($count=false)
+	{
+        if ($count == false) {
+            return $this->hasMany(ReportView::className(), ['report_id' => 'report_id']);
+        }
+
+		$model = ReportView::find()
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
+		$reads = $model->count();
+
+		return $reads ? $reads : 0;
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getCategory()
 	{
 		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id']);
@@ -280,18 +301,12 @@ class Reports extends \app\components\ActiveRecord
 			'filter' => ReportCategory::getCategory(),
 			'visible' => !Yii::$app->request->get('category') ? true : false,
 		];
-		$this->templateColumns['report_url'] = [
-			'attribute' => 'report_url',
-			'value' => function($model, $key, $index, $column) {
-				return $model->report_url;
-			},
-		];
 		$this->templateColumns['report_body'] = [
 			'attribute' => 'report_body',
 			'value' => function($model, $key, $index, $column) {
-				return $model->report_body;
+				return $model->parseError();
 			},
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['report_message'] = [
 			'attribute' => 'report_message',
@@ -383,6 +398,25 @@ class Reports extends \app\components\ActiveRecord
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
+		$this->templateColumns['reads'] = [
+			'attribute' => 'reads',
+			'value' => function($model, $key, $index, $column) {
+				$reads = $model->getReads(true);
+				return Html::a($reads, ['history/view/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
+			},
+			'filter' => false,
+			'contentOptions' => ['class' => 'text-center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['read'] = [
+			'attribute' => 'read',
+			'value' => function($model, $key, $index, $column) {
+				return $this->filterYesNo($model->read);
+			},
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class' => 'text-center'],
+			'format' => 'raw',
+		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'value' => function($model, $key, $index, $column) {
@@ -455,6 +489,31 @@ class Reports extends \app\components\ActiveRecord
 			}
 		}
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function parseError($update=true)
+	{
+        $reports = $this->reports;
+        $users = $this->getUsers(true);
+        $reads = $this->getReads(true);
+        $comments = $this->getComments(true);
+    
+        $html = $this->report_body;
+        $html .= '<hr class="mt-5 mb-5"/>';
+
+        $html .= Html::button(Yii::t('app', 'url'), ['class' => 'btn btn-secondary btn-xs px-5']);
+        $html .= Html::a($this->report_url, $this->report_url, ['title' => $this->report_url, 'target' => '_blank', 'data-pjax' => 0]);
+        $html .= '<hr class="mt-5 mb-5"/>';
+        
+        $html .= Html::a(Yii::t('app', '{count} reports', ['count' => $reports]), ['history/admin/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'class' => 'btn btn-primary btn-xs mr-5', 'data-pjax' => 0]);
+        $html .= $users ? Html::a(Yii::t('app', '{count} users', ['count' => $users]), ['history/user/manage', 'report' => $this->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'class' => 'btn btn-success btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $reads ? Html::a(Yii::t('app', '{count} reads', ['count' => $reads]), ['history/view/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'class' => 'btn btn-info btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $comments ? Html::a(Yii::t('app', '{count} comments', ['count' => $comments]), ['history/comment/manage', 'report' => $this->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'class' => 'btn btn-warning btn-xs mr-5', 'data-pjax' => 0]) : '';
+
+        return $html;
+    }
 
 	/**
 	 * after find attributes

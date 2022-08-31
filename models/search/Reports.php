@@ -28,7 +28,7 @@ class Reports extends ReportsModel
 	public function rules()
 	{
 		return [
-			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
+			[['report_id', 'status', 'read', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['app', 'report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date', 'categoryName', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -136,6 +136,7 @@ class Reports extends ReportsModel
 			't.report_id' => $this->report_id,
 			't.app' => $this->app,
 			't.status' => isset($params['status']) ? $params['status'] : $this->status,
+			't.read' => isset($params['read']) ? $params['read'] : $this->read,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.reports' => $this->reports,
