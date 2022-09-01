@@ -147,7 +147,10 @@ class Reports extends ReportsModel
 		]);
 
 		$query->andFilterWhere(['like', 't.report_url', $this->report_url])
-			->andFilterWhere(['like', 't.report_body', $this->report_body])
+			->andFilterWhere(['or',
+                ['like', 't.report_body', $this->report_body],
+                ['like', 't.report_url', $this->report_body]
+            ])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
 			->andFilterWhere(['like', 'category.message', $this->categoryName])
