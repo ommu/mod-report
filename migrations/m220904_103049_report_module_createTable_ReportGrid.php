@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
- * @created date 4 September 2022, 15:16 WIB
+ * @created date 4 September 2022, 18:46 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -27,9 +27,9 @@ class m220904_103049_report_module_createTable_ReportGrid extends \yii\db\Migrat
 				'id' => Schema::TYPE_INTEGER . '(11) UNSIGNED NOT NULL',
 				'comment' => Schema::TYPE_INTEGER . '(11) NOT NULL',
 				'history' => Schema::TYPE_INTEGER . '(11) NOT NULL',
+				'read' => Schema::TYPE_INTEGER . '(11) NOT NULL',
 				'status' => Schema::TYPE_INTEGER . '(11) NOT NULL',
 				'user' => Schema::TYPE_INTEGER . '(11) NOT NULL',
-				'view' => Schema::TYPE_INTEGER . '(11) NOT NULL',
 				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'PRIMARY KEY ([[id]])',
 				'CONSTRAINT ommu_report_grid_ibfk_1 FOREIGN KEY ([[id]]) REFERENCES ommu_reports ([[report_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
