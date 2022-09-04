@@ -304,7 +304,7 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['report_body'] = [
 			'attribute' => 'report_body',
 			'value' => function($model, $key, $index, $column) {
-				return $model->parseError();
+				return $model->parseReportBody();
 			},
 			'format' => 'raw',
 		];
@@ -493,7 +493,7 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseError($update=true)
+	public function parseReportBody($update=true)
 	{
         $reports = $this->reports;
         $users = $this->getUsers(true);

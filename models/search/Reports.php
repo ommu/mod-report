@@ -146,8 +146,7 @@ class Reports extends ReportsModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-		$query->andFilterWhere(['like', 't.report_url', $this->report_url])
-			->andFilterWhere(['or',
+		$query->andFilterWhere(['or',
                 ['like', 't.report_body', $this->report_body],
                 ['like', 't.report_url', $this->report_body]
             ])
