@@ -1,8 +1,8 @@
 <?php
 /**
- * ReportView
+ * ReportRead
  *
- * ReportView represents the model behind the search form about `ommu\report\models\ReportView`.
+ * ReportRead represents the model behind the search form about `ommu\report\models\ReportRead`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
@@ -17,9 +17,9 @@ namespace ommu\report\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use ommu\report\models\ReportView as ReportViewModel;
+use ommu\report\models\ReportRead as ReportViewModel;
 
-class ReportView extends ReportViewModel
+class ReportRead extends ReportViewModel
 {
 	/**
 	 * {@inheritdoc}

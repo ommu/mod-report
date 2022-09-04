@@ -33,7 +33,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
 use ommu\report\models\Reports;
-use ommu\report\models\ReportView;
+use ommu\report\models\ReportRead;
 use ommu\report\models\search\Reports as ReportsSearch;
 
 class AdminController extends Controller
@@ -203,7 +203,7 @@ class AdminController extends Controller
 		//Reports::insertReport($model->report_url, $model->report_body);
 
         // insert reportview
-		ReportView::insertView($id, Yii::$app->user->id);
+		ReportRead::insertView($id, Yii::$app->user->id);
 
         // update read status
         if ($model->read == 0) {

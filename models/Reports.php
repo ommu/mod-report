@@ -33,7 +33,7 @@
  * @property ReportHistory[] $histories
  * @property ReportStatus[] $statuses
  * @property ReportUser[] $users
- * @property ReportView[] $reads
+ * @property ReportRead[] $reads
  * @property ReportCategory $category
  * @property Users $user
  * @property Users $modified
@@ -214,10 +214,10 @@ class Reports extends \app\components\ActiveRecord
 	public function getReads($count=false)
 	{
         if ($count == false) {
-            return $this->hasMany(ReportView::className(), ['report_id' => 'report_id']);
+            return $this->hasMany(ReportRead::className(), ['report_id' => 'report_id']);
         }
 
-		$model = ReportView::find()
+		$model = ReportRead::find()
             ->alias('t')
             ->where(['t.report_id' => $this->report_id]);
 		$reads = $model->count();
@@ -402,7 +402,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'reads',
 			'value' => function($model, $key, $index, $column) {
 				$reads = $model->getReads(true);
-				return Html::a($reads, ['history/view/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
+				return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class' => 'text-center'],
@@ -509,7 +509,7 @@ class Reports extends \app\components\ActiveRecord
         
         $html .= Html::a(Yii::t('app', '{count} reports', ['count' => $reports]), ['history/admin/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'class' => 'btn btn-primary btn-xs mr-5', 'data-pjax' => 0]);
         $html .= $users ? Html::a(Yii::t('app', '{count} users', ['count' => $users]), ['history/user/manage', 'report' => $this->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'class' => 'btn btn-success btn-xs mr-5', 'data-pjax' => 0]) : '';
-        $html .= $reads ? Html::a(Yii::t('app', '{count} reads', ['count' => $reads]), ['history/view/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'class' => 'btn btn-info btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $reads ? Html::a(Yii::t('app', '{count} reads', ['count' => $reads]), ['history/read/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'class' => 'btn btn-info btn-xs mr-5', 'data-pjax' => 0]) : '';
         $html .= $comments ? Html::a(Yii::t('app', '{count} comments', ['count' => $comments]), ['history/comment/manage', 'report' => $this->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'class' => 'btn btn-warning btn-xs mr-5', 'data-pjax' => 0]) : '';
 
         return $html;

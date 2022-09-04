@@ -37,10 +37,10 @@ report_submenu:
         0: 'history/comment/manage'
         report: $_GET*id
       select: controller
-    views:
-      label: Views
+    reads:
+      label: Reads
       url:
-        0: 'history/view/manage'
+        0: 'history/read/manage'
         report: $_GET*id
       select: controller
   2:

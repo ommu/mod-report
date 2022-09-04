@@ -1,6 +1,6 @@
 <?php
 /**
- * ReportView
+ * ReportRead
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
@@ -8,9 +8,9 @@
  * @created date 28 August 2022, 07:24 WIB
  * @link https://github.com/ommu/mod-report
  *
- * This is the model class for table "ommu_report_view".
+ * This is the model class for table "ommu_report_read".
  *
- * The followings are the available columns in table "ommu_report_view":
+ * The followings are the available columns in table "ommu_report_read":
  * @property string $id
  * @property integer $report_id
  * @property integer $user_id
@@ -28,7 +28,7 @@ use Yii;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 
-class ReportView extends \app\components\ActiveRecord
+class ReportRead extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
@@ -40,7 +40,7 @@ class ReportView extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return 'ommu_report_view';
+		return 'ommu_report_read';
 	}
 
 	/**
@@ -91,11 +91,11 @@ class ReportView extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\query\ReportView the active query used by this AR class.
+	 * @return \ommu\report\models\query\ReportRead the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\report\models\query\ReportView(get_called_class());
+		return new \ommu\report\models\query\ReportRead(get_called_class());
 	}
 
 	/**

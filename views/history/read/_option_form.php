@@ -1,9 +1,9 @@
 <?php
 /**
- * Report Views (report-view)
+ * Report Reads (report-read)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\history\ViewController
- * @var $model ommu\report\models\search\ReportView
+ * @var $this ommu\report\controllers\history\ReadController
+ * @var $model ommu\report\models\search\ReportRead
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
