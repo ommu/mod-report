@@ -30,10 +30,11 @@
  *
  * The followings are the available model relations:
  * @property ReportComment[] $comments
+ * @property ReportGrid $grid
  * @property ReportHistory[] $histories
+ * @property ReportRead[] $reads
  * @property ReportStatus[] $statuses
  * @property ReportUser[] $users
- * @property ReportRead[] $reads
  * @property ReportCategory $category
  * @property Users $user
  * @property Users $modified
@@ -52,11 +53,15 @@ class Reports extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['report_url', 'report_message', 'reports', 'report_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'comments', 'histories', 'statuses', 'users', 'reads'];
+	public $gridForbiddenColumn = ['report_url', 'report_message', 'reports', 'report_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'oComment', 'oRead', 'oStatus', 'oUser'];
 
 	public $categoryName;
 	public $reporterDisplayname;
 	public $modifiedDisplayname;
+    public $oComment;
+    public $oRead;
+    public $oStatus;
+    public $oUser;
 
 	const SCENARIO_REPORT = 'reportForm';
 	const SCENARIO_RESOLVED = 'resolveForm';
@@ -81,8 +86,8 @@ class Reports extends \app\components\ActiveRecord
 			[['status', 'read', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
 			[['app', 'report_url', 'report_body', 'report_message'], 'string'],
 			[['app', 'cat_id'], 'safe'],
-			[['report_ip'], 'string', 'max' => 20],
 			[['app'], 'string', 'max' => 32],
+			[['report_ip'], 'string', 'max' => 20],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReportCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -128,6 +133,10 @@ class Reports extends \app\components\ActiveRecord
 			'categoryName' => Yii::t('app', 'Category'),
 			'reporterDisplayname' => Yii::t('app', 'Reporter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
+			'oComment' => Yii::t('app', 'Comments'),
+			'oRead' => Yii::t('app', 'Reads'),
+			'oStatus' => Yii::t('app', 'Statuses'),
+			'oUser' => Yii::t('app', 'Users'),
 		];
 	}
 
@@ -160,6 +169,14 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getGrid()
+	{
+		return $this->hasOne(ReportGrid::className(), ['id' => 'report_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getHistories($count=false)
 	{
         if ($count == false) {
@@ -172,6 +189,23 @@ class Reports extends \app\components\ActiveRecord
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getReads($count=false)
+	{
+        if ($count == false) {
+            return $this->hasMany(ReportRead::className(), ['report_id' => 'report_id']);
+        }
+
+		$model = ReportRead::find()
+            ->alias('t')
+            ->where(['t.report_id' => $this->report_id]);
+		$reads = $model->count();
+
+		return $reads ? $reads : 0;
 	}
 
 	/**
@@ -206,23 +240,6 @@ class Reports extends \app\components\ActiveRecord
 		$users = $model->count();
 
 		return $users ? $users : 0;
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getReads($count=false)
-	{
-        if ($count == false) {
-            return $this->hasMany(ReportRead::className(), ['report_id' => 'report_id']);
-        }
-
-		$model = ReportRead::find()
-            ->alias('t')
-            ->where(['t.report_id' => $this->report_id]);
-		$reads = $model->count();
-
-		return $reads ? $reads : 0;
 	}
 
 	/**
@@ -368,8 +385,8 @@ class Reports extends \app\components\ActiveRecord
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['comments'] = [
-			'attribute' => 'comments',
+		$this->templateColumns['oComment'] = [
+			'attribute' => 'oComment',
 			'value' => function($model, $key, $index, $column) {
 				$comments = $model->getComments(true);
 				return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'data-pjax' => 0]);
@@ -378,8 +395,18 @@ class Reports extends \app\components\ActiveRecord
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['statuses'] = [
-			'attribute' => 'statuses',
+        $this->templateColumns['oRead'] = [
+            'attribute' => 'oRead',
+            'value' => function($model, $key, $index, $column) {
+                $reads = $model->getReads(true);
+                return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
+            },
+            'filter' => $this->filterYesNo(),
+            'contentOptions' => ['class' => 'text-center'],
+            'format' => 'raw',
+        ];
+		$this->templateColumns['oStatus'] = [
+			'attribute' => 'oStatus',
 			'value' => function($model, $key, $index, $column) {
 				$statuses = $model->getStatuses(true);
 				return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses]), 'data-pjax' => 0]);
@@ -388,21 +415,11 @@ class Reports extends \app\components\ActiveRecord
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['users'] = [
-			'attribute' => 'users',
+		$this->templateColumns['oUser'] = [
+			'attribute' => 'oUser',
 			'value' => function($model, $key, $index, $column) {
 				$users = $model->getUsers(true);
 				return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'data-pjax' => 0]);
-			},
-			'filter' => false,
-			'contentOptions' => ['class' => 'text-center'],
-			'format' => 'raw',
-		];
-		$this->templateColumns['reads'] = [
-			'attribute' => 'reads',
-			'value' => function($model, $key, $index, $column) {
-				$reads = $model->getReads(true);
-				return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class' => 'text-center'],
@@ -525,6 +542,14 @@ class Reports extends \app\components\ActiveRecord
 		// $this->categoryName = isset($model->category) ? $model->category->title->message : '-';
 		// $this->reporterDisplayname = isset($model->user) ? $model->user->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+        // $this->comment = $this->getComments(true) ? 1 : 0;
+        // $this->read = $this->getReads(true) ? 1 : 0;
+        // $this->status = $this->getStatuses(true) ? 1 : 0;
+        // $this->user = $this->getUsers(true) ? 1 : 0;
+        $this->oComment = isset($this->grid) ? $this->grid->comment : 0;
+        $this->oRead = isset($this->grid) ? $this->grid->read : 0;
+        $this->oStatus = isset($this->grid) ? $this->grid->status : 0;
+        $this->oUser = isset($this->grid) ? $this->grid->user : 0;
 	}
 
 	/**
