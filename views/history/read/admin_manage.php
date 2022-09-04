@@ -1,10 +1,10 @@
 <?php
 /**
- * Report Views (report-view)
+ * Report Reads (report-read)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\history\ViewController
- * @var $model ommu\report\models\ReportView
- * @var $searchModel ommu\report\models\search\ReportView
+ * @var $this ommu\report\controllers\history\ReadController
+ * @var $model ommu\report\models\ReportRead
+ * @var $searchModel ommu\report\models\search\ReportRead
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
@@ -32,7 +32,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="report-view-manage">
+<div class="report-read-manage">
 <?php Pjax::begin(); ?>
 
 <?php if ($report != null) {

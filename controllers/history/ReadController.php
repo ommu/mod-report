@@ -1,10 +1,10 @@
 <?php
 /**
- * ViewController
- * @var $this ommu\report\controllers\history\ViewController
- * @var $model ommu\report\models\ReportView
+ * ReadController
+ * @var $this ommu\report\controllers\history\ReadController
+ * @var $model ommu\report\models\ReportRead
  *
- * ViewController implements the CRUD actions for ReportView model.
+ * ReadController implements the CRUD actions for ReportRead model.
  * Reference start
  * TOC :
  *  Index
@@ -27,10 +27,10 @@ use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\report\models\ReportView;
-use ommu\report\models\search\ReportView as ReportViewSearch;
+use ommu\report\models\ReportRead;
+use ommu\report\models\search\ReportRead as ReportViewSearch;
 
-class ViewController extends Controller
+class ReadController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -71,7 +71,7 @@ class ViewController extends Controller
 	}
 
 	/**
-	 * Lists all ReportView models.
+	 * Lists all ReportRead models.
 	 * @return mixed
 	 */
 	public function actionManage()
@@ -98,7 +98,7 @@ class ViewController extends Controller
             $user = \app\models\Users::findOne($user);
         }
 
-		$this->view->title = Yii::t('app', 'Views');
+		$this->view->title = Yii::t('app', 'Reads');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -111,7 +111,7 @@ class ViewController extends Controller
 	}
 
 	/**
-	 * Deletes an existing ReportView model.
+	 * Deletes an existing ReportRead model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param string $id
 	 * @return mixed
@@ -121,20 +121,20 @@ class ViewController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Report view success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Report read success deleted.'));
 		return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 	}
 
 	/**
-	 * Finds the ReportView model based on its primary key value.
+	 * Finds the ReportRead model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param string $id
-	 * @return ReportView the loaded model
+	 * @return ReportRead the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        if (($model = ReportView::findOne($id)) !== null) {
+        if (($model = ReportRead::findOne($id)) !== null) {
             return $model;
         }
 

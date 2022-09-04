@@ -1,9 +1,9 @@
 <?php
 /**
- * ReportView
+ * ReportRead
  *
- * This is the ActiveQuery class for [[\ommu\report\models\ReportView]].
- * @see \ommu\report\models\ReportView
+ * This is the ActiveQuery class for [[\ommu\report\models\ReportRead]].
+ * @see \ommu\report\models\ReportRead
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
@@ -15,7 +15,7 @@
 
 namespace ommu\report\models\query;
 
-class ReportView extends \yii\db\ActiveQuery
+class ReportRead extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()
@@ -26,7 +26,7 @@ class ReportView extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\ReportView[]|array
+	 * @return \ommu\report\models\ReportRead[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class ReportView extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\report\models\ReportView|array|null
+	 * @return \ommu\report\models\ReportRead|array|null
 	 */
 	public function one($db = null)
 	{
