@@ -91,27 +91,36 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'comments',
+		'attribute' => 'oComment',
 		'value' => function ($model) {
-			$comments = $model->getComments(true);
+			$comments = $model->oComment;
 			return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'statuses',
+		'attribute' => 'oRead',
 		'value' => function ($model) {
-			$statuses = $model->getStatuses(true);
+			$reads = $model->oRead;
+			return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads])]);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'oStatus',
+		'value' => function ($model) {
+			$statuses = $model->oStatus;
 			return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'users',
+		'attribute' => 'oUser',
 		'value' => function ($model) {
-			$users = $model->getUsers(true);
+			$users = $model->oUser;
 			return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} users', ['count' => $users])]);
 		},
 		'format' => 'html',

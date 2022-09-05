@@ -388,7 +388,8 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['oComment'] = [
 			'attribute' => 'oComment',
 			'value' => function($model, $key, $index, $column) {
-				$comments = $model->getComments(true);
+				// $comments = $model->getComments(true);
+                $comments = $model->oComment;
 				return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
@@ -398,7 +399,8 @@ class Reports extends \app\components\ActiveRecord
         $this->templateColumns['oRead'] = [
             'attribute' => 'oRead',
             'value' => function($model, $key, $index, $column) {
-                $reads = $model->getReads(true);
+                // $reads = $model->getReads(true);
+                $reads = $model->oRead;
                 return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
             },
             'filter' => $this->filterYesNo(),
@@ -408,7 +410,8 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['oStatus'] = [
 			'attribute' => 'oStatus',
 			'value' => function($model, $key, $index, $column) {
-				$statuses = $model->getStatuses(true);
+				// $statuses = $model->getStatuses(true);
+                $statuses = $model->oStatus;
 				return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
@@ -418,7 +421,8 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['oUser'] = [
 			'attribute' => 'oUser',
 			'value' => function($model, $key, $index, $column) {
-				$users = $model->getUsers(true);
+				// $users = $model->getUsers(true);
+                $users = $model->oUser;
 				return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
@@ -513,9 +517,9 @@ class Reports extends \app\components\ActiveRecord
 	public function parseReportBody($update=true)
 	{
         $reports = $this->reports;
-        $users = $this->getUsers(true);
-        $reads = $this->getReads(true);
-        $comments = $this->getComments(true);
+        $comments = $this->oComment;
+        $reads = $this->oRead;
+        $users = $this->oUser;
     
         $html = $this->report_body;
         $html .= '<hr class="mt-5 mb-5"/>';

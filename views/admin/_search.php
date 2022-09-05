@@ -60,6 +60,9 @@ use ommu\report\models\ReportCategory;
 		<?php echo $form->field($model, 'status')
 			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
+		<?php echo $form->field($model, 'read')
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']); ?>
