@@ -24,6 +24,7 @@
  * @property string $slug
  *
  * The followings are the available model relations:
+ * @property ReportCategoryGrid $grid
  * @property Reports[] $reports
  * @property SourceMessage $title
  * @property SourceMessage $description
@@ -41,7 +42,6 @@ use yii\helpers\Inflector;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use app\models\Users;
-use ommu\report\models\view\ReportCategory as ReportCategoryView;
 
 class ReportCategory extends \app\components\ActiveRecord
 {
@@ -53,6 +53,9 @@ class ReportCategory extends \app\components\ActiveRecord
 	public $desc_i;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
+    public $oReport;
+    public $oUnresolved;
+    public $oResolved;
 
 	/**
 	 * @return string the associated database table name
@@ -108,12 +111,20 @@ class ReportCategory extends \app\components\ActiveRecord
 			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Category'),
 			'desc_i' => Yii::t('app', 'Description'),
-			'reports' => Yii::t('app', 'Reports'),
-			'resolved' => Yii::t('app', 'Resolved'),
-			'unresolved' => Yii::t('app', 'Unresolved'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
+			'oReport' => Yii::t('app', 'Reports'),
+			'oUnresolved' => Yii::t('app', 'Unresolved'),
+			'oResolved' => Yii::t('app', 'Resolved'),
 		];
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getGrid()
+	{
+		return $this->hasOne(ReportCategoryGrid::className(), ['id' => 'cat_id']);
 	}
 
 	/**
@@ -130,29 +141,13 @@ class ReportCategory extends \app\components\ActiveRecord
             ->alias('t')
             ->where(['t.cat_id' => $this->cat_id]);
         if ($status == 0) {
-            $model->unresolved();
+            $model->unresolved;
         } else if ($status == 1) {
-            $model->resolved();
+            $model->resolved;
         }
 		$reports = $model->count();
 
 		return $reports ? $reports : 0;
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getResolved($count=false)
-	{
-		return $this->getReports($count, 1);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getUnresolved($count=false)
-	{
-		return $this->getReports($count, 0);
 	}
 
 	/**
@@ -185,14 +180,6 @@ class ReportCategory extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(ReportCategoryView::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**
@@ -279,30 +266,33 @@ class ReportCategory extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		$this->templateColumns['unresolved'] = [
-			'attribute' => 'unresolved',
+		$this->templateColumns['oUnresolved'] = [
+			'attribute' => 'oUnresolved',
 			'value' => function($model, $key, $index, $column) {
-				$unresolved = $model->getUnresolved(true);
+				// $unresolved = $model->getUnresolved(true);
+                $unresolved = $model->oUnresolved;
 				return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['resolved'] = [
-			'attribute' => 'resolved',
+		$this->templateColumns['oResolved'] = [
+			'attribute' => 'oResolved',
 			'value' => function($model, $key, $index, $column) {
-				$resolved = $model->getResolved(true);
+				// $resolved = $model->getResolved(true);
+                $resolved = $model->oResolved;
 				return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['reports'] = [
-			'attribute' => 'reports',
+		$this->templateColumns['oReport'] = [
+			'attribute' => 'oReport',
 			'value' => function($model, $key, $index, $column) {
-				$reports = $model->getReports(true);
+				// $reports = $model->getReports(true);
+                $reports = $model->oReport;
 				return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
@@ -364,6 +354,22 @@ class ReportCategory extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getResolved()
+	{
+		return $this->oResolved;
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUnresolved()
+	{
+		return $this->oUnresolved;
+	}
+
+	/**
 	 * after find attributes
 	 */
 	public function afterFind()
@@ -374,6 +380,9 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+        $this->oReport = isset($this->grid) ? $this->grid->report : 0;
+        $this->oUnresolved = isset($this->grid) ? $this->grid->unresolved : 0;
+        $this->oResolved = isset($this->grid) ? $this->grid->resolved : 0;
 	}
 
 	/**

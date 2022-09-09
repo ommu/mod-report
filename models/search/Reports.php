@@ -67,7 +67,6 @@ class Reports extends ReportsModel
             $query = ReportsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view', 
             'grid grid',
 			// 'category.title category', 
 			// 'user user', 
