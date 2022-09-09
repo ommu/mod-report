@@ -1,16 +1,15 @@
 <?php
 /**
- * Report Users (report-user)
+ * Report Reads (report-read)
  * @var $this app\components\View
- * @var $this ommu\report\controllers\history\UserController
- * @var $model ommu\report\models\ReportUser
- * @var $searchModel ommu\report\models\search\ReportUser
+ * @var $this ommu\report\controllers\history\ReadController
+ * @var $model ommu\report\models\ReportRead
+ * @var $searchModel ommu\report\models\search\ReportRead
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 22 September 2017, 13:56 WIB
- * @modified date 18 January 2019, 15:38 WIB
+ * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
+ * @created date 28 August 2022, 09:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -33,7 +32,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="report-user-manage">
+<div class="report-read-manage">
 <?php Pjax::begin(); ?>
 
 <?php if ($report != null) {
@@ -66,14 +65,14 @@ array_push($columnData, [
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail'), 'class' => 'modal-btn']);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail View')]);
 		},
 		'update' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update'), 'class' => 'modal-btn']);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update View')]);
 		},
 		'delete' => function ($url, $model, $key) {
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-				'title' => Yii::t('app', 'Delete'),
+				'title' => Yii::t('app', 'Delete View'),
 				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 				'data-method'  => 'post',
 			]);

@@ -54,28 +54,28 @@ $attributes = [
 		'value' => $model->desc_i,
 	],
 	[
-		'attribute' => 'unresolved',
+		'attribute' => 'oReport',
 		'value' => function ($model) {
-			$unresolved = $model->getUnresolved(true);
+			$reports = $model->oReport;
+			return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports])]);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'oUnresolved',
+		'value' => function ($model) {
+			$unresolved = $model->oUnresolved;
 			return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'resolved',
+		'attribute' => 'oResolved',
 		'value' => function ($model) {
-			$resolved = $model->getResolved(true);
+			$resolved = $model->oResolved;
 			return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved])]);
-		},
-		'format' => 'html',
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'reports',
-		'value' => function ($model) {
-			$reports = $model->getReports(true);
-			return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,

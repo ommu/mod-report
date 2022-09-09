@@ -1,23 +1,22 @@
 <?php
 /**
- * UserController
- * @var $this ommu\report\controllers\history\UserController
- * @var $model ommu\report\models\ReportUser
+ * ReadController
+ * @var $this ommu\report\controllers\history\ReadController
+ * @var $model ommu\report\models\ReportRead
  *
- * UserController implements the CRUD actions for ReportUser model.
+ * ReadController implements the CRUD actions for ReportRead model.
  * Reference start
  * TOC :
- *	Index
- *	Manage
- *	Delete
+ *  Index
+ *  Manage
+ *  Delete
  *
- *	findModel
+ *  findModel
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 22 September 2017, 13:56 WIB
- * @modified date 18 January 2019, 15:38 WIB
+ * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
+ * @created date 28 August 2022, 09:25 WIB
  * @link https://github.com/ommu/mod-report
  *
  */
@@ -28,11 +27,10 @@ use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\report\models\ReportUser;
-use ommu\report\models\search\ReportUser as ReportUserSearch;
-use ommu\report\models\Reports;
+use ommu\report\models\ReportRead;
+use ommu\report\models\search\ReportRead as ReportViewSearch;
 
-class UserController extends Controller
+class ReadController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -59,7 +57,6 @@ class UserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                    'publish' => ['POST'],
                 ],
             ],
         ];
@@ -74,12 +71,12 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Lists all ReportUser models.
+	 * Lists all ReportRead models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-        $searchModel = new ReportUserSearch();
+        $searchModel = new ReportViewSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -95,13 +92,13 @@ class UserController extends Controller
 
         if (($report = Yii::$app->request->get('report')) != null) {
             $this->subMenuParam = $report;
-			$report = \ommu\report\models\Reports::findOne($report);
-		}
+            $report = \ommu\report\models\Reports::findOne($report);
+        }
         if (($user = Yii::$app->request->get('user')) != null) {
             $user = \app\models\Users::findOne($user);
         }
 
-		$this->view->title = Yii::t('app', 'Users');
+		$this->view->title = Yii::t('app', 'Reads');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -114,9 +111,9 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Deletes an existing ReportUser model.
+	 * Deletes an existing ReportRead model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
+	 * @param string $id
 	 * @return mixed
 	 */
 	public function actionDelete($id)
@@ -124,20 +121,20 @@ class UserController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-        Yii::$app->session->setFlash('success', Yii::t('app', 'Report user success deleted.'));
-        return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'report' => $model->report_id]);
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Report read success deleted.'));
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 	}
 
 	/**
-	 * Finds the ReportUser model based on its primary key value.
+	 * Finds the ReportRead model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
-	 * @param integer $id
-	 * @return ReportUser the loaded model
+	 * @param string $id
+	 * @return ReportRead the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        if (($model = ReportUser::findOne($id)) !== null) {
+        if (($model = ReportRead::findOne($id)) !== null) {
             return $model;
         }
 

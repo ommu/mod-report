@@ -28,7 +28,7 @@ class Reports extends ReportsModel
 	public function rules()
 	{
 		return [
-			[['report_id', 'status', 'cat_id', 'user_id', 'reports', 'modified_id'], 'integer'],
+			[['report_id', 'status', 'read', 'cat_id', 'user_id', 'reports', 'modified_id', 'oComment', 'oRead', 'oStatus', 'oUser'], 'integer'],
 			[['app', 'report_url', 'report_body', 'report_message', 'report_date', 'report_ip', 'modified_date', 'updated_date', 'categoryName', 'reporterDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -67,11 +67,44 @@ class Reports extends ReportsModel
             $query = ReportsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view', 
-			'category.title category', 
-			'user user', 
-			'modified modified'
+            'grid grid',
+			// 'category.title category', 
+			// 'user user', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+            $query->joinWith(['category.title category']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
+        // if ((isset($params['sort']) && in_array($params['sort'], ['oComment', '-oComment'])) || (isset($params['oComment']) && $params['oComment'] != '')) {
+        //     $query->joinWith(['comments comments']);
+        //     if (isset($params['sort']) && in_array($params['sort'], ['oComment', '-oComment'])) {
+        //         $query->select(['t.*', 'count(comments.id) as oComment']);
+        //     }
+        // }
+        // if ((isset($params['sort']) && in_array($params['sort'], ['oRead', '-oRead'])) || (isset($params['oRead']) && $params['oRead'] != '')) {
+        //     $query->joinWith(['reads reads']);
+        //     if (isset($params['sort']) && in_array($params['sort'], ['oRead', '-oRead'])) {
+        //         $query->select(['t.*', 'count(reads.id) as oRead']);
+        //     }
+        // }
+        // if ((isset($params['sort']) && in_array($params['sort'], ['oStatus', '-oStatus'])) || (isset($params['oStatus']) && $params['oStatus'] != '')) {
+        //     $query->joinWith(['statuses statuses']);
+        //     if (isset($params['sort']) && in_array($params['sort'], ['oStatus', '-oStatus'])) {
+        //         $query->select(['t.*', 'count(statuses.id) as oStatus']);
+        //     }
+        // }
+        // if ((isset($params['sort']) && in_array($params['sort'], ['oUser', '-oUser'])) || (isset($params['oUser']) && $params['oUser'] != '')) {
+        //     $query->joinWith(['users users']);
+        //     if (isset($params['sort']) && in_array($params['sort'], ['oUser', '-oUser'])) {
+        //         $query->select(['t.*', 'count(users.id) as oUser']);
+        //     }
+        // }
 
 		$query->groupBy(['report_id']);
 
@@ -102,21 +135,21 @@ class Reports extends ReportsModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['comments'] = [
-			'asc' => ['view.comments' => SORT_ASC],
-			'desc' => ['view.comments' => SORT_DESC],
+		$attributes['oComment'] = [
+			'asc' => ['grid.comment' => SORT_ASC],
+			'desc' => ['grid.comment' => SORT_DESC],
 		];
-		$attributes['histories'] = [
-			'asc' => ['view.histories' => SORT_ASC],
-			'desc' => ['view.histories' => SORT_DESC],
+		$attributes['oRead'] = [
+			'asc' => ['grid.read' => SORT_ASC],
+			'desc' => ['grid.read' => SORT_DESC],
 		];
-		$attributes['statuses'] = [
-			'asc' => ['view.statuses' => SORT_ASC],
-			'desc' => ['view.statuses' => SORT_DESC],
+		$attributes['oStatus'] = [
+			'asc' => ['grid.status' => SORT_ASC],
+			'desc' => ['grid.status' => SORT_DESC],
 		];
-		$attributes['users'] = [
-			'asc' => ['view.users' => SORT_ASC],
-			'desc' => ['view.users' => SORT_DESC],
+		$attributes['oUser'] = [
+			'asc' => ['grid.user' => SORT_ASC],
+			'desc' => ['grid.user' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -136,6 +169,7 @@ class Reports extends ReportsModel
 			't.report_id' => $this->report_id,
 			't.app' => $this->app,
 			't.status' => isset($params['status']) ? $params['status'] : $this->status,
+			't.read' => isset($params['read']) ? $params['read'] : $this->read,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.reports' => $this->reports,
@@ -145,8 +179,39 @@ class Reports extends ReportsModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-		$query->andFilterWhere(['like', 't.report_url', $this->report_url])
-			->andFilterWhere(['like', 't.report_body', $this->report_body])
+        if (isset($params['oComment']) && $params['oComment'] != '') {
+            if ($this->oComment == 1) {
+                $query->andWhere(['is not', 'comments.id', null]);
+            } else if ($this->oComment == 0) {
+                $query->andWhere(['is', 'comments.id', null]);
+            }
+        }
+        if (isset($params['oRead']) && $params['oRead'] != '') {
+            if ($this->oRead == 1) {
+                $query->andWhere(['is not', 'reads.id', null]);
+            } else if ($this->oRead == 0) {
+                $query->andWhere(['is', 'reads.id', null]);
+            }
+        }
+        if (isset($params['oStatus']) && $params['oStatus'] != '') {
+            if ($this->oStatus == 1) {
+                $query->andWhere(['is not', 'statuses.id', null]);
+            } else if ($this->oStatus == 0) {
+                $query->andWhere(['is', 'statuses.id', null]);
+            }
+        }
+        if (isset($params['oUser']) && $params['oUser'] != '') {
+            if ($this->oUser == 1) {
+                $query->andWhere(['is not', 'users.id', null]);
+            } else if ($this->oUser == 0) {
+                $query->andWhere(['is', 'users.id', null]);
+            }
+        }
+
+		$query->andFilterWhere(['or',
+                ['like', 't.report_body', $this->report_body],
+                ['like', 't.report_url', $this->report_body]
+            ])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
 			->andFilterWhere(['like', 'category.message', $this->categoryName])

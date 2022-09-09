@@ -28,7 +28,7 @@ class ReportCategory extends ReportCategoryModel
 	public function rules()
 	{
 		return [
-			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
+			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id', 'oReport', 'oUnresolved', 'oResolved'], 'integer'],
 			[['creation_date', 'modified_date', 'updated_date', 'slug', 'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -67,12 +67,24 @@ class ReportCategory extends ReportCategoryModel
             $query = ReportCategoryModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view', 
-			'title title', 
-			'description description', 
-			'creation creation', 
-			'modified modified'
+			'grid grid', 
+			// 'title title', 
+			// 'description description', 
+			// 'creation creation', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
+            $query->joinWith(['title title']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['desc_i', '-desc_i'])) || (isset($params['desc_i']) && $params['desc_i'] != '')) {
+            $query->joinWith(['description description']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {
+            $query->joinWith(['creation creation']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
 
 		$query->groupBy(['cat_id']);
 
@@ -103,22 +115,26 @@ class ReportCategory extends ReportCategoryModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['reports'] = [
-			'asc' => ['view.report_all' => SORT_ASC],
-			'desc' => ['view.report_all' => SORT_DESC],
+		$attributes['oReport'] = [
+			'asc' => ['grid.report' => SORT_ASC],
+			'desc' => ['grid.report' => SORT_DESC],
 		];
-		$attributes['resolved'] = [
-			'asc' => ['view.report_resolved' => SORT_ASC],
-			'desc' => ['view.report_resolved' => SORT_DESC],
+		$attributes['oUnresolved'] = [
+			'asc' => ['grid.unresolved' => SORT_ASC],
+			'desc' => ['grid.unresolved' => SORT_DESC],
 		];
-		$attributes['unresolved'] = [
-			'asc' => ['view.reports' => SORT_ASC],
-			'desc' => ['view.reports' => SORT_DESC],
+		$attributes['oResolved'] = [
+			'asc' => ['grid.resolved' => SORT_ASC],
+			'desc' => ['grid.resolved' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['cat_id' => SORT_DESC],
 		]);
+
+        if (Yii::$app->request->get('cat_id')) {
+            unset($params['cat_id']);
+        }
 
 		$this->load($params);
 
@@ -147,6 +163,28 @@ class ReportCategory extends ReportCategoryModel
                 $query->andFilterWhere(['IN', 't.publish', [0,1]]);
             } else {
                 $query->andFilterWhere(['t.publish' => $this->publish]);
+            }
+        }
+
+        if (isset($params['oReport']) && $params['oReport'] != '') {
+            if ($this->oReport == 1) {
+                $query->andWhere(['is not', 'reports.id', null]);
+            } else if ($this->oReport == 0) {
+                $query->andWhere(['is', 'reports.id', null]);
+            }
+        }
+        if (isset($params['oUnresolved']) && $params['oUnresolved'] != '') {
+            if ($this->oUnresolved == 1) {
+                $query->andWhere(['<>', 'grid.unresolved', 0]);
+            } else if ($this->oUnresolved == 0) {
+                $query->andWhere(['=', 'grid.unresolved', 0]);
+            }
+        }
+        if (isset($params['oResolved']) && $params['oResolved'] != '') {
+            if ($this->oResolved == 1) {
+                $query->andWhere(['<>', 'grid.resolved', 0]);
+            } else if ($this->oResolved == 0) {
+                $query->andWhere(['=', 'grid.resolved', 0]);
             }
         }
 
