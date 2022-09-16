@@ -25,46 +25,46 @@ class m220909_082027_report_module_alterTrigger_all_updateReportGrid extends \yi
 		// alter sp reportAfterInsertComment
 		$reportAfterInsertComment = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
+    FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.creation_date);
 
 	UPDATE `ommu_report_grid` SET `comment` = `comment` + 1 WHERE `id` = NEW.report_id;
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertComment);
 
 		// alter sp reportAfterInsertStatus
 		$reportAfterInsertStatus = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
+    FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.updated_date);
 
 	UPDATE `ommu_report_grid` SET `status` = `status` + 1 WHERE `id` = NEW.report_id;
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertStatus);
 
 		// alter sp reportAfterInsertRead
 		$reportAfterInsertRead = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertRead` AFTER INSERT ON `ommu_report_read` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertRead` AFTER INSERT ON `ommu_report_read` 
+    FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.creation_date);
 
 	UPDATE `ommu_report_grid` SET `read` = `read` + 1 WHERE `id` = NEW.report_id;
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertRead);
 
 		// alter sp reportAfterInsertUser
 		$reportAfterInsertUser = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertUser` AFTER INSERT ON `ommu_report_user` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertUser` AFTER INSERT ON `ommu_report_user` 
+    FOR EACH ROW BEGIN
 	UPDATE `ommu_report_grid` SET `user` = `user` + 1 WHERE `id` = NEW.report_id;
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertUser);
 	}
@@ -79,20 +79,20 @@ SQL;
 		// alter sp reportAfterInsertComment
 		$reportAfterInsertComment = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
+    FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.creation_date);
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertComment);
 
 		// alter sp reportAfterInsertStatus
 		$reportAfterInsertStatus = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
+    FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.updated_date);
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsertStatus);
 	}

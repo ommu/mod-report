@@ -22,8 +22,8 @@ class m220909_081025_report_module_alterTrigger_all_insertReportGrid extends \yi
 		// alter sp reportAfterInsert
 		$reportAfterInsert = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
+    FOR EACH ROW BEGIN
 	/* Report History */
 	INSERT `ommu_report_history` (`report_id`, `user_id`, `report_date`, `report_ip`)
 	VALUE (NEW.report_id, NEW.user_id, NEW.report_date, NEW.report_ip);
@@ -34,7 +34,7 @@ CREATE
 
 	INSERT `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
 	VALUE (NEW.report_id, 0, 0, 0, 0);
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsert);
 	}
@@ -46,8 +46,8 @@ SQL;
 		// alter sp reportAfterInsert
 		$reportAfterInsert = <<< SQL
 CREATE
-	TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
-	FOR EACH ROW BEGIN
+    TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
+    FOR EACH ROW BEGIN
 	/* Report History */
 	INSERT `ommu_report_history` (`report_id`, `user_id`, `report_date`, `report_ip`)
 	VALUE (NEW.report_id, NEW.user_id, NEW.report_date, NEW.report_ip);
@@ -55,7 +55,7 @@ CREATE
 	/* Report Status */
 	INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
-	END;
+    END;
 SQL;
 		$this->execute($reportAfterInsert);
 	}
