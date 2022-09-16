@@ -67,9 +67,15 @@ class ReportSetting extends ReportSettingModel
             $query = ReportSettingModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'category.title category', 
-			'modified modified'
+			// 'category.title category', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['auto_report_cat_id', '-auto_report_cat_id']))) {
+            $query->joinWith(['category.title category']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
 
 		$query->groupBy(['id']);
 
