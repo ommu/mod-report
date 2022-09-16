@@ -17,10 +17,10 @@ class m210807_121472_report_module_addView_reportCategory extends \yii\db\Migrat
 {
 	public function up()
 	{
-        $this->execute('DROP VIEW `_report_category`');
+		$this->execute('DROP VIEW `_report_category`');
 
-        // alter view _reports
-        $alterViewReportCategory = <<< SQL
+		// alter view _reports
+		$alterViewReportCategory = <<< SQL
 CREATE VIEW `_report_category` AS 
 select
   `a`.`cat_id` AS `cat_id`,
@@ -29,14 +29,14 @@ select
   count(`b`.`cat_id`) AS `report_all`
 from (`ommu_report_category` `a`
    left join `ommu_reports` `b`
-     on (`a`.`cat_id` = `b`.`cat_id`))
+	 on (`a`.`cat_id` = `b`.`cat_id`))
 group by `a`.`cat_id`;
 SQL;
-        $this->execute($alterViewReportCategory);
+		$this->execute($alterViewReportCategory);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP VIEW `_report_category`');
-    }
+		$this->execute('DROP VIEW `_report_category`');
+	}
 }

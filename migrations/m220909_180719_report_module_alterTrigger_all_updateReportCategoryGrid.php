@@ -17,14 +17,14 @@ class m220909_180719_report_module_alterTrigger_all_updateReportCategoryGrid ext
 {
 	public function up()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
 
-        // alter sp reportAfterInsert
-        $reportAfterInsert = <<< SQL
+		// alter sp reportAfterInsert
+		$reportAfterInsert = <<< SQL
 CREATE
-    TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
-    FOR EACH ROW BEGIN
+	TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
+	FOR EACH ROW BEGIN
 	/* Report History */
 	INSERT `ommu_report_history` (`report_id`, `user_id`, `report_date`, `report_ip`)
 	VALUE (NEW.report_id, NEW.user_id, NEW.report_date, NEW.report_ip);
@@ -33,18 +33,21 @@ CREATE
 	INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
 
-	IF (NEW.cat_id IS NOT NULL) {
-		UPDATE `ommu_report_category_grid` SET `report` = `report` + 1 WHERE `id` = NEW.cat_id;
-	}
-    END;
-SQL;
-        $this->execute($reportAfterInsert);
+	INSERT `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
+	VALUE (NEW.report_id, 0, 0, 0, 0);
 
-        // alter sp reportAfterUpdate
-        $reportAfterUpdate = <<< SQL
+	IF (NEW.cat_id IS NOT NULL) THEN
+		UPDATE `ommu_report_category_grid` SET `report` = `report` + 1 WHERE `id` = NEW.cat_id;
+	END IF;
+	END;
+SQL;
+		$this->execute($reportAfterInsert);
+
+		// alter sp reportAfterUpdate
+		$reportAfterUpdate = <<< SQL
 CREATE
-    TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
-    FOR EACH ROW BEGIN
+	TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
+	FOR EACH ROW BEGIN
 	DECLARE user_id_tr INT;
 	
 	/* Report History */
@@ -71,21 +74,21 @@ CREATE
 		SET a.`unresolved` = b.`reports`, a.`resolved` = b.`report_resolved`
 		WHERE a.`id` = NEW.`cat_id`;
 	END IF;
-    END;
+	END;
 SQL;
-        $this->execute($reportAfterUpdate);
+		$this->execute($reportAfterUpdate);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
 
-        // alter sp reportAfterInsert
-        $reportAfterInsert = <<< SQL
+		// alter sp reportAfterInsert
+		$reportAfterInsert = <<< SQL
 CREATE
-    TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
-    FOR EACH ROW BEGIN
+	TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
+	FOR EACH ROW BEGIN
 	/* Report History */
 	INSERT `ommu_report_history` (`report_id`, `user_id`, `report_date`, `report_ip`)
 	VALUE (NEW.report_id, NEW.user_id, NEW.report_date, NEW.report_ip);
@@ -93,15 +96,18 @@ CREATE
 	/* Report Status */
 	INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
-    END;
-SQL;
-        $this->execute($reportAfterInsert);
 
-        // alter sp reportAfterUpdate
-        $reportAfterUpdate = <<< SQL
+	INSERT `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
+	VALUE (NEW.report_id, 0, 0, 0, 0);
+	END;
+SQL;
+		$this->execute($reportAfterInsert);
+
+		// alter sp reportAfterUpdate
+		$reportAfterUpdate = <<< SQL
 CREATE
-    TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
-    FOR EACH ROW BEGIN
+	TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
+	FOR EACH ROW BEGIN
 	DECLARE user_id_tr INT;
 	
 	/* Report History */
@@ -120,8 +126,8 @@ CREATE
 		INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 		VALUE (NEW.status, NEW.report_id, user_id_tr, NEW.report_message, NEW.updated_date, NEW.report_ip);
 	END IF;	
-    END;
+	END;
 SQL;
-        $this->execute($reportAfterUpdate);
-    }
+		$this->execute($reportAfterUpdate);
+	}
 }

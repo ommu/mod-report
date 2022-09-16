@@ -38,8 +38,8 @@ class m210807_102603_report_module_create_table_comment extends \yii\db\Migratio
 				'CONSTRAINT ommu_report_comment_ibfk_2 FOREIGN KEY ([[user_id]]) REFERENCES ommu_users ([[user_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);
 
-            // create view _report_statistic_comment
-            $createViewStatisticComment = <<< SQL
+			// create view _report_statistic_comment
+			$createViewStatisticComment = <<< SQL
 CREATE VIEW `_report_statistic_comment` AS 
 SELECT
   `a`.`report_id` AS `report_id`,
@@ -48,7 +48,7 @@ SELECT
 FROM `ommu_report_comment` `a`
 GROUP BY `a`.`report_id`;
 SQL;
-            $this->execute($createViewStatisticComment);
+			$this->execute($createViewStatisticComment);
 		}
 	}
 

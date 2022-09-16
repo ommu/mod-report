@@ -49,8 +49,8 @@ class m210807_100628_report_module_create_table_category extends \yii\db\Migrati
 				'name'
 			);
 
-            // create view _report_category
-            $createViewCategory = <<< SQL
+			// create view _report_category
+			$createViewCategory = <<< SQL
 CREATE VIEW `_report_category` AS 
 SELECT
   `a`.`cat_id` AS `cat_id`,
@@ -59,10 +59,10 @@ SELECT
   COUNT(`b`.`cat_id`) AS `report_all`
 FROM (`ommu_report_category` `a`
    LEFT JOIN `ommu_reports` `b`
-     ON (`a`.`cat_id` = `b`.`cat_id`))
+	 ON (`a`.`cat_id` = `b`.`cat_id`))
 GROUP BY `a`.`cat_id`;
 SQL;
-            $this->execute($createViewCategory);
+			$this->execute($createViewCategory);
 
 			$this->batchInsert($tableName, ['publish', 'name', 'desc'], [
 				['1', SourceMessage::setMessage('Spam', 'report category title'), SourceMessage::setMessage('Spam', 'report category description')],

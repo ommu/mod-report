@@ -15,7 +15,7 @@ use yii\db\Schema;
 
 class m220831_184611_report_module_addColumn_read_reports extends \yii\db\Migration
 {
-    public $tableName = 'ommu_reports';
+	public $tableName = 'ommu_reports';
 
 	public function up()
 	{
