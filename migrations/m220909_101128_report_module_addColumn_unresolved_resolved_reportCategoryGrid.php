@@ -15,7 +15,7 @@ use yii\db\Schema;
 
 class m220909_101128_report_module_addColumn_unresolved_resolved_reportCategoryGrid extends \yii\db\Migration
 {
-    public $tableName = 'ommu_report_category_grid';
+	public $tableName = 'ommu_report_category_grid';
 
 	public function up()
 	{

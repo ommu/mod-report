@@ -17,18 +17,18 @@ class m220828_030428_report_module_addTrigger_all extends \yii\db\Migration
 {
 	public function up()
 	{
-        $this->execute('DROP TRIGGER `reportBeforeUpdateCategory`');
-        $this->execute('DROP TRIGGER `reportAfterDeleteCategory`');
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportBeforeUpdate`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
-        $this->execute('DROP TRIGGER `reportAfterInsertComment`');
-        $this->execute('DROP TRIGGER `reportBeforeUpdateComment`');
-        $this->execute('DROP TRIGGER `reportAfterInsertStatus`');
-        $this->execute('DROP TRIGGER `reportAfterInsertHistory`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateCategory`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterDeleteCategory`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertStatus`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertHistory`');
 
-        // alter sp reportBeforeUpdateCategory
-        $reportBeforeUpdateCategory = <<< SQL
+		// alter sp reportBeforeUpdateCategory
+		$reportBeforeUpdateCategory = <<< SQL
 CREATE
     TRIGGER `reportBeforeUpdateCategory` BEFORE UPDATE ON `ommu_report_category` 
     FOR EACH ROW BEGIN
@@ -37,10 +37,10 @@ CREATE
 	END IF;	
     END;
 SQL;
-        $this->execute($reportBeforeUpdateCategory);
+		$this->execute($reportBeforeUpdateCategory);
 
-        // alter sp reportAfterDeleteCategory
-        $reportAfterDeleteCategory = <<< SQL
+		// alter sp reportAfterDeleteCategory
+		$reportAfterDeleteCategory = <<< SQL
 CREATE
     TRIGGER `reportAfterDeleteCategory` AFTER DELETE ON `ommu_report_category` 
     FOR EACH ROW BEGIN
@@ -52,10 +52,10 @@ CREATE
 	UPDATE `source_message` SET `message`=CONCAT(message,'_DELETED') WHERE `id`=OLD.desc;
     END;
 SQL;
-        $this->execute($reportAfterDeleteCategory);
+		$this->execute($reportAfterDeleteCategory);
 
-        // alter sp reportAfterInsert
-        $reportAfterInsert = <<< SQL
+		// alter sp reportAfterInsert
+		$reportAfterInsert = <<< SQL
 CREATE
     TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -68,10 +68,10 @@ CREATE
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
     END;
 SQL;
-        $this->execute($reportAfterInsert);
+		$this->execute($reportAfterInsert);
 
-        // alter sp reportBeforeUpdate
-        $reportBeforeUpdate = <<< SQL
+		// alter sp reportBeforeUpdate
+		$reportBeforeUpdate = <<< SQL
 CREATE
     TRIGGER `reportBeforeUpdate` BEFORE UPDATE ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -84,10 +84,10 @@ CREATE
 	END IF;	
     END;
 SQL;
-        $this->execute($reportBeforeUpdate);
+		$this->execute($reportBeforeUpdate);
 
-        // alter sp reportAfterUpdate
-        $reportAfterUpdate = <<< SQL
+		// alter sp reportAfterUpdate
+		$reportAfterUpdate = <<< SQL
 CREATE
     TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -111,20 +111,20 @@ CREATE
 	END IF;	
     END;
 SQL;
-        $this->execute($reportAfterUpdate);
+		$this->execute($reportAfterUpdate);
 
-        // alter sp reportAfterInsertComment
-        $reportAfterInsertComment = <<< SQL
+		// alter sp reportAfterInsertComment
+		$reportAfterInsertComment = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
     FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.creation_date);
     END;
 SQL;
-        $this->execute($reportAfterInsertComment);
+		$this->execute($reportAfterInsertComment);
 
-        // alter sp reportBeforeUpdateComment
-        $reportBeforeUpdateComment = <<< SQL
+		// alter sp reportBeforeUpdateComment
+		$reportBeforeUpdateComment = <<< SQL
 CREATE
     TRIGGER `reportBeforeUpdateComment` BEFORE UPDATE ON `ommu_report_comment` 
     FOR EACH ROW BEGIN
@@ -133,39 +133,39 @@ CREATE
 	END IF;	
     END;
 SQL;
-        $this->execute($reportBeforeUpdateComment);
+		$this->execute($reportBeforeUpdateComment);
 
-        // alter sp reportAfterInsertStatus
-        $reportAfterInsertStatus = <<< SQL
+		// alter sp reportAfterInsertStatus
+		$reportAfterInsertStatus = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
     FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.updated_date);
     END;
 SQL;
-        $this->execute($reportAfterInsertStatus);
+		$this->execute($reportAfterInsertStatus);
 
-        // alter sp reportAfterInsertHistory
-        $reportAfterInsertHistory = <<< SQL
+		// alter sp reportAfterInsertHistory
+		$reportAfterInsertHistory = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertHistory` AFTER INSERT ON `ommu_report_history` 
     FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.report_date);
     END;
 SQL;
-        $this->execute($reportAfterInsertHistory);
+		$this->execute($reportAfterInsertHistory);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP TRIGGER `reportBeforeUpdateCategory`');
-        $this->execute('DROP TRIGGER `reportAfterDeleteCategory`');
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportBeforeUpdate`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
-        $this->execute('DROP TRIGGER `reportAfterInsertComment`');
-        $this->execute('DROP TRIGGER `reportBeforeUpdateComment`');
-        $this->execute('DROP TRIGGER `reportAfterInsertStatus`');
-        $this->execute('DROP TRIGGER `reportAfterInsertHistory`');
-    }
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateCategory`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterDeleteCategory`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertStatus`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertHistory`');
+	}
 }

@@ -18,9 +18,9 @@ class m190319_120101_report_module_insert_menu extends \yii\db\Migration
 {
 	public function up()
 	{
-        $menuTable = Configs::instance()->menuTable;
+		$menuTable = Configs::instance()->menuTable;
 		$tableName = Yii::$app->db->tablePrefix . $menuTable;
-        if (Yii::$app->db->getTableSchema($tableName, true)) {
+		if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Reports', 'report', null, Menu::getParentId('Dashboard#rbac'), '/report/admin/index', null, null],
 				['Report Settings', 'report', null, Menu::getParentId('Settings#rbac'), '/report/setting/admin/index', null, null],

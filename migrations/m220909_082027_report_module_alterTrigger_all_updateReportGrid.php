@@ -17,13 +17,13 @@ class m220909_082027_report_module_alterTrigger_all_updateReportGrid extends \yi
 {
 	public function up()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsertComment`');
-        $this->execute('DROP TRIGGER `reportAfterInsertStatus`');
-        $this->execute('DROP TRIGGER `reportAfterInsertRead`');
-        $this->execute('DROP TRIGGER `reportAfterInsertUser`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertStatus`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertRead`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertUser`');
 
-        // alter sp reportAfterInsertComment
-        $reportAfterInsertComment = <<< SQL
+		// alter sp reportAfterInsertComment
+		$reportAfterInsertComment = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
     FOR EACH ROW BEGIN
@@ -32,10 +32,10 @@ CREATE
 	UPDATE `ommu_report_grid` SET `comment` = `comment` + 1 WHERE `id` = NEW.report_id;
     END;
 SQL;
-        $this->execute($reportAfterInsertComment);
+		$this->execute($reportAfterInsertComment);
 
-        // alter sp reportAfterInsertStatus
-        $reportAfterInsertStatus = <<< SQL
+		// alter sp reportAfterInsertStatus
+		$reportAfterInsertStatus = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
     FOR EACH ROW BEGIN
@@ -44,10 +44,10 @@ CREATE
 	UPDATE `ommu_report_grid` SET `status` = `status` + 1 WHERE `id` = NEW.report_id;
     END;
 SQL;
-        $this->execute($reportAfterInsertStatus);
+		$this->execute($reportAfterInsertStatus);
 
-        // alter sp reportAfterInsertRead
-        $reportAfterInsertRead = <<< SQL
+		// alter sp reportAfterInsertRead
+		$reportAfterInsertRead = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertRead` AFTER INSERT ON `ommu_report_read` 
     FOR EACH ROW BEGIN
@@ -56,44 +56,44 @@ CREATE
 	UPDATE `ommu_report_grid` SET `read` = `read` + 1 WHERE `id` = NEW.report_id;
     END;
 SQL;
-        $this->execute($reportAfterInsertRead);
+		$this->execute($reportAfterInsertRead);
 
-        // alter sp reportAfterInsertUser
-        $reportAfterInsertUser = <<< SQL
+		// alter sp reportAfterInsertUser
+		$reportAfterInsertUser = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertUser` AFTER INSERT ON `ommu_report_user` 
     FOR EACH ROW BEGIN
 	UPDATE `ommu_report_grid` SET `user` = `user` + 1 WHERE `id` = NEW.report_id;
     END;
 SQL;
-        $this->execute($reportAfterInsertUser);
-    }
+		$this->execute($reportAfterInsertUser);
+	}
 
 	public function down()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsertComment`');
-        $this->execute('DROP TRIGGER `reportAfterInsertStatus`');
-        $this->execute('DROP TRIGGER `reportAfterInsertRead`');
-        $this->execute('DROP TRIGGER `reportAfterInsertUser`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertComment`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertStatus`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertRead`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsertUser`');
 
-        // alter sp reportAfterInsertComment
-        $reportAfterInsertComment = <<< SQL
+		// alter sp reportAfterInsertComment
+		$reportAfterInsertComment = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertComment` AFTER INSERT ON `ommu_report_comment` 
     FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.creation_date);
     END;
 SQL;
-        $this->execute($reportAfterInsertComment);
+		$this->execute($reportAfterInsertComment);
 
-        // alter sp reportAfterInsertStatus
-        $reportAfterInsertStatus = <<< SQL
+		// alter sp reportAfterInsertStatus
+		$reportAfterInsertStatus = <<< SQL
 CREATE
     TRIGGER `reportAfterInsertStatus` AFTER INSERT ON `ommu_report_status` 
     FOR EACH ROW BEGIN
 	CALL reportSetUser(NEW.report_id, NEW.user_id, NEW.updated_date);
     END;
 SQL;
-        $this->execute($reportAfterInsertStatus);
+		$this->execute($reportAfterInsertStatus);
 	}
 }

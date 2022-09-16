@@ -17,9 +17,9 @@ class m210807_121431_report_module_dropColumn_publish_modifiedDate_modifiedId_up
 {
 	public function up()
 	{
-        $this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateUser`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportBeforeUpdateUser`');
 
-        // alter table ommu_report_user
+		// alter table ommu_report_user
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_report_user';
 		if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->dropColumn($tableName, 'publish');

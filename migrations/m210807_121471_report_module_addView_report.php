@@ -17,36 +17,36 @@ class m210807_121471_report_module_addView_report extends \yii\db\Migration
 {
 	public function up()
 	{
-        $this->execute('DROP VIEW `_reports`');
+		$this->execute('DROP VIEW `_reports`');
 
-        // alter view _reports
-        $alterViewReports = <<< SQL
+		// alter view _reports
+		$alterViewReports = <<< SQL
 CREATE VIEW `_reports` AS 
 select
   `a`.`report_id`   AS `report_id`,
   count(`b`.`id`)   AS `histories`,
-  `c`.`resolved`    AS `resolved`,
+  `c`.`resolved`	AS `resolved`,
   `c`.`unresolved`  AS `unresolved`,
-  `c`.`statuses`    AS `statuses`,
-  `d`.`comments`    AS `comments`,
+  `c`.`statuses`	AS `statuses`,
+  `d`.`comments`	AS `comments`,
   `d`.`comment_all` AS `comment_all`,
-  `e`.`users`       AS `users`
+  `e`.`users`	   AS `users`
 from ((((`ommu_reports` `a`
-      left join `ommu_report_history` `b`
-        on (`a`.`report_id` = `b`.`report_id`))
-     left join `_report_statistic_status` `c`
-       on (`a`.`report_id` = `c`.`report_id`))
-    left join `_report_statistic_comment` `d`
-      on (`a`.`report_id` = `d`.`report_id`))
+	  left join `ommu_report_history` `b`
+		on (`a`.`report_id` = `b`.`report_id`))
+	 left join `_report_statistic_status` `c`
+	   on (`a`.`report_id` = `c`.`report_id`))
+	left join `_report_statistic_comment` `d`
+	  on (`a`.`report_id` = `d`.`report_id`))
    left join `_report_statistic_user` `e`
-     on (`a`.`report_id` = `e`.`report_id`))
+	 on (`a`.`report_id` = `e`.`report_id`))
 group by `a`.`report_id`;
 SQL;
-        $this->execute($alterViewReports);
+		$this->execute($alterViewReports);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP VIEW `_reports`');
-    }
+		$this->execute('DROP VIEW `_reports`');
+	}
 }

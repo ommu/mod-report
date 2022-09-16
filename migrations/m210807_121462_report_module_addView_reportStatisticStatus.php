@@ -17,10 +17,10 @@ class m210807_121462_report_module_addView_reportStatisticStatus extends \yii\db
 {
 	public function up()
 	{
-        $this->execute('DROP VIEW `_report_statistic_status`');
+		$this->execute('DROP VIEW `_report_statistic_status`');
 
-        // alter view _report_statistic_status
-        $alterViewReportStatisticStatus = <<< SQL
+		// alter view _report_statistic_status
+		$alterViewReportStatisticStatus = <<< SQL
 CREATE VIEW `_report_statistic_status` AS 
 select
   `a`.`report_id` AS `report_id`,
@@ -30,11 +30,11 @@ select
 from `ommu_report_status` `a`
 group by `a`.`report_id`;
 SQL;
-        $this->execute($alterViewReportStatisticStatus);
+		$this->execute($alterViewReportStatisticStatus);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP VIEW `_report_statistic_status`');
-    }
+		$this->execute('DROP VIEW `_report_statistic_status`');
+	}
 }

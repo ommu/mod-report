@@ -17,10 +17,10 @@ class m210807_121461_report_module_addView_reportStatisticComment extends \yii\d
 {
 	public function up()
 	{
-        $this->execute('DROP VIEW `_report_statistic_comment`');
+		$this->execute('DROP VIEW `_report_statistic_comment`');
 
-        // alter view _report_statistic_comment
-        $alterViewReportStatisticComment = <<< SQL
+		// alter view _report_statistic_comment
+		$alterViewReportStatisticComment = <<< SQL
 CREATE VIEW `_report_statistic_comment` AS 
 select
   `a`.`report_id` AS `report_id`,
@@ -29,11 +29,11 @@ select
 from `ommu_report_comment` `a`
 group by `a`.`report_id`;
 SQL;
-        $this->execute($alterViewReportStatisticComment);
+		$this->execute($alterViewReportStatisticComment);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP VIEW `_report_statistic_comment`');
-    }
+		$this->execute('DROP VIEW `_report_statistic_comment`');
+	}
 }

@@ -17,11 +17,11 @@ class m220909_180719_report_module_alterTrigger_all_updateReportCategoryGrid ext
 {
 	public function up()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
 
-        // alter sp reportAfterInsert
-        $reportAfterInsert = <<< SQL
+		// alter sp reportAfterInsert
+		$reportAfterInsert = <<< SQL
 CREATE
     TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -33,15 +33,18 @@ CREATE
 	INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
 
-	IF (NEW.cat_id IS NOT NULL) {
+	INSERT `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
+	VALUE (NEW.report_id, 0, 0, 0, 0);
+
+	IF (NEW.cat_id IS NOT NULL) THEN
 		UPDATE `ommu_report_category_grid` SET `report` = `report` + 1 WHERE `id` = NEW.cat_id;
-	}
+	END IF;
     END;
 SQL;
-        $this->execute($reportAfterInsert);
+		$this->execute($reportAfterInsert);
 
-        // alter sp reportAfterUpdate
-        $reportAfterUpdate = <<< SQL
+		// alter sp reportAfterUpdate
+		$reportAfterUpdate = <<< SQL
 CREATE
     TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -73,16 +76,16 @@ CREATE
 	END IF;
     END;
 SQL;
-        $this->execute($reportAfterUpdate);
+		$this->execute($reportAfterUpdate);
 	}
 
 	public function down()
 	{
-        $this->execute('DROP TRIGGER `reportAfterInsert`');
-        $this->execute('DROP TRIGGER `reportAfterUpdate`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterInsert`');
+		$this->execute('DROP TRIGGER IF EXISTS `reportAfterUpdate`');
 
-        // alter sp reportAfterInsert
-        $reportAfterInsert = <<< SQL
+		// alter sp reportAfterInsert
+		$reportAfterInsert = <<< SQL
 CREATE
     TRIGGER `reportAfterInsert` AFTER INSERT ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -93,12 +96,15 @@ CREATE
 	/* Report Status */
 	INSERT `ommu_report_status` (`status`, `report_id`, `user_id`, `report_message`, `updated_date`, `updated_ip`)
 	VALUE (NEW.status, NEW.report_id, NEW.user_id, NEW.report_body, NEW.report_date, NEW.report_ip);
+
+	INSERT `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
+	VALUE (NEW.report_id, 0, 0, 0, 0);
     END;
 SQL;
-        $this->execute($reportAfterInsert);
+		$this->execute($reportAfterInsert);
 
-        // alter sp reportAfterUpdate
-        $reportAfterUpdate = <<< SQL
+		// alter sp reportAfterUpdate
+		$reportAfterUpdate = <<< SQL
 CREATE
     TRIGGER `reportAfterUpdate` AFTER UPDATE ON `ommu_reports` 
     FOR EACH ROW BEGIN
@@ -122,6 +128,6 @@ CREATE
 	END IF;	
     END;
 SQL;
-        $this->execute($reportAfterUpdate);
-    }
+		$this->execute($reportAfterUpdate);
+	}
 }

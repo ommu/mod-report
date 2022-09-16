@@ -17,21 +17,21 @@ class m220909_080739_report_module_insertRow_reportGrid extends \yii\db\Migratio
 {
 	public function up()
 	{
-        $inserRowReportGrid = <<< SQL
+		$inserRowReportGrid = <<< SQL
 INSERT INTO `ommu_report_grid` (`id`, `comment`, `read`, `status`, `user`) 
 
 SELECT 
-    a.report_id AS id,
-    case when a.comments is null then 0 else a.comments end AS `comments`,
-    case when a.reads is null then 0 else a.reads end AS `reads`,
-    case when a.statuses is null then 0 else a.statuses end AS `statuses`,
-    case when a.users is null then 0 else a.users end AS `users`
+	a.report_id AS id,
+	case when a.comments is null then 0 else a.comments end AS `comments`,
+	case when a.reads is null then 0 else a.reads end AS `reads`,
+	case when a.statuses is null then 0 else a.statuses end AS `statuses`,
+	case when a.users is null then 0 else a.users end AS `users`
 FROM _reports AS a
 LEFT JOIN ommu_report_grid AS b
-    ON b.id = a.report_id
+	ON b.id = a.report_id
 WHERE
 	b.id IS NULL;
 SQL;
-        $this->execute($inserRowReportGrid);
+		$this->execute($inserRowReportGrid);
 	}
 }
