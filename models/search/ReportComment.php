@@ -67,11 +67,23 @@ class ReportComment extends ReportCommentModel
             $query = ReportCommentModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'report report', 
-			'report.category.title category', 
-			'user user', 
-			'modified modified'
+			// 'report report', 
+			// 'report.category.title category', 
+			// 'user user', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (isset($params['reportBody']) && $params['reportBody'] != '') || (isset($params['categoryId']) && $params['categoryId'] != '')) {
+            $query->joinWith(['report report']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['report.category.title category']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
 
 		$query->groupBy(['comment_id']);
 
