@@ -273,7 +273,7 @@ class ReportCategory extends \app\components\ActiveRecord
                 $unresolved = $model->oUnresolved;
 				return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -284,7 +284,7 @@ class ReportCategory extends \app\components\ActiveRecord
                 $resolved = $model->oResolved;
 				return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -295,7 +295,7 @@ class ReportCategory extends \app\components\ActiveRecord
                 $reports = $model->oReport;
 				return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
