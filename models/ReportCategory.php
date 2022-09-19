@@ -141,9 +141,9 @@ class ReportCategory extends \app\components\ActiveRecord
             ->alias('t')
             ->where(['t.cat_id' => $this->cat_id]);
         if ($status == 0) {
-            $model->unresolved;
+            $model->unresolved();
         } else if ($status == 1) {
-            $model->resolved;
+            $model->resolved();
         }
 		$reports = $model->count();
 

@@ -18,7 +18,6 @@
  * @property string $modified_date
  *
  * The followings are the available model relations:
- * @property ReportCategory $0
  *
  */
 
@@ -28,9 +27,7 @@ use Yii;
 
 class ReportCategoryGrid extends \app\components\ActiveRecord
 {
-    public $gridForbiddenColumn = ['idName'];
-
-	public $idName;
+    public $gridForbiddenColumn = [];
 
 	/**
 	 * @return string the associated database table name
@@ -64,16 +61,7 @@ class ReportCategoryGrid extends \app\components\ActiveRecord
 			'resolved' => Yii::t('app', 'Resolved'),
 			'report' => Yii::t('app', 'Report'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
-			'idName' => Yii::t('app', 'Id'),
 		];
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function get0()
-	{
-		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'id']);
 	}
 
 	/**
@@ -90,46 +78,6 @@ class ReportCategoryGrid extends \app\components\ActiveRecord
         if (!$this->hasMethod('search')) {
             return;
         }
-
-		$this->templateColumns['_no'] = [
-			'header' => '#',
-			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class' => 'text-center'],
-		];
-		$this->templateColumns['id'] = [
-			'attribute' => 'id',
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->idRltn) ? $model->idRltn->title->message : '-';
-				// return $model->idName;
-			},
-			'filter' => ReportCategory::getCategory(),
-			'visible' => !Yii::$app->request->get('id') ? true : false,
-		];
-		$this->templateColumns['unresolved'] = [
-			'attribute' => 'unresolved',
-			'value' => function($model, $key, $index, $column) {
-				return $model->unresolved;
-			},
-		];
-		$this->templateColumns['resolved'] = [
-			'attribute' => 'resolved',
-			'value' => function($model, $key, $index, $column) {
-				return $model->resolved;
-			},
-		];
-		$this->templateColumns['report'] = [
-			'attribute' => 'report',
-			'value' => function($model, $key, $index, $column) {
-				return $model->report;
-			},
-		];
-		$this->templateColumns['modified_date'] = [
-			'attribute' => 'modified_date',
-			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asDatetime($model->modified_date, 'medium');
-			},
-			'filter' => $this->filterDatepicker($this, 'modified_date'),
-		];
 	}
 
 	/**
@@ -151,31 +99,5 @@ class ReportCategoryGrid extends \app\components\ActiveRecord
             $model = self::findOne($id);
             return $model;
         }
-	}
-
-	/**
-	 * function getGrid
-	 */
-	public static function getGrid($array=true) 
-	{
-		$model = self::find()->alias('t')
-			->select(['t.id', 't.id']);
-		$model = $model->orderBy('t.id ASC')->all();
-
-        if ($array == true) {
-            return \yii\helpers\ArrayHelper::map($model, 'id', 'id');
-        }
-
-		return $model;
-	}
-
-	/**
-	 * after find attributes
-	 */
-	public function afterFind()
-	{
-		parent::afterFind();
-
-		// $this->idName = isset($this->idRltn) ? $this->idRltn->title->message : '-';
 	}
 }

@@ -139,14 +139,14 @@ class ReportComment extends ReportCommentModel
 			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
-        if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
-            }
+            $query->andFilterWhere(['t.publish' => $this->publish]);
+        }
+
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.comment_text', $this->comment_text])

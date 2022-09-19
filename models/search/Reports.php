@@ -181,30 +181,30 @@ class Reports extends ReportsModel
 
         if (isset($params['oComment']) && $params['oComment'] != '') {
             if ($this->oComment == 1) {
-                $query->andWhere(['is not', 'comments.id', null]);
+                $query->andWhere(['<>', 'grid.comment', 0]);
             } else if ($this->oComment == 0) {
-                $query->andWhere(['is', 'comments.id', null]);
+                $query->andWhere(['=', 'grid.comment', 0]);
             }
         }
         if (isset($params['oRead']) && $params['oRead'] != '') {
             if ($this->oRead == 1) {
-                $query->andWhere(['is not', 'reads.id', null]);
+                $query->andWhere(['<>', 'grid.read', 0]);
             } else if ($this->oRead == 0) {
-                $query->andWhere(['is', 'reads.id', null]);
+                $query->andWhere(['=', 'grid.read', 0]);
             }
         }
         if (isset($params['oStatus']) && $params['oStatus'] != '') {
             if ($this->oStatus == 1) {
-                $query->andWhere(['is not', 'statuses.id', null]);
+                $query->andWhere(['<>', 'grid.status', 0]);
             } else if ($this->oStatus == 0) {
-                $query->andWhere(['is', 'statuses.id', null]);
+                $query->andWhere(['=', 'grid.status', 0]);
             }
         }
         if (isset($params['oUser']) && $params['oUser'] != '') {
             if ($this->oUser == 1) {
-                $query->andWhere(['is not', 'users.id', null]);
+                $query->andWhere(['<>', 'grid.user', 0]);
             } else if ($this->oUser == 0) {
-                $query->andWhere(['is', 'users.id', null]);
+                $query->andWhere(['=', 'grid.user', 0]);
             }
         }
 

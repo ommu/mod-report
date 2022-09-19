@@ -156,21 +156,11 @@ class ReportCategory extends ReportCategoryModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-        if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-        } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
-            }
-        }
-
         if (isset($params['oReport']) && $params['oReport'] != '') {
             if ($this->oReport == 1) {
-                $query->andWhere(['is not', 'reports.id', null]);
+                $query->andWhere(['<>', 'grid.report', 0]);
             } else if ($this->oReport == 0) {
-                $query->andWhere(['is', 'reports.id', null]);
+                $query->andWhere(['=', 'grid.report', 0]);
             }
         }
         if (isset($params['oUnresolved']) && $params['oUnresolved'] != '') {
@@ -186,6 +176,16 @@ class ReportCategory extends ReportCategoryModel
             } else if ($this->oResolved == 0) {
                 $query->andWhere(['=', 'grid.resolved', 0]);
             }
+        }
+
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+        } else {
+            $query->andFilterWhere(['t.publish' => $this->publish]);
+        }
+
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.slug', $this->slug])
