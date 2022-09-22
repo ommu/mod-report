@@ -67,12 +67,20 @@ class Reports extends ReportsModel
             $query = ReportsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-            'grid grid',
+            // 'grid grid',
 			// 'category.title category', 
 			// 'user user', 
 			// 'modified modified'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['oComment', '-oComment', 'oRead', '-oRead', 'oStatus', '-oStatus', 'oUser', '-oUser'])) || (
+            (isset($params['oComment']) && $params['oComment'] != '') ||
+            (isset($params['oRead']) && $params['oRead'] != '') ||
+            (isset($params['oStatus']) && $params['oStatus'] != '') ||
+            (isset($params['oUser']) && $params['oUser'] != '')
+        )) {
+            $query->joinWith(['grid grid']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
             $query->joinWith(['category.title category']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {

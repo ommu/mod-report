@@ -67,12 +67,19 @@ class ReportCategory extends ReportCategoryModel
             $query = ReportCategoryModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'grid grid', 
+			// 'grid grid', 
 			// 'title title', 
 			// 'description description', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['oReport', '-oReport', 'oUnresolved', '-oUnresolved', 'oResolved', '-oResolved'])) || (
+            (isset($params['oReport']) && $params['oReport'] != '') ||
+            (isset($params['oUnresolved']) && $params['oUnresolved'] != '') ||
+            (isset($params['oResolved']) && $params['oResolved'] != '')
+        )) {
+            $query->joinWith(['grid grid']);
+        }
         if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
             $query->joinWith(['title title']);
         }

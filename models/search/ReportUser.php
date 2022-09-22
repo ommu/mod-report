@@ -71,7 +71,11 @@ class ReportUser extends ReportUserModel
 			// 'report.category.title category', 
 			// 'user user', 
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (isset($params['reportBody']) && $params['reportBody'] != '') || (isset($params['categoryId']) && $params['categoryId'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (
+            (isset($params['reportBody']) && $params['reportBody'] != '') || 
+            (isset($params['categoryId']) && $params['categoryId'] != '') || 
+            (isset($params['category']) && $params['category'] != '')
+        )) {
             $query->joinWith(['report report']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {

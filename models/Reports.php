@@ -505,7 +505,7 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseReportBody($update=true)
+	public function parseReportBody()
 	{
         $reports = $this->reports;
         $comments = $this->oComment;
