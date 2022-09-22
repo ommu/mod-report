@@ -69,9 +69,13 @@ class ReportHistory extends ReportHistoryModel
 		$query->joinWith([
 			// 'report report', 
 			// 'report.category.title category', 
-			'user user'
+			// 'user user'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (isset($params['reportBody']) && $params['reportBody'] != '') || (isset($params['categoryId']) && $params['categoryId'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (
+            (isset($params['reportBody']) && $params['reportBody'] != '') || 
+            (isset($params['categoryId']) && $params['categoryId'] != '') || 
+            (isset($params['category']) && $params['category'] != '')
+        )) {
             $query->joinWith(['report report']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {

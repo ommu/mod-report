@@ -91,57 +91,6 @@ class ReportGrid extends \app\components\ActiveRecord
         if (!$this->hasMethod('search')) {
             return;
         }
-
-		$this->templateColumns['_no'] = [
-			'header' => '#',
-			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class' => 'text-center'],
-		];
-		$this->templateColumns['id'] = [
-			'attribute' => 'id',
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->report) ? $model->report->report_body : '-';
-				// return $model->id;
-			},
-			'visible' => !Yii::$app->request->get('id') ? true : false,
-		];
-		$this->templateColumns['comment'] = [
-			'attribute' => 'comment',
-			'value' => function($model, $key, $index, $column) {
-				return $model->comment;
-			},
-		];
-		$this->templateColumns['history'] = [
-			'attribute' => 'history',
-			'value' => function($model, $key, $index, $column) {
-				return $model->history;
-			},
-		];
-		$this->templateColumns['read'] = [
-			'attribute' => 'read',
-			'value' => function($model, $key, $index, $column) {
-				return $model->read;
-			},
-		];
-		$this->templateColumns['status'] = [
-			'attribute' => 'status',
-			'value' => function($model, $key, $index, $column) {
-				return $model->status;
-			},
-		];
-		$this->templateColumns['user'] = [
-			'attribute' => 'user',
-			'value' => function($model, $key, $index, $column) {
-				return $model->user;
-			},
-		];
-		$this->templateColumns['modified_date'] = [
-			'attribute' => 'modified_date',
-			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asDatetime($model->modified_date, 'medium');
-			},
-			'filter' => $this->filterDatepicker($this, 'modified_date'),
-		];
 	}
 
 	/**

@@ -32,6 +32,7 @@ class ReportRead extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
+	public $categoryId;
 	public $reportBody;
 	public $userDisplayname;
 
@@ -68,6 +69,7 @@ class ReportRead extends \app\components\ActiveRecord
 			'report_id' => Yii::t('app', 'Report'),
 			'user_id' => Yii::t('app', 'User'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
+			'categoryId' => Yii::t('app', 'Category'),
 			'reportBody' => Yii::t('app', 'Report'),
 			'userDisplayname' => Yii::t('app', 'User'),
 		];
@@ -117,6 +119,15 @@ class ReportRead extends \app\components\ActiveRecord
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
 			'contentOptions' => ['class' => 'text-center'],
+		];
+		$this->templateColumns['categoryId'] = [
+			'attribute' => 'categoryId',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->report) ? $model->report->category->title->message : '-';
+				// return $model->categoryId;
+			},
+			'filter' => ReportCategory::getCategory(),
+			'visible' => !Yii::$app->request->get('report') && !Yii::$app->request->get('id') && !Yii::$app->request->get('category') ? true : false,
 		];
 		$this->templateColumns['reportBody'] = [
 			'attribute' => 'reportBody',
@@ -188,6 +199,7 @@ class ReportRead extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
+		// $this->categoryId = iisset($model->report) ? $model->report->category->title->message : '-';
 		// $this->reportBody = isset($this->report) ? $this->report->report_body : '-';
 		// $this->userDisplayname = isset($this->user) ? $this->user->displayname : '-';
 	}

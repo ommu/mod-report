@@ -383,7 +383,7 @@ class Reports extends \app\components\ActiveRecord
                 $comments = $model->oComment;
 				return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -405,7 +405,7 @@ class Reports extends \app\components\ActiveRecord
                 $statuses = $model->oStatus;
 				return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -416,7 +416,7 @@ class Reports extends \app\components\ActiveRecord
                 $users = $model->oUser;
 				return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -505,7 +505,7 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseReportBody($update=true)
+	public function parseReportBody()
 	{
         $reports = $this->reports;
         $comments = $this->oComment;

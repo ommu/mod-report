@@ -27,7 +27,7 @@ class ReportRead extends ReportViewModel
 	public function rules()
 	{
 		return [
-			[['id', 'creation_date', 'reportBody', 'userDisplayname'], 'safe'],
+			[['id', 'creation_date', 'categoryId', 'reportBody', 'userDisplayname'], 'safe'],
 			[['report_id', 'user_id'], 'integer'],
 		];
 	}
@@ -67,10 +67,18 @@ class ReportRead extends ReportViewModel
         }
 		$query->joinWith([
 			// 'report report', 
+			// 'report.category.title category', 
 			// 'user user'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (isset($params['reportBody']) && $params['reportBody'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (
+            (isset($params['reportBody']) && $params['reportBody'] != '') || 
+            (isset($params['categoryId']) && $params['categoryId'] != '') || 
+            (isset($params['category']) && $params['category'] != '')
+        )) {
             $query->joinWith(['report report']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['report.category.title category']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
             $query->joinWith(['user user']);
@@ -89,6 +97,10 @@ class ReportRead extends ReportViewModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['categoryId'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
 		$attributes['reportBody'] = [
 			'asc' => ['report.report_body' => SORT_ASC],
 			'desc' => ['report.report_body' => SORT_DESC],
@@ -118,10 +130,10 @@ class ReportRead extends ReportViewModel
 			't.report_id' => isset($params['report']) ? $params['report'] : $this->report_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.creation_date as date)' => $this->creation_date,
+			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
-		$query->andFilterWhere(['like', 't.id', $this->id])
-			->andFilterWhere(['like', 'report.report_body', $this->reportBody])
+		$query->andFilterWhere(['like', 'report.report_body', $this->reportBody])
 			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname]);
 
 		return $dataProvider;

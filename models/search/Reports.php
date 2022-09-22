@@ -67,12 +67,20 @@ class Reports extends ReportsModel
             $query = ReportsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-            'grid grid',
+            // 'grid grid',
 			// 'category.title category', 
 			// 'user user', 
 			// 'modified modified'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['oComment', '-oComment', 'oRead', '-oRead', 'oStatus', '-oStatus', 'oUser', '-oUser'])) || (
+            (isset($params['oComment']) && $params['oComment'] != '') ||
+            (isset($params['oRead']) && $params['oRead'] != '') ||
+            (isset($params['oStatus']) && $params['oStatus'] != '') ||
+            (isset($params['oUser']) && $params['oUser'] != '')
+        )) {
+            $query->joinWith(['grid grid']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
             $query->joinWith(['category.title category']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
@@ -181,30 +189,30 @@ class Reports extends ReportsModel
 
         if (isset($params['oComment']) && $params['oComment'] != '') {
             if ($this->oComment == 1) {
-                $query->andWhere(['is not', 'comments.id', null]);
+                $query->andWhere(['<>', 'grid.comment', 0]);
             } else if ($this->oComment == 0) {
-                $query->andWhere(['is', 'comments.id', null]);
+                $query->andWhere(['=', 'grid.comment', 0]);
             }
         }
         if (isset($params['oRead']) && $params['oRead'] != '') {
             if ($this->oRead == 1) {
-                $query->andWhere(['is not', 'reads.id', null]);
+                $query->andWhere(['<>', 'grid.read', 0]);
             } else if ($this->oRead == 0) {
-                $query->andWhere(['is', 'reads.id', null]);
+                $query->andWhere(['=', 'grid.read', 0]);
             }
         }
         if (isset($params['oStatus']) && $params['oStatus'] != '') {
             if ($this->oStatus == 1) {
-                $query->andWhere(['is not', 'statuses.id', null]);
+                $query->andWhere(['<>', 'grid.status', 0]);
             } else if ($this->oStatus == 0) {
-                $query->andWhere(['is', 'statuses.id', null]);
+                $query->andWhere(['=', 'grid.status', 0]);
             }
         }
         if (isset($params['oUser']) && $params['oUser'] != '') {
             if ($this->oUser == 1) {
-                $query->andWhere(['is not', 'users.id', null]);
+                $query->andWhere(['<>', 'grid.user', 0]);
             } else if ($this->oUser == 0) {
-                $query->andWhere(['is', 'users.id', null]);
+                $query->andWhere(['=', 'grid.user', 0]);
             }
         }
 

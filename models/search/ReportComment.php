@@ -72,7 +72,11 @@ class ReportComment extends ReportCommentModel
 			// 'user user', 
 			// 'modified modified'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (isset($params['reportBody']) && $params['reportBody'] != '') || (isset($params['categoryId']) && $params['categoryId'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reportBody', '-reportBody'])) || (
+            (isset($params['reportBody']) && $params['reportBody'] != '') || 
+            (isset($params['categoryId']) && $params['categoryId'] != '') || 
+            (isset($params['category']) && $params['category'] != '')
+        )) {
             $query->joinWith(['report report']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
@@ -139,14 +143,14 @@ class ReportComment extends ReportCommentModel
 			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
-        if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
-            }
+            $query->andFilterWhere(['t.publish' => $this->publish]);
+        }
+
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.comment_text', $this->comment_text])
