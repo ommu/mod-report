@@ -81,7 +81,7 @@ class Reports extends ReportsModel
             $query->joinWith(['grid grid']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
-            $query->joinWith(['category.title category']);
+            $query->joinWith(['categoryTitle categoryTitle']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
             $query->joinWith(['user user']);
@@ -128,12 +128,12 @@ class Reports extends ReportsModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['cat_id'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['categoryName'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['reporterDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
@@ -222,7 +222,7 @@ class Reports extends ReportsModel
             ])
 			->andFilterWhere(['like', 't.report_message', $this->report_message])
 			->andFilterWhere(['like', 't.report_ip', $this->report_ip])
-			->andFilterWhere(['like', 'category.message', $this->categoryName])
+			->andFilterWhere(['like', 'categoryTitle.message', $this->categoryName])
 			->andFilterWhere(['like', 'user.displayname', $this->reporterDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 

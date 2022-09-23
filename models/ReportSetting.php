@@ -31,6 +31,7 @@ namespace ommu\report\models;
 
 use Yii;
 use app\models\Users;
+use app\models\SourceMessage;
 
 class ReportSetting extends \app\components\ActiveRecord
 {
@@ -94,6 +95,14 @@ class ReportSetting extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
@@ -146,7 +155,7 @@ class ReportSetting extends \app\components\ActiveRecord
 		$this->templateColumns['auto_report_cat_id'] = [
 			'attribute' => 'auto_report_cat_id',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->category) ? $model->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 			},
 			'filter' => ReportCategory::getCategory(),
 			'visible' => !Yii::$app->request->get('category') ? true : false,

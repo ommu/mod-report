@@ -80,7 +80,7 @@ class ReportComment extends ReportCommentModel
             $query->joinWith(['report report']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
-            $query->joinWith(['report.category.title category']);
+            $query->joinWith(['categoryTitle categoryTitle']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
             $query->joinWith(['user user']);
@@ -103,8 +103,8 @@ class ReportComment extends ReportCommentModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['reportBody'] = [
 			'asc' => ['report.report_body' => SORT_ASC],

@@ -58,7 +58,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'auto_report_cat_id',
-		'value' => isset($model->category) ? $model->category->title->message : '-',
+		'value' => isset($model->categoryTitle) ? $model->categoryTitle->message : '-',
 		'visible' => !$small,
 	],
 	[

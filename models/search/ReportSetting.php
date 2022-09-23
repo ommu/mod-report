@@ -71,7 +71,7 @@ class ReportSetting extends ReportSettingModel
 			// 'modified modified'
 		]);
         if ((isset($params['sort']) && in_array($params['sort'], ['auto_report_cat_id', '-auto_report_cat_id']))) {
-            $query->joinWith(['category.title category']);
+            $query->joinWith(['categoryTitle categoryTitle']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
             $query->joinWith(['modified modified']);
@@ -91,8 +91,8 @@ class ReportSetting extends ReportSettingModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['auto_report_cat_id'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],

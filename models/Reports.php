@@ -47,6 +47,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Users;
+use app\models\SourceMessage;
 
 class Reports extends \app\components\ActiveRecord
 {
@@ -252,6 +253,14 @@ class Reports extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
@@ -303,7 +312,7 @@ class Reports extends \app\components\ActiveRecord
 		$this->templateColumns['cat_id'] = [
 			'attribute' => 'cat_id',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->category) ? $model->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryName;
 			},
 			'filter' => ReportCategory::getCategory(),
