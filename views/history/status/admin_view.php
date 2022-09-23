@@ -46,7 +46,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'categoryId',
-		'value' => isset($model->report->category) ? $model->report->category->title->message : '-',
+		'value' => isset($model->categoryTitle) ? $model->categoryTitle->message : '-',
 	],
 	[
 		'attribute' => 'reportBody',

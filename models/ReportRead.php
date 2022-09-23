@@ -27,6 +27,7 @@ namespace ommu\report\models;
 use Yii;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
+use app\models\SourceMessage;
 
 class ReportRead extends \app\components\ActiveRecord
 {
@@ -86,6 +87,22 @@ class ReportRead extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getCategory()
+	{
+		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id'])->via('report');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
@@ -123,7 +140,7 @@ class ReportRead extends \app\components\ActiveRecord
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->report) ? $model->report->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryId;
 			},
 			'filter' => ReportCategory::getCategory(),
