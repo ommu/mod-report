@@ -56,7 +56,7 @@ $attributes = [
 	[
 		'attribute' => 'oReport',
 		'value' => function ($model) {
-			$reports = $model->oReport;
+			$reports = $model->grid->report;
 			return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports])]);
 		},
 		'format' => 'html',
@@ -65,7 +65,7 @@ $attributes = [
 	[
 		'attribute' => 'oUnresolved',
 		'value' => function ($model) {
-			$unresolved = $model->oUnresolved;
+			$unresolved = $model->grid->unresolved;
 			return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved])]);
 		},
 		'format' => 'html',
@@ -74,7 +74,7 @@ $attributes = [
 	[
 		'attribute' => 'oResolved',
 		'value' => function ($model) {
-			$resolved = $model->oResolved;
+			$resolved = $model->grid->resolved;
 			return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved])]);
 		},
 		'format' => 'html',

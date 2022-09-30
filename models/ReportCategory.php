@@ -270,7 +270,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oUnresolved',
 			'value' => function($model, $key, $index, $column) {
 				// $unresolved = $model->getUnresolved(true);
-                $unresolved = $model->oUnresolved;
+                $unresolved = $model->grid->unresolved;
 				return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -281,7 +281,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oResolved',
 			'value' => function($model, $key, $index, $column) {
 				// $resolved = $model->getResolved(true);
-                $resolved = $model->oResolved;
+                $resolved = $model->grid->resolved;
 				return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -292,7 +292,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oReport',
 			'value' => function($model, $key, $index, $column) {
 				// $reports = $model->getReports(true);
-                $reports = $model->oReport;
+                $reports = $model->grid->report;
 				return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -358,7 +358,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getResolved()
 	{
-		return $this->oResolved;
+		return $this->grid->resolved;
 	}
 
 	/**
@@ -366,7 +366,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getUnresolved()
 	{
-		return $this->oUnresolved;
+		return $this->grid->unresolved;
 	}
 
 	/**
@@ -380,9 +380,6 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-        $this->oReport = isset($this->grid) ? $this->grid->report : 0;
-        $this->oUnresolved = isset($this->grid) ? $this->grid->unresolved : 0;
-        $this->oResolved = isset($this->grid) ? $this->grid->resolved : 0;
 	}
 
 	/**

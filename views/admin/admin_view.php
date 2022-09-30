@@ -93,7 +93,7 @@ $attributes = [
 	[
 		'attribute' => 'oComment',
 		'value' => function ($model) {
-			$comments = $model->oComment;
+			$comments = $model->grid->comment;
 			return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments])]);
 		},
 		'format' => 'html',
@@ -102,7 +102,7 @@ $attributes = [
 	[
 		'attribute' => 'oRead',
 		'value' => function ($model) {
-			$reads = $model->oRead;
+			$reads = $model->grid->read;
 			return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads])]);
 		},
 		'format' => 'html',
@@ -111,7 +111,7 @@ $attributes = [
 	[
 		'attribute' => 'oStatus',
 		'value' => function ($model) {
-			$statuses = $model->oStatus;
+			$statuses = $model->grid->status;
 			return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses])]);
 		},
 		'format' => 'html',
@@ -120,7 +120,7 @@ $attributes = [
 	[
 		'attribute' => 'oUser',
 		'value' => function ($model) {
-			$users = $model->oUser;
+			$users = $model->grid->user;
 			return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} users', ['count' => $users])]);
 		},
 		'format' => 'html',
