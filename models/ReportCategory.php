@@ -155,7 +155,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['message']);
 	}
 
 	/**
@@ -163,7 +164,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getDescription()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc'])
+            ->select(['message']);
 	}
 
 	/**
@@ -171,7 +173,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['displayname']);
 	}
 
 	/**
@@ -179,7 +182,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['displayname']);
 	}
 
 	/**
@@ -338,7 +342,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true)
 	{
-		$model = self::find()->alias('t');
+		$model = self::find()->alias('t')
+            ->select(['cat_id', 'name']);
 		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
         if ($publish != null) {
             $model->andWhere(['t.publish' => $publish]);

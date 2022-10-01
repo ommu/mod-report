@@ -98,7 +98,8 @@ class ReportStatus extends \app\components\ActiveRecord
 	 */
 	public function getReport()
 	{
-		return $this->hasOne(Reports::className(), ['report_id' => 'report_id']);
+		return $this->hasOne(Reports::className(), ['report_id' => 'report_id'])
+            ->select(['cat_id', 'report_body']);
 	}
 
 	/**
@@ -106,7 +107,9 @@ class ReportStatus extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id'])->via('report');
+		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id'])
+            ->select(['name'])
+            ->via('report');
 	}
 
 	/**
@@ -114,7 +117,8 @@ class ReportStatus extends \app\components\ActiveRecord
 	 */
 	public function getCategoryTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->via('category');
 	}
 
 	/**
@@ -122,7 +126,8 @@ class ReportStatus extends \app\components\ActiveRecord
 	 */
 	public function getUser()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])
+            ->select(['displayname']);
 	}
 
 	/**
@@ -130,7 +135,8 @@ class ReportStatus extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['displayname']);
 	}
 
 	/**
