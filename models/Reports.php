@@ -248,7 +248,7 @@ class Reports extends \app\components\ActiveRecord
 	public function getCategory()
 	{
 		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id'])
-            ->select(['name']);
+            ->select(['cat_id', 'name']);
 	}
 
 	/**
@@ -257,6 +257,7 @@ class Reports extends \app\components\ActiveRecord
 	public function getCategoryTitle()
 	{
 		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message'])
             ->via('category');
 	}
 
@@ -266,7 +267,7 @@ class Reports extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])
-            ->select(['displayname']);
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -275,7 +276,7 @@ class Reports extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
-            ->select(['displayname']);
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**

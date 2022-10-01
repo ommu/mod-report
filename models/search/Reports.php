@@ -80,13 +80,19 @@ class Reports extends ReportsModel
         )) {
             $query->joinWith(['grid grid']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || 
+            (isset($params['categoryName']) && $params['categoryName'] != '')
+        ) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || 
+            (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')
+        ) {
             $query->joinWith(['modified modified']);
         }
         // if ((isset($params['sort']) && in_array($params['sort'], ['oComment', '-oComment'])) || (isset($params['oComment']) && $params['oComment'] != '')) {

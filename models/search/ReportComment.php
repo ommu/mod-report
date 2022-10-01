@@ -82,10 +82,14 @@ class ReportComment extends ReportCommentModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || 
+            (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')
+        ) {
             $query->joinWith(['modified modified']);
         }
 

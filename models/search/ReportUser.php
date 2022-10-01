@@ -81,7 +81,9 @@ class ReportUser extends ReportUserModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['reporterDisplayname', '-reporterDisplayname'])) || (isset($params['reporterDisplayname']) && $params['reporterDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reporterDisplayname', '-reporterDisplayname'])) || 
+            (isset($params['reporterDisplayname']) && $params['reporterDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
 
