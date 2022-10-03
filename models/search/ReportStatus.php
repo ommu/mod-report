@@ -64,7 +64,8 @@ class ReportStatus extends ReportStatusModel
         if (!($column && is_array($column))) {
             $query = ReportStatusModel::find()->alias('t');
         } else {
-            $query = ReportStatusModel::find()->alias('t')->select($column);
+            $query = ReportStatusModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 

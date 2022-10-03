@@ -64,7 +64,8 @@ class ReportCategory extends ReportCategoryModel
         if (!($column && is_array($column))) {
             $query = ReportCategoryModel::find()->alias('t');
         } else {
-            $query = ReportCategoryModel::find()->alias('t')->select($column);
+            $query = ReportCategoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'grid grid', 

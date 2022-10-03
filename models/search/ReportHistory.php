@@ -64,7 +64,8 @@ class ReportHistory extends ReportHistoryModel
         if (!($column && is_array($column))) {
             $query = ReportHistoryModel::find()->alias('t');
         } else {
-            $query = ReportHistoryModel::find()->alias('t')->select($column);
+            $query = ReportHistoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 

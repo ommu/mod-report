@@ -64,7 +64,8 @@ class ReportSetting extends ReportSettingModel
         if (!($column && is_array($column))) {
             $query = ReportSettingModel::find()->alias('t');
         } else {
-            $query = ReportSettingModel::find()->alias('t')->select($column);
+            $query = ReportSettingModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'category.title category', 

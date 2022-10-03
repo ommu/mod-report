@@ -64,7 +64,8 @@ class Reports extends ReportsModel
         if (!($column && is_array($column))) {
             $query = ReportsModel::find()->alias('t');
         } else {
-            $query = ReportsModel::find()->alias('t')->select($column);
+            $query = ReportsModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
             // 'grid grid',

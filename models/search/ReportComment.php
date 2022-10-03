@@ -64,7 +64,8 @@ class ReportComment extends ReportCommentModel
         if (!($column && is_array($column))) {
             $query = ReportCommentModel::find()->alias('t');
         } else {
-            $query = ReportCommentModel::find()->alias('t')->select($column);
+            $query = ReportCommentModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 

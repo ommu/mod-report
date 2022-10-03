@@ -64,7 +64,8 @@ class ReportUser extends ReportUserModel
         if (!($column && is_array($column))) {
             $query = ReportUserModel::find()->alias('t');
         } else {
-            $query = ReportUserModel::find()->alias('t')->select($column);
+            $query = ReportUserModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 

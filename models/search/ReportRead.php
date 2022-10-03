@@ -63,7 +63,8 @@ class ReportRead extends ReportViewModel
         if (!($column && is_array($column))) {
             $query = ReportViewModel::find()->alias('t');
         } else {
-            $query = ReportViewModel::find()->alias('t')->select($column);
+            $query = ReportViewModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 
