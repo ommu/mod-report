@@ -218,13 +218,13 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->name_i;
+				return $model->title->message;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->desc_i;
+				return $model->description->message;
 			},
 		];
 		$this->templateColumns['creation_date'] = [
@@ -381,8 +381,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		$this->name_i = isset($this->title) ? $this->title->message : '';
-		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		// $this->name_i = isset($this->title) ? $this->title->message : '';
+		// $this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
