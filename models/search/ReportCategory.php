@@ -64,7 +64,8 @@ class ReportCategory extends ReportCategoryModel
         if (!($column && is_array($column))) {
             $query = ReportCategoryModel::find()->alias('t');
         } else {
-            $query = ReportCategoryModel::find()->alias('t')->select($column);
+            $query = ReportCategoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'grid grid', 
@@ -80,16 +81,24 @@ class ReportCategory extends ReportCategoryModel
         )) {
             $query->joinWith(['grid grid']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || 
+            (isset($params['name_i']) && $params['name_i'] != '')
+        ) {
             $query->joinWith(['title title']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['desc_i', '-desc_i'])) || (isset($params['desc_i']) && $params['desc_i'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['desc_i', '-desc_i'])) || 
+            (isset($params['desc_i']) && $params['desc_i'] != '')
+        ) {
             $query->joinWith(['description description']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || 
+            (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')
+        ) {
             $query->joinWith(['creation creation']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || 
+            (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')
+        ) {
             $query->joinWith(['modified modified']);
         }
 
@@ -185,7 +194,7 @@ class ReportCategory extends ReportCategoryModel
             }
         }
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);

@@ -64,7 +64,8 @@ class ReportStatus extends ReportStatusModel
         if (!($column && is_array($column))) {
             $query = ReportStatusModel::find()->alias('t');
         } else {
-            $query = ReportStatusModel::find()->alias('t')->select($column);
+            $query = ReportStatusModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 
@@ -82,10 +83,14 @@ class ReportStatus extends ReportStatusModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || 
+            (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')
+        ) {
             $query->joinWith(['modified modified']);
         }
 

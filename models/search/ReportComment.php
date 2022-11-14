@@ -64,7 +64,8 @@ class ReportComment extends ReportCommentModel
         if (!($column && is_array($column))) {
             $query = ReportCommentModel::find()->alias('t');
         } else {
-            $query = ReportCommentModel::find()->alias('t')->select($column);
+            $query = ReportCommentModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 
@@ -82,10 +83,14 @@ class ReportComment extends ReportCommentModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || 
+            (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')
+        ) {
             $query->joinWith(['modified modified']);
         }
 
@@ -143,7 +148,7 @@ class ReportComment extends ReportCommentModel
 			'report.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);

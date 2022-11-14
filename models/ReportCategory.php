@@ -155,7 +155,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -163,7 +164,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getDescription()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -171,7 +173,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -179,7 +182,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -214,13 +218,13 @@ class ReportCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->name_i;
+				return $model->title->message;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->desc_i;
+				return $model->description->message;
 			},
 		];
 		$this->templateColumns['creation_date'] = [
@@ -270,7 +274,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oUnresolved',
 			'value' => function($model, $key, $index, $column) {
 				// $unresolved = $model->getUnresolved(true);
-                $unresolved = $model->oUnresolved;
+                $unresolved = $model->grid->unresolved;
 				return Html::a($unresolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 0], ['title' => Yii::t('app', '{count} unresolved', ['count' => $unresolved]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -281,7 +285,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oResolved',
 			'value' => function($model, $key, $index, $column) {
 				// $resolved = $model->getResolved(true);
-                $resolved = $model->oResolved;
+                $resolved = $model->grid->resolved;
 				return Html::a($resolved, ['admin/manage', 'category' => $model->primaryKey, 'status' => 1], ['title' => Yii::t('app', '{count} resolved', ['count' => $resolved]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -292,7 +296,7 @@ class ReportCategory extends \app\components\ActiveRecord
 			'attribute' => 'oReport',
 			'value' => function($model, $key, $index, $column) {
 				// $reports = $model->getReports(true);
-                $reports = $model->oReport;
+                $reports = $model->grid->report;
 				return Html::a($reports, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -338,7 +342,8 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true)
 	{
-		$model = self::find()->alias('t');
+		$model = self::find()->alias('t')
+            ->select(['cat_id', 'name']);
 		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
         if ($publish != null) {
             $model->andWhere(['t.publish' => $publish]);
@@ -347,7 +352,7 @@ class ReportCategory extends \app\components\ActiveRecord
 		$model = $model->orderBy('title.message ASC')->all();
 
         if ($array == true) {
-            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'title.message');
         }
 
 		return $model;
@@ -358,7 +363,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getResolved()
 	{
-		return $this->oResolved;
+		return $this->grid->resolved;
 	}
 
 	/**
@@ -366,7 +371,7 @@ class ReportCategory extends \app\components\ActiveRecord
 	 */
 	public function getUnresolved()
 	{
-		return $this->oUnresolved;
+		return $this->grid->unresolved;
 	}
 
 	/**
@@ -376,13 +381,10 @@ class ReportCategory extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		$this->name_i = isset($this->title) ? $this->title->message : '';
-		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		// $this->name_i = isset($this->title) ? $this->title->message : '';
+		// $this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-        $this->oReport = isset($this->grid) ? $this->grid->report : 0;
-        $this->oUnresolved = isset($this->grid) ? $this->grid->unresolved : 0;
-        $this->oResolved = isset($this->grid) ? $this->grid->resolved : 0;
 	}
 
 	/**

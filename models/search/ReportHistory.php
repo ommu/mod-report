@@ -64,7 +64,8 @@ class ReportHistory extends ReportHistoryModel
         if (!($column && is_array($column))) {
             $query = ReportHistoryModel::find()->alias('t');
         } else {
-            $query = ReportHistoryModel::find()->alias('t')->select($column);
+            $query = ReportHistoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 
@@ -81,7 +82,9 @@ class ReportHistory extends ReportHistoryModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['reporterDisplayname', '-reporterDisplayname'])) || (isset($params['reporterDisplayname']) && $params['reporterDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['reporterDisplayname', '-reporterDisplayname'])) || 
+            (isset($params['reporterDisplayname']) && $params['reporterDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
 

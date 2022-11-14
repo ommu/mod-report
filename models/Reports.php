@@ -247,7 +247,8 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id']);
+		return $this->hasOne(ReportCategory::className(), ['cat_id' => 'cat_id'])
+            ->select(['cat_id', 'name']);
 	}
 
 	/**
@@ -255,7 +256,9 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getCategoryTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message'])
+            ->via('category');
 	}
 
 	/**
@@ -263,7 +266,8 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getUser()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -271,7 +275,8 @@ class Reports extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -389,7 +394,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'oComment',
 			'value' => function($model, $key, $index, $column) {
 				// $comments = $model->getComments(true);
-                $comments = $model->oComment;
+                $comments = $model->grid->comment;
 				return Html::a($comments, ['history/comment/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} comments', ['count' => $comments]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -400,7 +405,7 @@ class Reports extends \app\components\ActiveRecord
             'attribute' => 'oRead',
             'value' => function($model, $key, $index, $column) {
                 // $reads = $model->getReads(true);
-                $reads = $model->oRead;
+                $reads = $model->grid->read;
                 return Html::a($reads, ['history/read/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'data-pjax' => 0]);
             },
             'filter' => $this->filterYesNo(),
@@ -411,7 +416,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'oStatus',
 			'value' => function($model, $key, $index, $column) {
 				// $statuses = $model->getStatuses(true);
-                $statuses = $model->oStatus;
+                $statuses = $model->grid->status;
 				return Html::a($statuses, ['history/status/manage', 'report' => $model->primaryKey], ['title' => Yii::t('app', '{count} statuses', ['count' => $statuses]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -422,7 +427,7 @@ class Reports extends \app\components\ActiveRecord
 			'attribute' => 'oUser',
 			'value' => function($model, $key, $index, $column) {
 				// $users = $model->getUsers(true);
-                $users = $model->oUser;
+                $users = $model->grid->user;
 				return Html::a($users, ['history/user/manage', 'report' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -517,9 +522,9 @@ class Reports extends \app\components\ActiveRecord
 	public function parseReportBody()
 	{
         $reports = $this->reports;
-        $comments = $this->oComment;
-        $reads = $this->oRead;
-        $users = $this->oUser;
+        $comments = $this->grid->comment;
+        $reads = $this->grid->read;
+        $users = $this->grid->user;
     
         $html = $this->report_body;
         $html .= '<hr class="mt-5 mb-5"/>';
@@ -550,10 +555,6 @@ class Reports extends \app\components\ActiveRecord
         // $this->read = $this->getReads(true) ? 1 : 0;
         // $this->status = $this->getStatuses(true) ? 1 : 0;
         // $this->user = $this->getUsers(true) ? 1 : 0;
-        $this->oComment = isset($this->grid) ? $this->grid->comment : 0;
-        $this->oRead = isset($this->grid) ? $this->grid->read : 0;
-        $this->oStatus = isset($this->grid) ? $this->grid->status : 0;
-        $this->oUser = isset($this->grid) ? $this->grid->user : 0;
 	}
 
 	/**

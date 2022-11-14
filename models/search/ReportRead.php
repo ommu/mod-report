@@ -63,7 +63,8 @@ class ReportRead extends ReportViewModel
         if (!($column && is_array($column))) {
             $query = ReportViewModel::find()->alias('t');
         } else {
-            $query = ReportViewModel::find()->alias('t')->select($column);
+            $query = ReportViewModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'report report', 
@@ -80,7 +81,9 @@ class ReportRead extends ReportViewModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
 
