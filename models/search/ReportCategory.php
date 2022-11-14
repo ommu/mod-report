@@ -194,7 +194,7 @@ class ReportCategory extends ReportCategoryModel
             }
         }
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);

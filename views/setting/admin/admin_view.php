@@ -23,11 +23,10 @@ if ($breadcrumb) {
     $this->params['breadcrumbs'][] = $this->title;
 }
 
-if (!$small) {
-    $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Reset'), 'url' => Url::to(['delete']), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to reset this setting?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
-    ];
-} ?>
+$this->params['menu']['content'] = [
+    ['label' => Yii::t('app', 'Reset'), 'url' => Url::to(['delete']), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to reset this setting?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
+];
+?>
 
 <div class="report-setting-view">
 
@@ -36,7 +35,6 @@ $attributes = [
 	[
 		'attribute' => 'id',
 		'value' => $model->id ? $model->id : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'license',
@@ -49,27 +47,22 @@ $attributes = [
 	[
 		'attribute' => 'meta_description',
 		'value' => $model->meta_description ? $model->meta_description : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'meta_keyword',
 		'value' => $model->meta_keyword ? $model->meta_keyword : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'auto_report_cat_id',
 		'value' => isset($model->categoryTitle) ? $model->categoryTitle->message : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modified_date',
 		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modifiedDisplayname',
 		'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => '',
