@@ -526,13 +526,10 @@ class Reports extends \app\components\ActiveRecord
         $reads = $this->grid->read;
         $users = $this->grid->user;
     
-        $html = $this->report_body;
+        $html = $this->report_body.'<br/><em class="d-block mt-2">'.$this->report_url.'</em>';
         $html .= '<hr class="mt-5 mb-5"/>';
 
-        $html .= Html::button(Yii::t('app', 'url'), ['class' => 'btn btn-secondary btn-xs px-5']);
-        $html .= Html::a($this->report_url, $this->report_url, ['title' => $this->report_url, 'target' => '_blank', 'data-pjax' => 0]);
-        $html .= '<hr class="mt-5 mb-5"/>';
-        
+        $html .= Html::a(Yii::t('app', 'url'), $this->report_url, ['title' => $this->report_url, 'class' => 'btn btn-danger btn-xs px-5', 'target' => '_blank', 'data-pjax' => 0]);
         $html .= Html::a(Yii::t('app', '{count} reports', ['count' => $reports]), ['history/admin/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reports', ['count' => $reports]), 'class' => 'btn btn-primary btn-xs mr-5', 'data-pjax' => 0]);
         $html .= $users ? Html::a(Yii::t('app', '{count} users', ['count' => $users]), ['history/user/manage', 'report' => $this->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} users', ['count' => $users]), 'class' => 'btn btn-success btn-xs mr-5', 'data-pjax' => 0]) : '';
         $html .= $reads ? Html::a(Yii::t('app', '{count} reads', ['count' => $reads]), ['history/read/manage', 'report' => $this->primaryKey], ['title' => Yii::t('app', '{count} reads', ['count' => $reads]), 'class' => 'btn btn-info btn-xs mr-5', 'data-pjax' => 0]) : '';
