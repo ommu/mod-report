@@ -17,7 +17,7 @@ class m210807_121471_report_module_addView_report extends \yii\db\Migration
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_reports`');
+		$this->execute('DROP VIEW IF EXISTS `_reports`');
 
 		// alter view _reports
 		$alterViewReports = <<< SQL
@@ -47,6 +47,6 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_reports`');
+		$this->execute('DROP VIEW IF EXISTS `_reports`');
 	}
 }

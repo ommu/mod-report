@@ -17,7 +17,7 @@ class m220909_074213_report_module_updateView_report_addStatisticRead extends \y
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_reports`');
+		$this->execute('DROP VIEW IF EXISTS `_reports`');
 
 		// alter view _reports
 		$alterViewReports = <<< SQL
@@ -50,7 +50,7 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_reports`');
+		$this->execute('DROP VIEW IF EXISTS `_reports`');
 
 		// alter view _reports
 		$alterViewReports = <<< SQL

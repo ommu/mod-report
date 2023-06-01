@@ -17,7 +17,7 @@ class m210807_121481_report_module_addSP_reportSetUser extends \yii\db\Migration
 {
 	public function up()
 	{
-		$this->execute('DROP PROCEDURE `reportSetUser`');
+		$this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
 
 		// alter sp reportSetUser
 		$alterProsedureReportSetUser = <<< SQL
@@ -39,7 +39,7 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP PROCEDURE `reportSetUser`');
+		$this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
 
         // create sp reportSetUser
         $alterProsedureReportSetUser = <<< SQL

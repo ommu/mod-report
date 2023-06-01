@@ -17,7 +17,7 @@ class m210807_121461_report_module_addView_reportStatisticComment extends \yii\d
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_report_statistic_comment`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_comment`');
 
 		// alter view _report_statistic_comment
 		$alterViewReportStatisticComment = <<< SQL
@@ -34,6 +34,6 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_report_statistic_comment`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_comment`');
 	}
 }

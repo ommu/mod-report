@@ -17,7 +17,7 @@ class m210807_121472_report_module_addView_reportCategory extends \yii\db\Migrat
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_report_category`');
+		$this->execute('DROP VIEW IF EXISTS `_report_category`');
 
 		// alter view _reports
 		$alterViewReportCategory = <<< SQL
@@ -37,6 +37,6 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_report_category`');
+		$this->execute('DROP VIEW IF EXISTS `_report_category`');
 	}
 }

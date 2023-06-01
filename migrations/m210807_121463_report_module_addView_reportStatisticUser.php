@@ -17,7 +17,7 @@ class m210807_121463_report_module_addView_reportStatisticUser extends \yii\db\M
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_report_statistic_user`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_user`');
 
 		// alter view _report_statistic_user
 		$alterViewReportStatisticUser = <<< SQL
@@ -33,7 +33,7 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_report_statistic_user`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_user`');
 
         // create view _report_statistic_user
         $alterViewReportStatisticUser = <<< SQL

@@ -17,7 +17,7 @@ class m220909_073559_report_module_addView_reportStatisticRead extends \yii\db\M
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_report_statistic_read`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_read`');
 
 		// alter view _report_statistic_read
 		$alterViewReportStatisticRead = <<< SQL
@@ -33,6 +33,6 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_report_statistic_read`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_read`');
 	}
 }

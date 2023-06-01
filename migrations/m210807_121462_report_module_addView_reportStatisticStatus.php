@@ -17,7 +17,7 @@ class m210807_121462_report_module_addView_reportStatisticStatus extends \yii\db
 {
 	public function up()
 	{
-		$this->execute('DROP VIEW `_report_statistic_status`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_status`');
 
 		// alter view _report_statistic_status
 		$alterViewReportStatisticStatus = <<< SQL
@@ -35,6 +35,6 @@ SQL;
 
 	public function down()
 	{
-		$this->execute('DROP VIEW `_report_statistic_status`');
+		$this->execute('DROP VIEW IF EXISTS `_report_statistic_status`');
 	}
 }
