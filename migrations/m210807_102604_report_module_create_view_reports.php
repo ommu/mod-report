@@ -43,7 +43,16 @@ FROM ((((`ommu_reports` `a`
 	 ON (`a`.`report_id` = `e`.`report_id`))
 GROUP BY `a`.`report_id`;
 SQL;
+            $this->execute('DROP VIEW IF EXISTS `_reports`');
 			$this->execute($createViewReports);
+		}
+	}
+
+	public function down()
+	{
+		$tableName = Yii::$app->db->tablePrefix . 'ommu_reports';
+		if (Yii::$app->db->getTableSchema($tableName, true)) {
+            $this->execute('DROP VIEW IF EXISTS `_reports`');
 		}
 	}
 }
