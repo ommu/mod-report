@@ -23,8 +23,8 @@ class m210807_121463_report_module_addView_reportStatisticUser extends \yii\db\M
 		$alterViewReportStatisticUser = <<< SQL
 CREATE VIEW `_report_statistic_user` AS 
 SELECT
-`a`.`report_id` AS `report_id`,
-COUNT(`a`.`user_id`) AS `users`
+  `a`.`report_id` AS `report_id`,
+  COUNT(`a`.`user_id`) AS `users`
 FROM `ommu_report_user` `a`
 GROUP BY `a`.`report_id`;
 SQL;
@@ -34,5 +34,17 @@ SQL;
 	public function down()
 	{
 		$this->execute('DROP VIEW `_report_statistic_user`');
+
+        // create view _report_statistic_user
+        $alterViewReportStatisticUser = <<< SQL
+CREATE VIEW `_report_statistic_user` AS 
+SELECT
+  `a`.`report_id` AS `report_id`,
+  SUM(CASE WHEN `a`.`publish` = '1' THEN 1 ELSE 0 END) AS `users`,
+  COUNT(`a`.`user_id`) AS `user_all`
+FROM `ommu_report_user` `a`
+GROUP BY `a`.`report_id`;
+SQL;
+		$this->execute($alterViewReportStatisticUser);
 	}
 }

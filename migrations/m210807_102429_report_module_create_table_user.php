@@ -65,6 +65,7 @@ SELECT
 FROM `ommu_report_user` `a`
 GROUP BY `a`.`report_id`;
 SQL;
+            $this->execute('DROP VIEW IF EXISTS `_report_statistic_user`');
 			$this->execute($createViewStatisticUser);
 		}
 	}
