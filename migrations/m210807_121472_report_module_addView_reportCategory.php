@@ -19,7 +19,7 @@ class m210807_121472_report_module_addView_reportCategory extends \yii\db\Migrat
 	{
 		$this->execute('DROP VIEW IF EXISTS `_report_category`');
 
-		// alter view _reports
+		// alter view _report_category
 		$alterViewReportCategory = <<< SQL
 CREATE VIEW `_report_category` AS 
 select

@@ -74,5 +74,8 @@ SQL;
 	{
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_report_user';
 		$this->dropTable($tableName);
+
+        $this->execute('DROP VIEW IF EXISTS `_report_statistic_user`');
+        $this->execute('DROP PROCEDURE IF EXISTS `reportSetUser`');
 	}
 }
