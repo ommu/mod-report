@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_121462_report_module_addView_reportStatisticStatus extends \yii\db\Migration

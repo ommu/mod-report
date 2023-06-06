@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m220904_181040_report_module_renameTable_reportView_2reportRead extends \yii\db\Migration

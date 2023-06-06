@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_100628_report_module_create_table_category extends \yii\db\Migration

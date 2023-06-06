@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m220909_101128_report_module_addColumn_unresolved_resolved_reportCategoryGrid extends \yii\db\Migration

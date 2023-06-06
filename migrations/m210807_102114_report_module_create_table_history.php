@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_102114_report_module_create_table_history extends \yii\db\Migration
