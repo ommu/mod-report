@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m220909_081025_report_module_alterTrigger_all_insertReportGrid extends \yii\db\Migration

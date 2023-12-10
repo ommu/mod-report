@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_102603_report_module_create_table_comment extends \yii\db\Migration

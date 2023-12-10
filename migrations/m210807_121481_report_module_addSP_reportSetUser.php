@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_121481_report_module_addSP_reportSetUser extends \yii\db\Migration

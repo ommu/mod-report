@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_104628_report_module_dropForeignKey_autoReportCatId_setting extends \yii\db\Migration

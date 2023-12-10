@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_121431_report_module_dropColumn_publish_modifiedDate_modifiedId_updatedDate_user extends \yii\db\Migration

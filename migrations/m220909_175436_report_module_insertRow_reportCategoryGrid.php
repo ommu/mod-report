@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m220909_175436_report_module_insertRow_reportCategoryGrid extends \yii\db\Migration

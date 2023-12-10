@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m220904_103049_report_module_createTable_ReportGrid extends \yii\db\Migration

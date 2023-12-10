@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210807_115024_report_module_dropForeignKey_userId_user extends \yii\db\Migration
