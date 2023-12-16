@@ -33,7 +33,7 @@
 		"oomphinc/composer-installers-extender": "^1.0",
 		"yiisoft/yii": ">=1.1.14",
 		"yiiext/imperavi-redactor-widget": "~1.3",
-		"ommu/yii-sluggable": "~1.0",
-		"ommu/yii-traits": "~1.0"
+		"ommu/yii-sluggable": "dev-master",
+		"ommu/yii-traits": "dev-master"
 	}
 }
