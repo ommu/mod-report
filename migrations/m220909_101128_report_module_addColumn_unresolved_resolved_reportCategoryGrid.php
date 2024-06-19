@@ -3,7 +3,7 @@
  * m220909_101128_report_module_addColumn_unresolved_resolved_reportCategoryGrid
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
  * @created date 9 September 2022, 10:13 WIB
  * @link https://github.com/ommu/mod-report

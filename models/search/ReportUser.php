@@ -5,7 +5,7 @@
  * ReportUser represents the model behind the search form about `ommu\report\models\ReportUser`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 22 September 2017, 13:56 WIB
  * @modified date 18 January 2019, 15:38 WIB

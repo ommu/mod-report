@@ -5,7 +5,7 @@
  * ReportHistory represents the model behind the search form about `ommu\report\models\ReportHistory`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2018 OMMU (www.ommu.id)
  * @created date 22 September 2017, 13:57 WIB
  * @modified date 18 January 2019, 15:37 WIB

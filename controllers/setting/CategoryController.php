@@ -19,7 +19,7 @@
  *	findModel
  *
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 22 September 2017, 13:52 WIB
  * @modified date 16 January 2019, 16:25 WIB
